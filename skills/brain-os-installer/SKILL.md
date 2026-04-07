@@ -168,16 +168,19 @@ openclaw cron import Obsidian-Brain-OS/cron-examples/generated/personal-ops.json
 
 | 用户问题 | 引用文档 |
 |---------|---------|
-| "Agent 怎么配？" | `docs/guide/01-agent-setup.md` |
+| **"Agent 怎么配？团队怎么搭？"** | **`docs/agents.md`** ⭐ 最重要 |
 | "频道怎么分？" | `docs/guide/02-channel-design.md` |
 | "日常怎么用？" | `docs/guide/03-daily-workflow.md` |
 | "怎么持续优化？" | `docs/guide/04-iteration-guide.md` |
 | "Obsidian 插件推荐？" | `docs/zh/obsidian-setup.md` |
 | "Cron 怎么配？" | `docs/zh/openclaw-setup.md` |
-| "Skill 怎么用？" | `docs/zh/skills-guide.md` |
+| "Skill 怎么用？每个 Skill 干嘛的？" | `docs/agents.md`（Skills 全览章节） |
 | "项目管理推荐？" | `docs/zh/project-management.md` |
 | "常见问题？" | `docs/zh/faq.md` |
 | "conversation-mining 怎么装？" | `tools/conversation-mining/AI_INSTALL.md` |
+| "Chronicle 史官是什么？" | `docs/chronicle-agent.md` |
+| "QMD 语义搜索？" | `docs/qmd-setup.md` |
+| "主 Agent 为什么要多模态？" | `docs/agents.md`（主 Agent 章节） |
 
 ---
 

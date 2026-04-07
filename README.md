@@ -152,6 +152,7 @@ The AI doesn't replace your thinking — it handles the plumbing so you can focu
 - [Obsidian Setup](docs/obsidian-setup.md)
 - [OpenClaw Setup](docs/openclaw-setup.md)
 - [QMD Semantic Search](docs/qmd-setup.md)
+- [Agent Team Guide](docs/agents.md)
 - [Nightly Pipeline](docs/nightly-pipeline.md)
 - [Personal Ops System](docs/personal-ops.md)
 - [Knowledge Architecture](docs/knowledge-architecture.md)

@@ -28,6 +28,7 @@
 - [个人文档与工作上下文（06/07）](../personal-context-guide.md)
 - [知识库架构](knowledge-architecture.md)
 - [QMD 语义搜索配置](../qmd-setup.md)
+- [Agent 团队配置指南](../agents.md)
 - [Obsidian 配置](obsidian-setup.md)
 - [OpenClaw 配置](openclaw-setup.md)
 - [Skills 指南](skills-guide.md)
