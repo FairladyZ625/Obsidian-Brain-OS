@@ -1,121 +1,121 @@
 ---
 name: distill
-description: Strip designs to their essence by removing unnecessary complexity. Great design is simple, powerful, and clean.
+description: 移除设计中不必要的复杂性，揭示本质元素，通过无情简化创造清晰。Strip designs to their essence by removing unnecessary complexity.
 user-invokable: true
 argument-hint: [TARGET=<value>]
 ---
 
-Remove unnecessary complexity from designs, revealing the essential elements and creating clarity through ruthless simplification.
+从设计中移除不必要的复杂性，揭示本质元素，通过无情的简化创造清晰。
 
-## MANDATORY PREPARATION
+## 强制准备
 
-Use the frontend-design skill — it contains design principles, anti-patterns, and the **Context Gathering Protocol**. Follow the protocol before proceeding — if no design context exists yet, you MUST run teach-impeccable first.
+使用 frontend-design skill——其中包含设计原则、反模式，以及**上下文收集协议**。在继续之前遵循该协议——如果没有现成的设计上下文，必须先运行 teach-impeccable。
 
 ---
 
-## Assess Current State
+## 评估当前状态
 
-Analyze what makes the design feel complex or cluttered:
+分析是什么让设计感觉复杂或混乱：
 
-1. **Identify complexity sources**:
-   - **Too many elements**: Competing buttons, redundant information, visual clutter
-   - **Excessive variation**: Too many colors, fonts, sizes, styles without purpose
-   - **Information overload**: Everything visible at once, no progressive disclosure
-   - **Visual noise**: Unnecessary borders, shadows, backgrounds, decorations
-   - **Confusing hierarchy**: Unclear what matters most
-   - **Feature creep**: Too many options, actions, or paths forward
+1. **识别复杂性来源**：
+   - **元素过多**：竞争的按钮、冗余信息、视觉杂乱
+   - **过度变化**：没有目的的颜色、字体、尺寸、样式过多
+   - **信息过载**：一次性展示所有内容，没有渐进披露
+   - **视觉噪音**：不必要的边框、阴影、背景、装饰
+   - **混乱的层级**：不清楚什么最重要
+   - **功能蔓延**：选项、动作或前进路径过多
 
-2. **Find the essence**:
-   - What's the primary user goal? (There should be ONE)
-   - What's actually necessary vs nice-to-have?
-   - What can be removed, hidden, or combined?
-   - What's the 20% that delivers 80% of value?
+2. **找到本质**：
+   - 主要用户目标是什么？（应该只有一个）
+   - 什么真正必要 vs 锦上添花？
+   - 什么可以移除、隐藏或合并？
+   - 什么是用 20% 付出交付 80% 价值的？
 
-If any of these are unclear from the codebase, ask the user directly to clarify what you cannot infer.
+如果这些中有任何不清楚的地方，直接询问用户以澄清你无法推断的内容。
 
-**CRITICAL**: Simplicity is not about removing features - it's about removing obstacles between users and their goals. Every element should justify its existence.
+**关键**：简单不是移除功能——是移除用户和目标之间的障碍。每个元素都应该证明其存在的合理性。
 
-## Plan Simplification
+## 规划简化
 
-Create a ruthless editing strategy:
+创建无情的编辑策略：
 
-- **Core purpose**: What's the ONE thing this should accomplish?
-- **Essential elements**: What's truly necessary to achieve that purpose?
-- **Progressive disclosure**: What can be hidden until needed?
-- **Consolidation opportunities**: What can be combined or integrated?
+- **核心目的**：这应该实现的**唯一**一件事是什么？
+- **必要元素**：真正实现该目的需要什么？
+- **渐进披露**：什么可以隐藏到需要时才显示？
+- **整合机会**：什么可以合并或集成？
 
-**IMPORTANT**: Simplification is hard. It requires saying no to good ideas to make room for great execution. Be ruthless.
+**重要**：简化是困难的。它需要对好想法说不，为伟大的执行腾出空间。要无情。
 
-## Simplify the Design
+## 简化设计
 
-Systematically remove complexity across these dimensions:
+系统性移除这些维度的复杂性：
 
-### Information Architecture
-- **Reduce scope**: Remove secondary actions, optional features, redundant information
-- **Progressive disclosure**: Hide complexity behind clear entry points (accordions, modals, step-through flows)
-- **Combine related actions**: Merge similar buttons, consolidate forms, group related content
-- **Clear hierarchy**: ONE primary action, few secondary actions, everything else tertiary or hidden
-- **Remove redundancy**: If it's said elsewhere, don't repeat it here
+### 信息架构
+- **缩减范围**：移除次要动作、可选功能、冗余信息
+- **渐进披露**：将复杂性隐藏在清晰的入口点后面（折叠、手模、分步流程）
+- **合并相关动作**：合并相似按钮、整合表单、分组相关内容
+- **清晰层级**：一个主要动作，几个次要动作，其他都是第三级或隐藏的
+- **移除冗余**：如果在其他地方说了，就不要重复
 
-### Visual Simplification
-- **Reduce color palette**: Use 1-2 colors plus neutrals, not 5-7 colors
-- **Limit typography**: One font family, 3-4 sizes maximum, 2-3 weights
-- **Remove decorations**: Eliminate borders, shadows, backgrounds that don't serve hierarchy or function
-- **Flatten structure**: Reduce nesting, remove unnecessary containers—never nest cards inside cards
-- **Remove unnecessary cards**: Cards aren't needed for basic layout; use spacing and alignment instead
-- **Consistent spacing**: Use one spacing scale, remove arbitrary gaps
+### 视觉简化
+- **减少调色板**：使用 1-2 种颜色加中性色，不用 5-7 种
+- **限制字体**：一个字体家族，最多 3-4 种尺寸，2-3 种字重
+- **移除装饰**：消除不服务层级或功能的对齐、阴影、背景
+- **扁平化结构**：减少嵌套，移除不必要的容器——不要在卡片里嵌套卡片
+- **移除不必要的卡片**：卡片不是基本布局必需的；用间距和对齐即可
+- **一致间距**：使用一个间距比例，移除任意间隙
 
-### Layout Simplification
-- **Linear flow**: Replace complex grids with simple vertical flow where possible
-- **Remove sidebars**: Move secondary content inline or hide it
-- **Full-width**: Use available space generously instead of complex multi-column layouts
-- **Consistent alignment**: Pick left or center, stick with it
-- **Generous white space**: Let content breathe, don't pack everything tight
+### 布局简化
+- **线性流程**：在可能的地方用简单的垂直流替换复杂网格
+- **移除侧边栏**：将次要内容移入行内或隐藏
+- **全宽**：大方使用可用空间，不用复杂的多栏布局
+- **一致对齐**：选择左对齐或居中，坚持到底
+- **慷慨留白**：让内容呼吸，不要把所有东西塞紧
 
-### Interaction Simplification
-- **Reduce choices**: Fewer buttons, fewer options, clearer path forward (paradox of choice is real)
-- **Smart defaults**: Make common choices automatic, only ask when necessary
-- **Inline actions**: Replace modal flows with inline editing where possible
-- **Remove steps**: Can signup be one step instead of three? Can checkout be simplified?
-- **Clear CTAs**: ONE obvious next step, not five competing actions
+### 交互简化
+- **减少选择**：更少的按钮、更少的选项、更清晰的前进路径（选择悖论是真的）
+- **智能默认值**：让常见选择自动化，只在必要时询问
+- **行内动作**：在可能的地方用行内编辑替换模态流程
+- **移除步骤**：注册可以一步而不是三步吗？结账可以简化吗？
+- **清晰的 CTA**：一个明显下一步，不是五个竞争动作
 
-### Content Simplification
-- **Shorter copy**: Cut every sentence in half, then do it again
-- **Active voice**: "Save changes" not "Changes will be saved"
-- **Remove jargon**: Plain language always wins
-- **Scannable structure**: Short paragraphs, bullet points, clear headings
-- **Essential information only**: Remove marketing fluff, legalese, hedging
-- **Remove redundant copy**: No headers restating intros, no repeated explanations, say it once
+### 内容简化
+- **更短文案**：每句话砍一半，然后再做一次
+- **主动语态**："Save changes" 不是 "Changes will be saved"
+- **移除术语**：通俗语言总是赢家
+- **可扫描结构**：短段落、项目符号、清晰标题
+- **仅必要信息**：移除营销废话、法律术语、模糊措辞
+- **移除冗余文案**：不要有重述引言的标题、不要有重复的解释，说一次就好
 
-### Code Simplification
-- **Remove unused code**: Dead CSS, unused components, orphaned files
-- **Flatten component trees**: Reduce nesting depth
-- **Consolidate styles**: Merge similar styles, use utilities consistently
-- **Reduce variants**: Does that component need 12 variations, or can 3 cover 90% of cases?
+### 代码简化
+- **移除未使用代码**：死 CSS、未使用组件、孤立文件
+- **扁平化组件树**：减少嵌套深度
+- **整合样式**：合并相似样式，一致使用工具类
+- **减少变体**：该组件需要 12 种变体，还是 3 种能覆盖 90% 的情况？
 
-**NEVER**:
-- Remove necessary functionality (simplicity ≠ feature-less)
-- Sacrifice accessibility for simplicity (clear labels and ARIA still required)
-- Make things so simple they're unclear (mystery ≠ minimalism)
-- Remove information users need to make decisions
-- Eliminate hierarchy completely (some things should stand out)
-- Oversimplify complex domains (match complexity to actual task complexity)
+**禁止**：
+- 移除必要功能（简单 ≠ 无功能）
+- 为简单牺牲无障碍（清晰的标签和 ARIA 仍然需要）
+- 做得太简单以至于不清楚（神秘 ≠ 极简）
+- 移除用户做决策所需的信息
+- 完全消除层级（有些东西应该突出）
+- 过度简化复杂领域（与实际任务复杂性匹配）
 
-## Verify Simplification
+## 验证简化
 
-Ensure simplification improves usability:
+确保简化改善了可用性：
 
-- **Faster task completion**: Can users accomplish goals more quickly?
-- **Reduced cognitive load**: Is it easier to understand what to do?
-- **Still complete**: Are all necessary features still accessible?
-- **Clearer hierarchy**: Is it obvious what matters most?
-- **Better performance**: Does simpler design load faster?
+- **任务完成更快**：用户能更快实现目标吗？
+- **认知负荷降低**：更容易理解该做什么吗？
+- **仍然完整**：所有必要功能仍然可访问吗？
+- **层级更清晰**：什么最重要明显吗？
+- **性能更好**：更简单的设计加载更快吗？
 
-## Document Removed Complexity
+## 文档化移除的复杂性
 
-If you removed features or options:
-- Document why they were removed
-- Consider if they need alternative access points
-- Note any user feedback to monitor
+如果你移除了功能或选项：
+- 记录为什么移除
+- 考虑是否需要替代入口点
+- 注意任何需要监控的用户反馈
 
-Remember: You have great taste and judgment. Simplification is an act of confidence - knowing what to keep and courage to remove the rest. As Antoine de Saint-Exupéry said: "Perfection is achieved not when there is nothing more to add, but when there is nothing left to take away."
+记住：你有很好的品味和判断力。简化是自信的行为——知道该保留什么，并有勇气移除其余的。正如 Antoine de Saint-Exupéry 所说："完美不是当没有东西可添加时实现，而是当没有东西可移除时实现。"

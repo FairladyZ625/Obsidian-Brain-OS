@@ -1,124 +1,124 @@
 ---
 name: arrange
-description: Improve layout, spacing, and visual rhythm. Fixes monotonous grids, inconsistent spacing, and weak visual hierarchy to create intentional compositions.
+description: 改进布局、间距和视觉节奏。修复单调网格、不一致间距和弱视觉层级，创造有意的节奏感。Improve layout, spacing, and visual rhythm.
 user-invokable: true
 argument-hint: [TARGET=<value>]
 ---
 
-Assess and improve layout and spacing that feels monotonous, crowded, or structurally weak — turning generic arrangements into intentional, rhythmic compositions.
+评估并改进感觉单调、拥挤或结构薄弱的布局和间距——将通用排列转化为有意的、节奏化的构图。
 
-## MANDATORY PREPARATION
+## 强制准备
 
-Use the frontend-design skill — it contains design principles, anti-patterns, and the **Context Gathering Protocol**. Follow the protocol before proceeding — if no design context exists yet, you MUST run teach-impeccable first.
+使用 frontend-design skill——其中包含设计原则、反模式，以及**上下文收集协议**。在继续之前遵循该协议——如果没有现成的设计上下文，必须先运行 teach-impeccable。
 
 ---
 
-## Assess Current Layout
+## 评估当前布局
 
-Analyze what's weak about the current spatial design:
+分析当前空间设计的薄弱之处：
 
-1. **Spacing**:
-   - Is spacing consistent or arbitrary? (Random padding/margin values)
-   - Is all spacing the same? (Equal padding everywhere = no rhythm)
-   - Are related elements grouped tightly, with generous space between groups?
+1. **间距**：
+   - 间距一致还是随意的？（随机的 padding/margin 值）
+   - 所有间距都一样？（到处相等的 padding = 无节奏）
+   - 相关元素是否紧密分组，组之间间距慷慨？
 
-2. **Visual hierarchy**:
-   - Apply the squint test: blur your (metaphorical) eyes — can you still identify the most important element, second most important, and clear groupings?
-   - Is hierarchy achieved effectively? (Space and weight alone can be enough — but is the current approach working?)
-   - Does whitespace guide the eye to what matters?
+2. **视觉层级**：
+   - 应用眯眼测试：模糊你的（比喻）眼睛——你仍然能识别最重要的元素、第二重要的元素和清晰的分组吗？
+   - 层级有效实现了吗？（空间和重量本身就足够——但当前方法有效吗？）
+   - 留白是否引导视线到重要的地方？
 
-3. **Grid & structure**:
-   - Is there a clear underlying structure, or does the layout feel random?
-   - Are identical card grids used everywhere? (Icon + heading + text, repeated endlessly)
-   - Is everything centered? (Left-aligned with asymmetric layouts feels more designed, but not a hard and fast rule)
+3. **网格与结构**：
+   - 有清晰的底层结构，还是布局感觉随机？
+   - 是否到处使用相同的卡片网格？（图标 + 标题 + 文本，无尽重复）
+   - 一切都居中吗？（左对齐与非对称布局感觉更有设计感，但不是硬性规则）
 
-4. **Rhythm & variety**:
-   - Does the layout have visual rhythm? (Alternating tight/generous spacing)
-   - Is every section structured the same way? (Monotonous repetition)
-   - Are there intentional moments of surprise or emphasis?
+4. **节奏与变化**：
+   - 布局有视觉节奏吗？（紧张/慷慨间距交替）
+   - 每个部分结构都相同吗？（单调重复）
+   - 有刻意的大强调时刻吗？
 
-5. **Density**:
-   - Is the layout too cramped? (Not enough breathing room)
-   - Is the layout too sparse? (Excessive whitespace without purpose)
-   - Does density match the content type? (Data-dense UIs need tighter spacing; marketing pages need more air)
+5. **密度**：
+   - 布局太拥挤了吗？（呼吸空间不够）
+   - 布局太稀疏了吗？（没有目的的过度留白）
+   - 密度与内容类型匹配吗？（数据密集的 UI 需要更紧间距；营销页面需要更多空间）
 
-**CRITICAL**: Layout problems are often the root cause of interfaces feeling "off" even when colors and fonts are fine. Space is a design material — use it with intention.
+**关键**：布局问题通常是界面"不对劲"的根本原因，即使颜色和字体看起来没问题。空间是一种设计材料——要有意识地使用。
 
-## Plan Layout Improvements
+## 规划布局改进
 
-Consult the [spatial design reference](reference/spatial-design.md) from the frontend-design skill for detailed guidance on grids, rhythm, and container queries.
+查阅 frontend-design skill 中的[空间设计参考](reference/spatial-design.md)获取网格、节奏和容器查询的详细指导。
 
-Create a systematic plan:
+创建系统性计划：
 
-- **Spacing system**: Use a consistent scale — whether that's a framework's built-in scale (e.g., Tailwind), rem-based tokens, or a custom system. The specific values matter less than consistency.
-- **Hierarchy strategy**: How will space communicate importance?
-- **Layout approach**: What structure fits the content? Flex for 1D, Grid for 2D, named areas for complex page layouts.
-- **Rhythm**: Where should spacing be tight vs generous?
+- **间距系统**：使用一致的间距比例——无论是框架内置比例（如 Tailwind）、rem 基础 token 还是自定义系统。具体值不重要，一致性才重要。
+- **层级策略**：空间如何传达重要性？
+- **布局方法**：什么结构适合内容？Flex 用于一维，Grid 用于二维，命名的 areas 用于复杂页面布局。
+- **节奏**：哪里间距应该紧张，哪里应该慷慨？
 
-## Improve Layout Systematically
+## 系统性改进布局
 
-### Establish a Spacing System
+### 建立间距系统
 
-- Use a consistent spacing scale — framework scales (Tailwind, etc.), rem-based tokens, or a custom scale all work. What matters is that values come from a defined set, not arbitrary numbers.
-- Name tokens semantically if using custom properties: `--space-xs` through `--space-xl`, not `--spacing-8`
-- Use `gap` for sibling spacing instead of margins — eliminates margin collapse hacks
-- Apply `clamp()` for fluid spacing that breathes on larger screens
+- 使用一致的间距比例——框架比例（Tailwind 等）、rem 基础 token 或自定义比例都可以。重要的是值来自一个定义的集合，不是任意数字。
+- 如果使用自定义属性，用语义命名 token：`--space-xs` 到 `--space-xl`，不是 `--spacing-8`
+- 用 `gap` 替代 margin 做同级间距——消除 margin collapse hack
+- 应用 `clamp()` 实现流动间距，在大屏幕上呼吸
 
-### Create Visual Rhythm
+### 创造视觉节奏
 
-- **Tight grouping** for related elements (8-12px between siblings)
-- **Generous separation** between distinct sections (48-96px)
-- **Varied spacing** within sections — not every row needs the same gap
-- **Asymmetric compositions** — break the predictable centered-content pattern when it makes sense
+- **紧密分组**：相关元素（同级之间 8-12px）
+- **慷慨分隔**：不同部分之间（48-96px）
+- **部分内变化**：不是每行都需要相同间隙
+- **非对称构图**：在有意义的时候打破可预测的居中内容模式
 
-### Choose the Right Layout Tool
+### 选择正确的布局工具
 
-- **Use Flexbox for 1D layouts**: Rows of items, nav bars, button groups, card contents, most component internals. Flex is simpler and more appropriate for the majority of layout tasks.
-- **Use Grid for 2D layouts**: Page-level structure, dashboards, data-dense interfaces, anything where rows AND columns need coordinated control.
-- **Don't default to Grid** when Flexbox with `flex-wrap` would be simpler and more flexible.
-- Use `repeat(auto-fit, minmax(280px, 1fr))` for responsive grids without breakpoints.
-- Use named grid areas (`grid-template-areas`) for complex page layouts — redefine at breakpoints.
+- **Flexbox 用于一维布局**：物品行、导航栏、按钮组、卡片内容、大多数组件内部。Flex 更简单，更适合大多数布局任务。
+- **Grid 用于二维布局**：页面级结构、仪表板、数据密集界面、任何需要行和列协调控制的。
+- **不要默认用 Grid**：当 Flexbox 加 `flex-wrap` 更简单更灵活时，不要默认用 Grid。
+- 使用 `repeat(auto-fit, minmax(280px, 1fr))` 实现无断点响应式网格。
+- 对复杂页面布局使用命名网格区域（`grid-template-areas`）——在断点处重新定义。
 
-### Break Card Grid Monotony
+### 打破卡片网格单调
 
-- Don't default to card grids for everything — spacing and alignment create visual grouping naturally
-- Use cards only when content is truly distinct and actionable — never nest cards inside cards
-- Vary card sizes, span columns, or mix cards with non-card content to break repetition
+- 不要默认用卡片网格处理一切——间距和对齐自然创造视觉分组
+- 只在内容真正独特且可操作时使用卡片——永远不要在卡片里嵌套卡片
+- 变化卡片尺寸、跨列，或混合卡片与非卡片内容以打破重复
 
-### Strengthen Visual Hierarchy
+### 加强视觉层级
 
-- Use the fewest dimensions needed for clear hierarchy. Space alone can be enough — generous whitespace around an element draws the eye. Some of the most sophisticated designs achieve rhythm with just space and weight. Add color or size contrast only when simpler means aren't sufficient.
-- Be aware of reading flow — in LTR languages, the eye naturally scans top-left to bottom-right, but primary action placement depends on context (e.g., bottom-right in dialogs, top in navigation).
-- Create clear content groupings through proximity and separation.
+- 使用最少数量的维度实现清晰层级。空间本身就足够了——元素周围慷慨的留白吸引视线。一些最精致的设计仅用空间和重量就实现了节奏。只有当更简单的手段不够时，才添加颜色或尺寸对比。
+- 注意阅读流向——在 LTR 语言中，视线自然从左扫到右，但主要动作放置取决于上下文（例如，对话框在右下角，导航在上方）。
+- 通过接近和分隔创造清晰的内容分组。
 
-### Manage Depth & Elevation
+### 管理深度与海拔
 
-- Create a semantic z-index scale (dropdown → sticky → modal-backdrop → modal → toast → tooltip)
-- Build a consistent shadow scale (sm → md → lg → xl) — shadows should be subtle
-- Use elevation to reinforce hierarchy, not as decoration
+- 创建语义 z-index 比例（dropdown → sticky → modal-backdrop → modal → toast → tooltip）
+- 构建一致的阴影比例（sm → md → lg → xl）——阴影应该微妙
+- 使用海拔强化层级，不是装饰
 
-### Optical Adjustments
+### 光学调整
 
-- If an icon looks visually off-center despite being geometrically centered, nudge it — but only if you're confident it actually looks wrong. Don't adjust speculatively.
+- 如果图标尽管几何居中但在视觉上看起来偏了，就微调——但只在你确信它看起来确实不对时。不要推测性调整。
 
-**NEVER**:
-- Use arbitrary spacing values outside your scale
-- Make all spacing equal — variety creates hierarchy
-- Wrap everything in cards — not everything needs a container
-- Nest cards inside cards — use spacing and dividers for hierarchy within
-- Use identical card grids everywhere (icon + heading + text, repeated)
-- Center everything — left-aligned with asymmetry feels more designed
-- Default to the hero metric layout (big number, small label, stats, gradient) as a template. If showing real user data, a prominent metric can work — but it should display actual data, not decorative numbers.
-- Default to CSS Grid when Flexbox would be simpler — use the simplest tool for the job
-- Use arbitrary z-index values (999, 9999) — build a semantic scale
+**禁止**：
+- 使用你比例之外的任意间距值
+- 使所有间距相等——变化创造层级
+- 用卡片包装一切——不是所有东西都需要容器
+- 在卡片里嵌套卡片——在卡片内使用间距和分隔符做层级
+- 到处使用相同的卡片网格（图标 + 标题 + 文本，重复）
+- 一切都居中——左对齐与非对称感觉更有设计感
+- 默认使用 Hero 指标布局（大数字、小标签、统计、渐变）作为模板。如果显示真实用户数据，突出的指标可以工作——但它应该显示真实数据，不是装饰性数字。
+- 默认用 CSS Grid 当 Flexbox 更简单时——使用最简单的工具完成工作
+- 使用任意 z-index 值（999、9999）——构建语义比例
 
-## Verify Layout Improvements
+## 验证布局改进
 
-- **Squint test**: Can you identify primary, secondary, and groupings with blurred vision?
-- **Rhythm**: Does the page have a satisfying beat of tight and generous spacing?
-- **Hierarchy**: Is the most important content obvious within 2 seconds?
-- **Breathing room**: Does the layout feel comfortable, not cramped or wasteful?
-- **Consistency**: Is the spacing system applied uniformly?
-- **Responsiveness**: Does the layout adapt gracefully across screen sizes?
+- **眯眼测试**：模糊视力下你能识别主要、次要和分组吗？
+- **节奏**：页面有紧张和慷慨间距的满意节拍吗？
+- **层级**：最重要的内容在 2 秒内明显吗？
+- **呼吸空间**：布局感觉舒适，不拥挤也不浪费吗？
+- **一致性**：间距系统应用一致吗？
+- **响应式**：布局在各屏幕尺寸下优雅适应吗？
 
-Remember: Space is the most underused design tool. A layout with the right rhythm and hierarchy can make even simple content feel polished and intentional.
+记住：空间是最未被利用的设计工具。正确节奏和层级的布局可以让简单内容感觉精致和有意图。

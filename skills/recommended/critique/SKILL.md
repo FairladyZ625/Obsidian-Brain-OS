@@ -1,119 +1,120 @@
 ---
 name: critique
-description: Evaluate design effectiveness from a UX perspective. Assesses visual hierarchy, information architecture, emotional resonance, and overall design quality with actionable feedback.
+description: >
+  设计评审技能。从 UX 视角评估设计效果，涵盖视觉层次、信息架构、情感共鸣和整体设计质量，提供可操作的反馈。Use when: design review, UX critique, design feedback, visual hierarchy assessment, design quality check. 评估设计效果时使用。
 user-invokable: true
 argument-hint: [AREA=<value>]
 ---
 
-## MANDATORY PREPARATION
+## 必要准备
 
-Use the frontend-design skill — it contains design principles, anti-patterns, and the **Context Gathering Protocol**. Follow the protocol before proceeding — if no design context exists yet, you MUST run teach-impeccable first. Additionally gather: what the interface is trying to accomplish.
+使用 frontend-design 技能 — 它包含设计原则、反模式和**上下文收集协议**。在继续之前遵循该协议 — 如果尚无设计上下文，你必须先运行 teach-impeccable。此外还需收集：该界面试图达成什么目标。
 
 ---
 
-Conduct a holistic design critique, evaluating whether the interface actually works—not just technically, but as a designed experience. Think like a design director giving feedback.
+进行全面的设计评审，评估界面是否真正有效 — 不仅是技术上，而是作为一个设计体验。像设计总监给出反馈一样思考。
 
-## Design Critique
+## 设计评审
 
-Evaluate the interface across these dimensions:
+从以下维度评估界面：
 
-### 1. AI Slop Detection (CRITICAL)
+### 1. AI 痕迹检测（关键）
 
-**This is the most important check.** Does this look like every other AI-generated interface from 2024-2025?
+**这是最重要的检查。** 这看起来像不像 2024-2025 年所有其他 AI 生成的界面？
 
-Review the design against ALL the **DON'T** guidelines in the frontend-design skill—they are the fingerprints of AI-generated work. Check for the AI color palette, gradient text, dark mode with glowing accents, glassmorphism, hero metric layouts, identical card grids, generic fonts, and all other tells.
+对照 frontend-design 技能中所有**"不要"**指南检查设计 — 它们是 AI 生成作品的指纹。检查 AI 调色板、渐变文字、暗色模式+发光点缀、玻璃态、英雄指标布局、千篇一律的卡片网格、通用字体以及其他所有特征。
 
-**The test**: If you showed this to someone and said "AI made this," would they believe you immediately? If yes, that's the problem.
+**测试方法**：如果你给某人看这个并说"AI 做的"，他们会立刻相信吗？如果是，那就是问题。
 
-### 2. Visual Hierarchy
-- Does the eye flow to the most important element first?
-- Is there a clear primary action? Can you spot it in 2 seconds?
-- Do size, color, and position communicate importance correctly?
-- Is there visual competition between elements that should have different weights?
+### 2. 视觉层次
+- 眼睛是否首先流向最重要的元素？
+- 是否有清晰的主要操作？2 秒内能找到吗？
+- 大小、颜色和位置是否正确传达了重要性？
+- 不同权重的元素之间是否存在视觉竞争？
 
-### 3. Information Architecture
-- Is the structure intuitive? Would a new user understand the organization?
-- Is related content grouped logically?
-- Are there too many choices at once? (cognitive overload)
-- Is the navigation clear and predictable?
+### 3. 信息架构
+- 结构是否直观？新用户能理解组织方式吗？
+- 相关内容是否逻辑分组？
+- 是否一次有太多选择？（认知过载）
+- 导航是否清晰可预测？
 
-### 4. Emotional Resonance
-- What emotion does this interface evoke? Is that intentional?
-- Does it match the brand personality?
-- Does it feel trustworthy, approachable, premium, playful—whatever it should feel?
-- Would the target user feel "this is for me"?
+### 4. 情感共鸣
+- 这个界面唤起什么情感？这是有意为之的吗？
+- 是否匹配品牌个性？
+- 是否感觉可信、亲和、高端、有趣 — 无论它应该是什么感觉？
+- 目标用户会觉得"这是为我设计的"吗？
 
-### 5. Discoverability & Affordance
-- Are interactive elements obviously interactive?
-- Would a user know what to do without instructions?
-- Are hover/focus states providing useful feedback?
-- Are there hidden features that should be more visible?
+### 5. 可发现性与可供性
+- 交互元素是否明显可交互？
+- 用户不借助说明能知道该做什么吗？
+- 悬停/聚焦状态是否提供有用反馈？
+- 是否有隐藏功能应该更显眼？
 
-### 6. Composition & Balance
-- Does the layout feel balanced or uncomfortably weighted?
-- Is whitespace used intentionally or just leftover?
-- Is there visual rhythm in spacing and repetition?
-- Does asymmetry feel designed or accidental?
+### 6. 构图与平衡
+- 布局是否感觉平衡或有不舒服的偏重？
+- 留白是否有意图还是只是剩余空间？
+- 间距和重复是否有视觉节奏？
+- 不对称感是设计出来的还是偶然的？
 
-### 7. Typography as Communication
-- Does the type hierarchy clearly signal what to read first, second, third?
-- Is body text comfortable to read? (line length, spacing, size)
-- Do font choices reinforce the brand/tone?
-- Is there enough contrast between heading levels?
+### 7. 字体即传达
+- 字体层次是否清晰标示了第一、第二、第三阅读优先级？
+- 正文是否舒适可读？（行宽、间距、大小）
+- 字体选择是否强化了品牌/调性？
+- 标题层级之间是否有足够对比？
 
-### 8. Color with Purpose
-- Is color used to communicate, not just decorate?
-- Does the palette feel cohesive?
-- Are accent colors drawing attention to the right things?
-- Does it work for colorblind users? (not just technically—does meaning still come through?)
+### 8. 有目的的色彩
+- 色彩是否用于传达，而非仅仅装饰？
+- 调色板是否协调？
+- 强调色是否将注意力引向正确的事物？
+- 对色盲用户是否有效？（不仅是技术上通过 — 意义是否仍然传达？）
 
-### 9. States & Edge Cases
-- Empty states: Do they guide users toward action, or just say "nothing here"?
-- Loading states: Do they reduce perceived wait time?
-- Error states: Are they helpful and non-blaming?
-- Success states: Do they confirm and guide next steps?
+### 9. 状态与边缘情况
+- 空状态：是否引导用户行动，还是只说"这里没有"？
+- 加载状态：是否减少了感知等待时间？
+- 错误状态：是否有帮助且不带指责？
+- 成功状态：是否确认并引导下一步？
 
-### 10. Microcopy & Voice
-- Is the writing clear and concise?
-- Does it sound like a human (the right human for this brand)?
-- Are labels and buttons unambiguous?
-- Does error copy help users fix the problem?
+### 10. 微文案与语调
+- 文案是否清晰简洁？
+- 是否听起来像真人（适合该品牌的真人）？
+- 标签和按钮是否无歧义？
+- 错误文案是否帮助用户解决问题？
 
-## Generate Critique Report
+## 生成评审报告
 
-Structure your feedback as a design director would:
+以设计总监的方式组织反馈：
 
-### Anti-Patterns Verdict
-**Start here.** Pass/fail: Does this look AI-generated? List specific tells from the skill's Anti-Patterns section. Be brutally honest.
+### 反模式判定
+**从这里开始。** 通过/不通过：这看起来是 AI 生成的吗？列出技能反模式部分的具体特征。要毫不留情。
 
-### Overall Impression
-A brief gut reaction—what works, what doesn't, and the single biggest opportunity.
+### 总体印象
+简要的直觉反应 — 什么有效、什么无效，以及最大的单一机会。
 
-### What's Working
-Highlight 2-3 things done well. Be specific about why they work.
+### 做得好的地方
+突出 2-3 个做得好的方面。具体说明为什么有效。
 
-### Priority Issues
-The 3-5 most impactful design problems, ordered by importance:
+### 优先问题
+按重要性排列的 3-5 个最有影响力的设计问题：
 
-For each issue:
-- **What**: Name the problem clearly
-- **Why it matters**: How this hurts users or undermines goals
-- **Fix**: What to do about it (be concrete)
-- **Command**: Which command to use (prefer: /normalize, /onboard, /polish, /animate, /clarify, /audit, /quieter, /typeset, /harden, /overdrive, /delight, /arrange, /critique, /colorize, /bolder, /optimize, /adapt, /distill, /extract — or other installed skills you're sure exist)
+每个问题：
+- **什么**：清晰命名问题
+- **为什么重要**：这如何伤害用户或损害目标
+- **如何修复**：具体怎么做
+- **命令**：使用哪个命令（优先：/normalize, /onboard, /polish, /animate, /clarify, /audit, /quieter, /typeset, /harden, /overdrive, /delight, /arrange, /critique, /colorize, /bolder, /optimize, /adapt, /distill, /extract — 或其他已安装的确定存在的技能）
 
-### Minor Observations
-Quick notes on smaller issues worth addressing.
+### 次要观察
+值得处理的较小问题的快速记录。
 
-### Questions to Consider
-Provocative questions that might unlock better solutions:
-- "What if the primary action were more prominent?"
-- "Does this need to feel this complex?"
-- "What would a confident version of this look like?"
+### 值得思考的问题
+可能解锁更好方案的挑衅性问题：
+- "如果主要操作更显眼会怎样？"
+- "这需要感觉这么复杂吗？"
+- "自信版本会是什么样子？"
 
-**Remember**:
-- Be direct—vague feedback wastes everyone's time
-- Be specific—"the submit button" not "some elements"
-- Say what's wrong AND why it matters to users
-- Give concrete suggestions, not just "consider exploring..."
-- Prioritize ruthlessly—if everything is important, nothing is
-- Don't soften criticism—developers need honest feedback to ship great design
+**记住**：
+- 直接 — 模糊的反馈浪费所有人的时间
+- 具体 — "提交按钮"而不是"某些元素"
+- 说出什么不对以及为什么对用户重要
+- 给出具体建议，而不只是"考虑探索..."
+- 无情排序 — 如果一切都很重要，那就什么都不重要
+- 不要软化批评 — 开发者需要诚实的反馈来做出好设计
