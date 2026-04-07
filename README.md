@@ -1,6 +1,6 @@
 # 🧠 Obsidian Brain OS
 
-> AI-driven personal knowledge management system — fully runnable, Obsidian-native.
+> AI-driven personal context system — fully runnable, Obsidian-native.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -38,7 +38,7 @@ bash setup.sh
 Don't want to read docs? Just **copy the message below and send it to your AI agent** (Claude, ChatGPT, Cursor, OpenClaw agent, or any coding assistant). It will clone the repo, read the installer skill, and guide you through setup step by step.
 
 ```
-Hi! I want to install Obsidian Brain OS — an AI-driven personal knowledge system. Please:
+Hi! I want to install Obsidian Brain OS — an AI-driven personal context system. Please:
 1. Clone the repo: git clone https://github.com/FairladyZ625/Obsidian-Brain-OS.git
 2. Read skills/brain-os-installer/SKILL.md — that's the installation guide for you
 3. Follow it to set up my vault: ask me where I want it, my name, timezone, etc.

@@ -1,6 +1,6 @@
 # 🧠 Obsidian Brain OS
 
-> AI 驱动的个人知识管理系统——开箱即用，深度 Obsidian 原生。
+> AI 驱动的个人上下文管理系统——开箱即用，深度 Obsidian 原生。
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -40,7 +40,7 @@ bash setup.sh
 不想看文档？**直接复制下面这段话，发给你的 AI Agent**（Claude / ChatGPT / Cursor / OpenClaw / 任何编程助手）。它会自动拉取仓库、阅读安装向导、一步步帮你装好。
 
 ```
-你好！我想安装 Obsidian Brain OS——一个 AI 驱动的个人知识管理系统。请帮我：
+你好！我想安装 Obsidian Brain OS——一个 AI 驱动的个人上下文管理系统。请帮我：
 1. 克隆仓库：git clone https://github.com/FairladyZ625/Obsidian-Brain-OS.git
 2. 阅读 skills/brain-os-installer/SKILL.md —— 这是给你的安装指南
 3. 按指南帮我配置：问我 vault 放哪、我叫什么、时区等

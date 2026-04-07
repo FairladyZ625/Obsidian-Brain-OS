@@ -74,7 +74,7 @@ TRANSCRIPT_DIR="$HOME/transcripts"    # AI 对话导出位置
 ## 第三步：选择你的安装配置
 
 ### 🧠 配置 A：仅知识系统
-适用场景：构建个人知识库、整理研究资料
+适用场景：构建个人上下文库、整理研究资料
 
 安装以下 skills：
 - `skills/article-notes-integration/`
