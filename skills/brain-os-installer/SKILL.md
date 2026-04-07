@@ -49,22 +49,22 @@ description: >
 安装内容：vault 知识层 + 文章处理 + 深度研究
 
 **引导阅读**：
-- 📖 先读 `docs/guide/00-philosophy.md`（理解为什么这样设计）
-- 📖 再读 `docs/guide/03-daily-workflow.md`（了解日常怎么用）
+- 📖 先读 `docs/zh/guide/00-philosophy.md`（理解为什么这样设计）
+- 📖 再读 `docs/zh/guide/03-daily-workflow.md`（了解日常怎么用）
 
 ### 方案 B：个人事务管理
 安装内容：vault 事务层 + 每日驾驶舱 + 待办管理
 
 **引导阅读**：
-- 📖 先读 `docs/guide/01-agent-setup.md`（Agent 配置是关键）
-- 📖 再读 `docs/guide/02-channel-design.md`（频道设计防止上下文污染）
+- 📖 先读 `docs/zh/guide/01-agent-setup.md`（Agent 配置是关键）
+- 📖 再读 `docs/zh/guide/02-channel-design.md`（频道设计防止上下文污染）
 
 ### 方案 C：Nightly Pipeline
 安装内容：全套 vault + 脚本 + prompts + 核心 skills + cron 配置
 
 **引导阅读**：
-- 📖 先读 `docs/guide/00-overview.md`（总览）
-- 📖 再读 `docs/guide/01-agent-setup.md`（Agent 配置）
+- 📖 先读 `docs/zh/guide/00-overview.md`（总览）
+- 📖 再读 `docs/zh/guide/01-agent-setup.md`（Agent 配置）
 - 📖 然后读 `docs/zh/nightly-pipeline.md`（Pipeline 详解）
 
 ### 方案 D：完整系统
@@ -145,8 +145,8 @@ openclaw cron import Obsidian-Brain-OS/cron-examples/generated/personal-ops.json
 安装完成后：
 1. 确认用户能在 Obsidian 中打开 vault
 2. 确认至少一个脚本运行正常
-3. **引导用户阅读 `docs/guide/03-daily-workflow.md`**（了解日常使用方式）
-4. **引导用户阅读 `docs/guide/04-iteration-guide.md`**（了解如何持续优化）
+3. **引导用户阅读 `docs/zh/guide/03-daily-workflow.md`**（了解日常使用方式）
+4. **引导用户阅读 `docs/zh/guide/04-iteration-guide.md`**（了解如何持续优化）
 5. 告诉用户：系统需要迭代，不是装完就完美的
 
 ---
@@ -169,9 +169,9 @@ openclaw cron import Obsidian-Brain-OS/cron-examples/generated/personal-ops.json
 | 用户问题 | 引用文档 |
 |---------|---------|
 | **"Agent 怎么配？团队怎么搭？"** | **`docs/agents.md`** ⭐ 最重要 |
-| "频道怎么分？" | `docs/guide/02-channel-design.md` |
-| "日常怎么用？" | `docs/guide/03-daily-workflow.md` |
-| "怎么持续优化？" | `docs/guide/04-iteration-guide.md` |
+| "频道怎么分？" | `docs/zh/guide/02-channel-design.md` |
+| "日常怎么用？" | `docs/zh/guide/03-daily-workflow.md` |
+| "怎么持续优化？" | `docs/zh/guide/04-iteration-guide.md` |
 | "Obsidian 插件推荐？" | `docs/zh/obsidian-setup.md` |
 | "Cron 怎么配？" | `docs/zh/openclaw-setup.md` |
 | "Skill 怎么用？每个 Skill 干嘛的？" | `docs/agents.md`（Skills 全览章节） |

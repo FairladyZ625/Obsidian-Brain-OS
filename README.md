@@ -1,6 +1,6 @@
 # 🧠 Obsidian Brain OS
 
-> An AI-driven personal knowledge management system — fully runnable, Obsidian-native.
+> AI-driven personal knowledge management system — fully runnable, Obsidian-native.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -10,88 +10,73 @@ English | [中文](README_CN.md)
 
 ## What is this?
 
-**Obsidian Brain OS** is a complete, battle-tested framework for building an AI-augmented personal knowledge system. It's not just a template — it's a running platform with:
+**Obsidian Brain OS** is a complete, battle-tested framework for building an AI-augmented personal knowledge system. Not just a template — it's a running platform:
 
 - 📚 **Three-layer knowledge architecture** (Reading / Working / System)
 - 🤖 **Nightly AI pipeline** (article integration → conversation mining → knowledge amplification → daily digest)
 - 📋 **Personal ops system** (daily dashboard, weekly planning, commitment tracking, morning brief)
-- 🛠️ **Automation scripts** (knowledge lint, nightly digest init, conversation export, knowledge canvas)
-- 🎯 **Agent Skills** (AI-native skills for knowledge workflows, research, writing, brainstorming)
-- ⏰ **OpenClaw cron configs** (ready-to-use scheduling templates)
-- 🦭 **Brain OS Installer Skill** (guided Socratic setup for new users)
-
-This is the exact system used to manage knowledge, projects, and daily operations — open-sourced and anonymized for everyone.
-
----
-
-## Architecture Overview
-
-```
-Obsidian Brain OS
-├── 📥 00-INBOX/              Capture everything first
-├── 🎯 01-PERSONAL-OPS/       Daily ops, planning, tracking
-├── 👥 02-TEAM/               Team collaboration rules
-├── 🧠 03-KNOWLEDGE/
-│   ├── 01-READING/           What you actually read
-│   │   ├── 01-DOMAINS/       Domain knowledge cards
-│   │   ├── 02-TOPICS/        Topic entry pages
-│   │   ├── 03-PATTERNS/      Distilled patterns
-│   │   └── 04-DIGESTS/       Daily/weekly digests ← Start here
-│   ├── 02-WORKING/           Work in progress
-│   │   ├── 01-ARTICLE-NOTES/ Raw article processing
-│   │   ├── 02-PATTERN-CANDIDATES/
-│   │   ├── 03-TOPIC-DRAFTS/
-│   │   └── 04-RESEARCH-QUESTIONS/
-│   └── 99-SYSTEM/            AI pipeline outputs (don't read directly)
-├── 04-CUSTOM/                Your custom zone (define it yourself)
-├── 05-PROJECTS/              Project registry layer
-├── 06-PERSONAL-DOCS/         Personal docs (gitignored by default)
-├── 07-WORK-CONTEXT/          Work experience & context
-└── templates/                Document templates
-```
-
-### Nightly AI Pipeline
-
-```
-02:00  Article Integration    → process article notes → domain knowledge
-03:00  Conversation Mining    → extract insights from AI conversations
-04:00  Knowledge Amplification → cross-source synthesis → patterns
-       ↓
-       Daily Digest (your morning reading)
-```
+- 🛠️ **Automation scripts** (knowledge lint, nightly digest init, conversation export)
+- 🎯 **Agent Skills** (AI-native skills for knowledge workflows, research, writing)
+- ⏰ **Cron configs** (ready-to-use scheduling templates)
+- 🦭 **Installer Skill** (guided Socratic setup for new users)
 
 ---
 
 ## Quick Start
 
-### Prerequisites
-- [Obsidian](https://obsidian.md/) (required)
-- [Git](https://git-scm.com/)
-- [OpenClaw](https://openclaw.ai) (for AI pipeline & scheduling)
-- Python 3.9+ (for scripts)
-
-### 5-Minute Setup
-
 ```bash
-# 1. Clone this repo as your vault
-git clone git@github.com:FairladyZ625/Obsidian-Brain-OS.git ~/brain
-
-# 2. Open in Obsidian
-# File → Open Vault → select ~/brain/vault-template
-
-# 3. Install recommended Obsidian plugins
-# See docs/obsidian-setup.md
-
-# 4. Configure your paths
-cp scripts/config.env.example scripts/config.env
-# Edit config.env with your paths
-
-# 5. Run the installer skill (optional — guided setup)
-# In OpenClaw: "install brain-os" 
-# The installer will walk you through everything via Socratic dialogue
+# Clone & install
+git clone https://github.com/FairladyZ625/Obsidian-Brain-OS.git
+cd Obsidian-Brain-OS
+bash setup.sh
 ```
 
-→ See **[docs/getting-started.md](docs/getting-started.md)** for full setup guide.
+`setup.sh` walks you through everything interactively: vault path, user info, skills, cron, verification. Use `bash setup.sh --test` for a dry run.
+
+→ Full guide: [docs/getting-started.md](docs/getting-started.md) | [中文指南](docs/zh/README.md)
+
+---
+
+## Documentation
+
+### 📁 Structure
+
+```
+docs/                  ← English documentation (authoritative)
+├── getting-started.md
+├── agents.md          ← Agent team config (⭐ start here after install)
+├── architecture.md
+├── nightly-pipeline.md
+├── personal-ops.md
+├── chronicle-agent.md
+├── qmd-setup.md
+├── personal-context-guide.md
+├── project-management.md
+├── obsidian-setup.md
+├── openclaw-setup.md
+├── skills-guide.md
+├── knowledge-architecture.md
+└── faq.md
+
+docs/zh/               ← 中文文档（Chinese translations）
+├── README.md           ← 中文文档索引
+├── agents.md           ← Agent 团队配置指南（详细中文版）
+├── ... (same structure, all translated)
+```
+
+**Rule**: `docs/` = English, `docs/zh/` = Chinese. Same file names, same content, different language. Read whichever you prefer.
+
+### 📖 Essential Reading (in order)
+
+1. **[Getting Started](docs/getting-started.md)** — Install & first run
+2. **[Agent Team Guide](docs/agents.md)** ⭐ — Configure your AI agents (most important post-install doc)
+3. **[Architecture](docs/architecture.md)** — Understand the system design
+4. **[Personal Ops](docs/personal-ops.md)** — Daily operations
+5. **[Nightly Pipeline](docs/nightly-pipeline.md)** — Automated knowledge processing
+
+### 🇨🇳 中文用户
+
+→ 从 [docs/zh/README.md](docs/zh/README.md) 开始，顺序同上。
 
 ---
 
@@ -99,25 +84,15 @@ cp scripts/config.env.example scripts/config.env
 
 | Module | Description |
 |--------|-------------|
-| `vault-template/` | Complete Obsidian vault template |
-| `scripts/` | Automation scripts (lint, digest, export, canvas) |
-| `prompts/` | Nightly pipeline prompt templates |
-| `skills/` | AI agent skills (core + recommended) |
-| `cron-examples/` | OpenClaw scheduling configs |
-| `examples/` | Sample notes, digests, project briefs |
-| `docs/` | Full documentation |
-
-### Core Skills
-- **brain-os-installer** — Guided Socratic setup for new users
-- **personal-ops-driver** — Daily personal ops management
-- **article-notes-integration** — Article processing pipeline
-- **conversation-knowledge-flywheel** — Knowledge flywheel orchestration
-- **knowledge-flywheel-amplifier** — Cross-source synthesis
-- **notebooklm** — NotebookLM deep research integration
-- **deep-research** — Multi-source deep research
-
-### Recommended Skills
-Planning, brainstorming, writing, critique, humanizing, polishing and more — see `skills/recommended/`.
+| `vault-template/` | Complete Obsidian vault (8 directories) |
+| `setup.sh` | Interactive installer (`--test` for dry run) |
+| `scripts/` | Automation scripts (lint, digest, export) |
+| `prompts/` | Nightly pipeline prompt templates (5 files) |
+| `skills/` | 7 core + 18 recommended agent skills |
+| `tools/conversation-mining/` | Conversation mining tool (embedded) |
+| `cron-examples/` | OpenClaw cron configs (7 jobs) |
+| `docs/` | Full English documentation |
+| `docs/zh/` | Full Chinese documentation |
 
 ---
 
@@ -125,42 +100,18 @@ Planning, brainstorming, writing, critique, humanizing, polishing and more — s
 
 > **Context is infrastructure. Knowledge is compounding.**
 
-Most PKM systems are static vaults. Brain OS is a living system:
-
 1. **Capture** → everything goes to INBOX first
-2. **Process** → nightly AI pipeline turns raw notes into structured knowledge
+2. **Process** → Nightly AI pipeline turns raw notes into structured knowledge
 3. **Compound** → patterns emerge from cross-source synthesis
 4. **Act** → daily digest + personal ops keeps you moving
 
-The AI doesn't replace your thinking — it handles the plumbing so you can focus on the signal.
+The AI handles the plumbing so you can focus on signal.
 
 ---
 
-## Documentation
+## Related Project
 
-### 📖 使用指南（中文，推荐先读）
-- [总览](docs/guide/00-overview.md) — 从这里开始
-- [核心方法论](docs/guide/00-philosophy.md) — 为什么这样设计
-- [Agent 配置指南](docs/guide/01-agent-setup.md) — 怎么配好你的 AI Agent
-- [频道设计](docs/guide/02-channel-design.md) — 怎么分频道防止上下文污染
-- [日常工作流](docs/guide/03-daily-workflow.md) — 每天怎么用这套系统
-- [迭代指南](docs/guide/04-iteration-guide.md) — 持续优化你的系统
-
-### 📚 技术文档（English）
-- [Getting Started](docs/getting-started.md)
-- [Architecture](docs/architecture.md)
-- [Obsidian Setup](docs/obsidian-setup.md)
-- [OpenClaw Setup](docs/openclaw-setup.md)
-- [QMD Semantic Search](docs/qmd-setup.md)
-- [Agent Team Guide](docs/agents.md)
-- [Nightly Pipeline](docs/nightly-pipeline.md)
-- [Personal Ops System](docs/personal-ops.md)
-- [Knowledge Architecture](docs/knowledge-architecture.md)
-- [Personal Context Guide (06 & 07)](docs/personal-context-guide.md)
-- [Skills Guide](docs/skills-guide.md)
-- [Project Management](docs/project-management.md)
-- [Chronicle 史官系统](docs/chronicle-agent.md)
-- [FAQ](docs/faq.md)
+- **[Agora](https://github.com/FairladyZ625/Agora)** — Multi-agent governance framework. Brain OS provides knowledge context; Agora provides agent collaboration structure.
 
 ---
 

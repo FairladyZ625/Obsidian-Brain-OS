@@ -76,5 +76,5 @@ Brain OS 提供的是：
 
 如果你的 AI Agent 需要理解 Brain OS 的安装和使用：
 - 让它先读这篇总览
-- 然后按顺序阅读 `docs/guide/` 下的文档
+- 然后按顺序阅读 `docs/zh/guide/` 下的文档
 - 安装时让它参考 `skills/brain-os-installer/SKILL.md`
