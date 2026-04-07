@@ -1,0 +1,174 @@
+# Obsidian Brain OS 入门指南
+
+> 本文档为英文版的中译本。如有歧义，以英文原版为准。
+
+> 你的 AI 增强型个人上下文系统。从零到运行，30 分钟搞定。
+
+---
+
+## 你将要构建什么
+
+Brain OS 将 Obsidian 打造为一个**活的个人上下文系统**——不仅仅是一个笔记应用，而是一个 AI agent 能够主动处理、关联和呈现你知识的工作空间。
+
+完成设置后：
+- 你只需捕获一次（文章、想法、待办）
+- AI 在你睡觉时处理（夜间 pipeline，凌晨 02:00-04:00）
+- 你醒来时看到的是精筛摘要、有序知识库和每日简报
+
+---
+
+## 前置要求
+
+| 工具 | 用途 | 是否必需 |
+|------|------|----------|
+| [Obsidian](https://obsidian.md) | Vault 界面 | ✅ 必需 |
+| [OpenClaw](https://docs.openclaw.ai) | AI 调度 + cron | ✅ 用于夜间 pipeline |
+| Git | Vault 版本控制 | ✅ 推荐 |
+| Python 3.8+ | 部分脚本 | ✅ 用于完整 pipeline |
+| `convs` CLI | 导出 AI 对话 | 可选 |
+
+---
+
+## 第一步：克隆并设置 Vault
+
+```bash
+# 克隆仓库
+git clone https://github.com/FairladyZ625/Obsidian-Brain-OS.git
+cd Obsidian-Brain-OS
+
+# 将 vault 模板复制到你的目标位置
+cp -r vault-template ~/my-brain
+
+# 初始化 vault 为 git 仓库
+cd ~/my-brain
+git init
+git add .
+git commit -m "init: Brain OS vault"
+```
+
+然后打开 Obsidian → **File → Open Vault** → 选择 `~/my-brain`。
+
+---
+
+## 第二步：配置路径
+
+```bash
+# 复制配置模板
+cp scripts/config.env.example scripts/config.env
+
+# 用实际值编辑
+nano scripts/config.env
+```
+
+需要设置的关键值：
+
+```bash
+BRAIN_PATH="$HOME/my-brain"          # 你的 vault 位置
+USER_NAME="Your Name"                 # AI 对你的称呼
+TIMEZONE="America/New_York"           # 你的时区（用于夜间调度）
+TRANSCRIPT_DIR="$HOME/transcripts"    # AI 对话导出位置
+```
+
+---
+
+## 第三步：选择你的安装配置
+
+### 🧠 配置 A：仅知识系统
+适用场景：构建个人知识库、整理研究资料
+
+安装以下 skills：
+- `skills/article-notes-integration/`
+- `skills/deep-research/`
+- `skills/recommended/planning-with-files/`
+- `skills/recommended/brainstorming/`
+
+设置以下 cron job（来自 `cron-examples/nightly-pipeline.json`）：
+- `article-notes-integration-nightly` (02:00)
+- `knowledge-lint-weekly` (周一 01:00)
+
+### 📋 配置 B：仅个人 Ops
+适用场景：AI 驱动的每日规划、待办管理
+
+安装以下 skills：
+- `skills/personal-ops-driver/`
+
+设置以下 cron job（来自 `cron-examples/personal-ops.json`）：
+- `personal-ops-morning-brief` (07:00 每日)
+- `personal-ops-todo-reminder-1500` (15:00 每日)
+- `personal-ops-weekly-plan` (周一 05:10)
+
+### 🌙 配置 C：完整夜间 Pipeline
+适用场景：最大化自动化、知识持续复合增长
+
+安装所有 skills + 所有 cron job。详见 [夜间 Pipeline 文档](nightly-pipeline.md)。
+
+---
+
+## 第四步：安装 Skills
+
+将你需要的 skills 复制到 OpenClaw skills 目录：
+
+```bash
+# 复制核心 skills
+cp -r skills/article-notes-integration/ ~/.agents/skills/
+cp -r skills/personal-ops-driver/ ~/.agents/skills/
+
+# 或安装所有推荐的 skills
+cp -r skills/recommended/*/ ~/.agents/skills/
+```
+
+然后更新每个 `SKILL.md` 中的占位符值：
+- `{{BRAIN_PATH}}` → 你的 vault 路径
+- `{{USER_NAME}}` → 你的名字
+- `{{TIMEZONE}}` → 你的时区
+
+---
+
+## 第五步：设置 Cron Jobs（OpenClaw）
+
+```bash
+# 导入夜间 pipeline 任务
+openclaw cron import cron-examples/nightly-pipeline.json
+
+# 导入个人 ops 任务
+openclaw cron import cron-examples/personal-ops.json
+```
+
+或手动编辑 `~/.openclaw/cron/jobs.json`，参考 `cron-examples/` 中的格式。
+
+> ⚠️ 启用前：请替换 cron 配置文件中的所有 `{{PLACEHOLDER}}` 值。
+
+---
+
+## 第六步：验证
+
+```bash
+# 测试知识 lint
+bash scripts/knowledge-lint.sh ~/my-brain
+
+# 测试夜间摘要初始化
+bash scripts/init-nightly-digest.sh ~/my-brain
+```
+
+---
+
+## 第一周行动计划
+
+**第一天：** 打开 Obsidian，探索 vault 结构，阅读 `00-INBOX/README.md`
+
+**第二天：** 在 `03-KNOWLEDGE/02-WORKING/01-ARTICLE-NOTES/` 中添加 3-5 篇文章链接。让 AI 当晚处理。
+
+**第三天：** 在 `03-KNOWLEDGE/01-READING/04-DIGESTS/` 查看你的第一个夜间摘要。
+
+**第四到七天：** 在 `00-INBOX/todo-backlog.md` 添加待办。在 `01-PERSONAL-OPS/01-DAILY-BRIEFS/` 查看你的早间简报。
+
+---
+
+## 故障排除
+
+常见问题见 [FAQ](faq.md)。
+
+- Obsidian 不显示 vault → 检查 vault 路径是目录而非文件
+- 脚本运行失败 → 先执行 `source scripts/config.env`
+- Cron job 不运行 → 验证 OpenClaw 正在运行（`openclaw gateway status`）
+- 知识 lint 无发现 → 确认 `BRAIN_PATH` 指向 vault 根目录
