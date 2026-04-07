@@ -1,44 +1,44 @@
 ---
 name: optimize
-description: 提升界面性能，包括加载速度、渲染、动画、图片和包体积。让体验更快更流畅。Improve interface performance across loading speed, rendering, animations, images, and bundle size.
+description: Improve interface performance across loading speed, rendering, animations, images, and bundle size. Makes experiences faster and smoother.
 user-invokable: true
 argument-hint: [TARGET=<value>]
 ---
 
-识别并修复性能问题，创造更快、更流畅的用户体验。
+Identify and fix performance issues to create faster, smoother user experiences.
 
-## 评估性能问题
+## Assess Performance Issues
 
-了解当前性能并识别问题：
+Understand current performance and identify problems:
 
-1. **测量当前状态**：
-   - **Core Web Vitals**：LCP、FID/INP、CLS 分数
-   - **加载时间**：可交互时间、首次内容绘制
-   - **包体积**：JavaScript、CSS、图片大小
-   - **运行时性能**：帧率、内存使用、CPU 使用
-   - **网络**：请求数、payload 大小、瀑布流
+1. **Measure current state**:
+   - **Core Web Vitals**: LCP, FID/INP, CLS scores
+   - **Load time**: Time to interactive, first contentful paint
+   - **Bundle size**: JavaScript, CSS, image sizes
+   - **Runtime performance**: Frame rate, memory usage, CPU usage
+   - **Network**: Request count, payload sizes, waterfall
 
-2. **识别瓶颈**：
-   - 什么慢？（初始加载？交互？动画？）
-   - 什么导致的？（大图片？昂贵的 JavaScript？布局抖动？）
-   - 有多严重？（可感知？烦人？阻塞？）
-   - 影响谁？（所有用户？只有移动端？慢速连接？）
+2. **Identify bottlenecks**:
+   - What's slow? (Initial load? Interactions? Animations?)
+   - What's causing it? (Large images? Expensive JavaScript? Layout thrashing?)
+   - How bad is it? (Perceivable? Annoying? Blocking?)
+   - Who's affected? (All users? Mobile only? Slow connections?)
 
-**关键**：测量前和后。提前优化浪费时间。只优化真正重要的。
+**CRITICAL**: Measure before and after. Premature optimization wastes time. Optimize what actually matters.
 
-## 优化策略
+## Optimization Strategy
 
-创建系统性改进计划：
+Create systematic improvement plan:
 
-### 加载性能
+### Loading Performance
 
-**优化图片**：
-- 使用现代格式（WebP、AVIF）
-- 正确尺寸（不要为 300px 显示加载 3000px 图片）
-- 懒加载折叠下方图片
-- 响应式图片（`srcset`、`picture` 元素）
-- 压缩图片（80-85% 质量通常难以察觉）
-- 使用 CDN 加快交付
+**Optimize Images**:
+- Use modern formats (WebP, AVIF)
+- Proper sizing (don't load 3000px image for 300px display)
+- Lazy loading for below-fold images
+- Responsive images (`srcset`, `picture` element)
+- Compress images (80-85% quality is usually imperceptible)
+- Use CDN for faster delivery
 
 ```html
 <img 
@@ -50,216 +50,216 @@ argument-hint: [TARGET=<value>]
 />
 ```
 
-**减少 JavaScript 包**：
-- 代码分割（按路由、按组件）
-- Tree shaking（移除未使用代码）
-- 移除未使用依赖
-- 懒加载非关键代码
-- 对大组件使用动态导入
+**Reduce JavaScript Bundle**:
+- Code splitting (route-based, component-based)
+- Tree shaking (remove unused code)
+- Remove unused dependencies
+- Lazy load non-critical code
+- Use dynamic imports for large components
 
 ```javascript
-// 懒加载重型组件
+// Lazy load heavy component
 const HeavyChart = lazy(() => import('./HeavyChart'));
 ```
 
-**优化 CSS**：
-- 移除未使用 CSS
-- 关键 CSS 内联，其余异步
-- 最小化 CSS 文件
-- 使用 CSS containment 隔离独立区域
+**Optimize CSS**:
+- Remove unused CSS
+- Critical CSS inline, rest async
+- Minimize CSS files
+- Use CSS containment for independent regions
 
-**优化字体**：
-- 使用 `font-display: swap` 或 `optional`
-- 子集化字体（只加载需要的字符）
-- 预加载关键字体
-- 适当使用系统字体
-- 限制加载的字体重量
+**Optimize Fonts**:
+- Use `font-display: swap` or `optional`
+- Subset fonts (only characters you need)
+- Preload critical fonts
+- Use system fonts when appropriate
+- Limit font weights loaded
 
 ```css
 @font-face {
   font-family: 'CustomFont';
   src: url('/fonts/custom.woff2') format('woff2');
-  font-display: swap; /* 立即显示后备 */
-  unicode-range: U+0020-007F; /* 仅基本拉丁字母 */
+  font-display: swap; /* Show fallback immediately */
+  unicode-range: U+0020-007F; /* Basic Latin only */
 }
 ```
 
-**优化加载策略**：
-- 关键资源优先（非关键异步/defer）
-- 预加载关键资源
-- 预取可能的下一页
-- Service worker 离线/缓存
-- HTTP/2 或 HTTP/3 多路复用
+**Optimize Loading Strategy**:
+- Critical resources first (async/defer non-critical)
+- Preload critical assets
+- Prefetch likely next pages
+- Service worker for offline/caching
+- HTTP/2 or HTTP/3 for multiplexing
 
-### 渲染性能
+### Rendering Performance
 
-**避免布局抖动**：
+**Avoid Layout Thrashing**:
 ```javascript
-// ❌ 差：交替读写（导致回流）
+// ❌ Bad: Alternating reads and writes (causes reflows)
 elements.forEach(el => {
-  const height = el.offsetHeight; // 读（强制布局）
-  el.style.height = height * 2; // 写
+  const height = el.offsetHeight; // Read (forces layout)
+  el.style.height = height * 2; // Write
 });
 
-// ✅ 好：批量读，然后批量写
-const heights = elements.map(el => el.offsetHeight); // 全部读
+// ✅ Good: Batch reads, then batch writes
+const heights = elements.map(el => el.offsetHeight); // All reads
 elements.forEach((el, i) => {
-  el.style.height = heights[i] * 2; // 全部写
+  el.style.height = heights[i] * 2; // All writes
 });
 ```
 
-**优化渲染**：
-- 对独立区域使用 CSS `contain` 属性
-- 最小化 DOM 深度（扁平更快）
-- 减少 DOM 数量（元素越少越好）
-- 对长列表使用 `content-visibility: auto`
-- 对超长列表使用虚拟滚动（react-window、react-virtualized）
+**Optimize Rendering**:
+- Use CSS `contain` property for independent regions
+- Minimize DOM depth (flatter is faster)
+- Reduce DOM size (fewer elements)
+- Use `content-visibility: auto` for long lists
+- Virtual scrolling for very long lists (react-window, react-virtualized)
 
-**减少绘制与合成**：
-- 使用 `transform` 和 `opacity` 做动画（GPU 加速）
-- 避免动画布局属性（width、height、top、left）
-- 谨慎使用 `will-change` 处理已知昂贵操作
-- 最小化绘制区域（越小越快）
+**Reduce Paint & Composite**:
+- Use `transform` and `opacity` for animations (GPU-accelerated)
+- Avoid animating layout properties (width, height, top, left)
+- Use `will-change` sparingly for known expensive operations
+- Minimize paint areas (smaller is faster)
 
-### 动画性能
+### Animation Performance
 
-**GPU 加速**：
+**GPU Acceleration**:
 ```css
-/* ✅ GPU 加速（快） */
+/* ✅ GPU-accelerated (fast) */
 .animated {
   transform: translateX(100px);
   opacity: 0.5;
 }
 
-/* ❌ CPU 绑定（慢） */
+/* ❌ CPU-bound (slow) */
 .animated {
   left: 100px;
   width: 300px;
 }
 ```
 
-**流畅 60fps**：
-- 目标每帧 16ms（60fps）
-- 对 JS 动画使用 `requestAnimationFrame`
-- 对滚动处理函数去抖/节流
-- 尽可能使用 CSS 动画
-- 动画期间避免长时间运行的 JavaScript
+**Smooth 60fps**:
+- Target 16ms per frame (60fps)
+- Use `requestAnimationFrame` for JS animations
+- Debounce/throttle scroll handlers
+- Use CSS animations when possible
+- Avoid long-running JavaScript during animations
 
-**Intersection Observer**：
+**Intersection Observer**:
 ```javascript
-// 高效检测元素何时进入视口
+// Efficiently detect when elements enter viewport
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
-      // 元素可见，懒加载或动画
+      // Element is visible, lazy load or animate
     }
   });
 });
 ```
 
-### React/框架优化
+### React/Framework Optimization
 
-**React 特定**：
-- 对昂贵组件使用 `memo()`
-- 对昂贵计算使用 `useMemo()` 和 `useCallback()`
-- 虚拟化长列表
-- 路由代码分割
-- 避免在渲染中创建内联函数
-- 使用 React DevTools Profiler
+**React-specific**:
+- Use `memo()` for expensive components
+- `useMemo()` and `useCallback()` for expensive computations
+- Virtualize long lists
+- Code split routes
+- Avoid inline function creation in render
+- Use React DevTools Profiler
 
-**框架通用**：
-- 最小化重渲染
-- 对昂贵操作去抖
-- 记忆化计算值
-- 懒加载路由和组件
+**Framework-agnostic**:
+- Minimize re-renders
+- Debounce expensive operations
+- Memoize computed values
+- Lazy load routes and components
 
-### 网络优化
+### Network Optimization
 
-**减少请求**：
-- 合并小文件
-- 对图标使用 SVG sprites
-- 内联小型关键资源
-- 移除未使用的第三方脚本
+**Reduce Requests**:
+- Combine small files
+- Use SVG sprites for icons
+- Inline small critical assets
+- Remove unused third-party scripts
 
-**优化 API**：
-- 使用分页（不要加载所有内容）
-- GraphQL 只请求需要的字段
-- 响应压缩（gzip、brotli）
-- HTTP 缓存头
-- CDN 提供静态资源
+**Optimize APIs**:
+- Use pagination (don't load everything)
+- GraphQL to request only needed fields
+- Response compression (gzip, brotli)
+- HTTP caching headers
+- CDN for static assets
 
-**针对慢速连接优化**：
-- 基于连接的自适应加载（navigator.connection）
-- 乐观 UI 更新
-- 请求优先级
-- 渐进增强
+**Optimize for Slow Connections**:
+- Adaptive loading based on connection (navigator.connection)
+- Optimistic UI updates
+- Request prioritization
+- Progressive enhancement
 
-## Core Web Vitals 优化
+## Core Web Vitals Optimization
 
-### 最大内容绘制（LCP < 2.5s）
-- 优化 Hero 图片
-- 内联关键 CSS
-- 预加载关键资源
-- 使用 CDN
-- 服务端渲染
+### Largest Contentful Paint (LCP < 2.5s)
+- Optimize hero images
+- Inline critical CSS
+- Preload key resources
+- Use CDN
+- Server-side rendering
 
-### 首次输入延迟（FID < 100ms）/ INP（< 200ms）
-- 拆分长任务
-- 延迟非关键 JavaScript
-- 对重型计算使用 Web Workers
-- 减少 JavaScript 执行时间
+### First Input Delay (FID < 100ms) / INP (< 200ms)
+- Break up long tasks
+- Defer non-critical JavaScript
+- Use web workers for heavy computation
+- Reduce JavaScript execution time
 
-### 累积布局偏移（CLS < 0.1）
-- 为图片和视频设置尺寸
-- 不要在现有内容上方注入内容
-- 使用 CSS `aspect-ratio` 属性
-- 为广告/嵌入预留空间
-- 避免导致布局偏移的动画
+### Cumulative Layout Shift (CLS < 0.1)
+- Set dimensions on images and videos
+- Don't inject content above existing content
+- Use `aspect-ratio` CSS property
+- Reserve space for ads/embeds
+- Avoid animations that cause layout shifts
 
 ```css
-/* 为图片预留空间 */
+/* Reserve space for image */
 .image-container {
   aspect-ratio: 16 / 9;
 }
 ```
 
-## 性能监控
+## Performance Monitoring
 
-**使用的工具**：
-- Chrome DevTools（Lighthouse、Performance 面板）
+**Tools to use**:
+- Chrome DevTools (Lighthouse, Performance panel)
 - WebPageTest
-- Core Web Vitals（Chrome UX 报告）
-- 包分析器（webpack-bundle-analyzer）
-- 性能监控（Sentry、DataDog、New Relic）
+- Core Web Vitals (Chrome UX Report)
+- Bundle analyzers (webpack-bundle-analyzer)
+- Performance monitoring (Sentry, DataDog, New Relic)
 
-**关键指标**：
-- LCP、FID/INP、CLS（Core Web Vitals）
-- Time to Interactive（TTI）
-- First Contentful Paint（FCP）
-- Total Blocking Time（TBT）
-- 包大小
-- 请求数
+**Key metrics**:
+- LCP, FID/INP, CLS (Core Web Vitals)
+- Time to Interactive (TTI)
+- First Contentful Paint (FCP)
+- Total Blocking Time (TBT)
+- Bundle size
+- Request count
 
-**最重要**：在真实设备和真实网络条件下测量。桌面 Chrome 加快速连接不代表实际情况。
+**IMPORTANT**: Measure on real devices with real network conditions. Desktop Chrome with fast connection isn't representative.
 
-**禁止**：
-- 不测量就优化（提前优化）
-- 为性能牺牲无障碍
-- 优化时破坏功能
-- 到处使用 `will-change`（创建新层，消耗内存）
-- 懒加载折叠上方内容
-- 忽略主要问题而优化微优化（先优化最大瓶颈）
-- 忘记移动端性能（通常是更慢的设备和更慢的连接）
+**NEVER**:
+- Optimize without measuring (premature optimization)
+- Sacrifice accessibility for performance
+- Break functionality while optimizing
+- Use `will-change` everywhere (creates new layers, uses memory)
+- Lazy load above-fold content
+- Optimize micro-optimizations while ignoring major issues (optimize the biggest bottleneck first)
+- Forget about mobile performance (often slower devices, slower connections)
 
-## 验证改进
+## Verify Improvements
 
-测试优化是否有效：
+Test that optimizations worked:
 
-- **前/后指标**：比较 Lighthouse 分数
-- **真实用户监控**：跟踪真实用户的改进
-- **不同设备**：在低端 Android 上测试，不只是旗舰 iPhone
-- **慢速连接**：节流到 3G，测试体验
-- **无回归**：确保功能仍然正常
-- **用户感知**：它*感觉*更快了吗？
+- **Before/after metrics**: Compare Lighthouse scores
+- **Real user monitoring**: Track improvements for real users
+- **Different devices**: Test on low-end Android, not just flagship iPhone
+- **Slow connections**: Throttle to 3G, test experience
+- **No regressions**: Ensure functionality still works
+- **User perception**: Does it *feel* faster?
 
-记住：性能是一个特性。快速体验感觉更响应、更精致、更专业。系统化优化，严格测量，优先考虑用户可感知的性能。
+Remember: Performance is a feature. Fast experiences feel more responsive, more polished, more professional. Optimize systematically, measure ruthlessly, and prioritize user-perceived performance.

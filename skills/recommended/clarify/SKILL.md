@@ -1,182 +1,182 @@
 ---
 name: clarify
-description: 改进不清晰的 UX 文案、错误消息、微文案、标签和说明。让界面更容易理解和使用。Improve unclear UX copy, error messages, microcopy, labels, and instructions.
+description: Improve unclear UX copy, error messages, microcopy, labels, and instructions. Makes interfaces easier to understand and use.
 user-invokable: true
 argument-hint: [TARGET=<value>]
 ---
 
-识别并改进不清晰、令人困惑或写得不好的界面文本，让产品更容易理解和使用。
+Identify and improve unclear, confusing, or poorly written interface text to make the product easier to understand and use.
 
-## 强制准备
+## MANDATORY PREPARATION
 
-使用 frontend-design skill——其中包含设计原则、反模式，以及**上下文收集协议**。在继续之前遵循该协议——如果没有现成的设计上下文，必须先运行 teach-impeccable。另外收集：用户技术水平和使用上下文中的心理状态。
+Use the frontend-design skill — it contains design principles, anti-patterns, and the **Context Gathering Protocol**. Follow the protocol before proceeding — if no design context exists yet, you MUST run teach-impeccable first. Additionally gather: audience technical level and users' mental state in context.
 
 ---
 
-## 评估当前文案
+## Assess Current Copy
 
-识别是什么让文本不清晰或无效：
+Identify what makes the text unclear or ineffective:
 
-1. **找出清晰度问题**：
-   - **术语**：用户听不懂的技术术语
-   - **歧义**：多种可能的解释
-   - **被动语态**："Your file has been uploaded" vs "We uploaded your file"
-   - **长度**：太啰嗦或太简洁
-   - **假设**：假设用户没有的知识
-   - **缺失上下文**：用户不知道该做什么或为什么
-   - **语气不匹配**：太正式、太随意或不适合场景
+1. **Find clarity problems**:
+   - **Jargon**: Technical terms users won't understand
+   - **Ambiguity**: Multiple interpretations possible
+   - **Passive voice**: "Your file has been uploaded" vs "We uploaded your file"
+   - **Length**: Too wordy or too terse
+   - **Assumptions**: Assuming user knowledge they don't have
+   - **Missing context**: Users don't know what to do or why
+   - **Tone mismatch**: Too formal, too casual, or inappropriate for situation
 
-2. **理解上下文**：
-   - 受众是谁？（技术型？普通用户？新手？）
-   - 用户的心理状态是什么？（错误时压力大？成功时自信？）
-   - 要做什么？（我们希望用户做什么？）
-   - 有什么限制？（字符限制？空间限制？）
+2. **Understand the context**:
+   - Who's the audience? (Technical? General? First-time users?)
+   - What's the user's mental state? (Stressed during error? Confident during success?)
+   - What's the action? (What do we want users to do?)
+   - What's the constraint? (Character limits? Space limitations?)
 
-**关键**：清晰的文案帮助用户成功。不清晰的文案造成挫折、错误和服务单。
+**CRITICAL**: Clear copy helps users succeed. Unclear copy creates frustration, errors, and support tickets.
 
-## 规划文案改进
+## Plan Copy Improvements
 
-创建更清晰沟通的策略：
+Create a strategy for clearer communication:
 
-- **主要信息**：用户需要知道的**唯一**一件事是什么？
-- **需要的行动**：用户接下来应该做什么（如果有的话）？
-- **语气**：这应该感觉如何？（有帮助？道歉？鼓励？）
-- **限制**：长度限制、品牌语气、本地化考虑
+- **Primary message**: What's the ONE thing users need to know?
+- **Action needed**: What should users do next (if anything)?
+- **Tone**: How should this feel? (Helpful? Apologetic? Encouraging?)
+- **Constraints**: Length limits, brand voice, localization considerations
 
-**重要**：好的 UX 文案是无形的。用户应该立即理解，不会注意到文字。
+**IMPORTANT**: Good UX writing is invisible. Users should understand immediately without noticing the words.
 
-## 系统性改进文案
+## Improve Copy Systematically
 
-在以下常见领域精炼文本：
+Refine text across these common areas:
 
-### 错误消息
-**差**："Error 403: Forbidden"
-**好**："You don't have permission to view this page. Contact your admin for access."
+### Error Messages
+**Bad**: "Error 403: Forbidden"
+**Good**: "You don't have permission to view this page. Contact your admin for access."
 
-**差**："Invalid input"
-**好**："Email addresses need an @ symbol. Try: name@example.com"
+**Bad**: "Invalid input"
+**Good**: "Email addresses need an @ symbol. Try: name@example.com"
 
-**原则**：
-- 用通俗语言解释哪里出错了
-- 建议如何修复
-- 不要归咎于用户
-- 适当包含示例
-- 如有需要链接到帮助/支持
+**Principles**:
+- Explain what went wrong in plain language
+- Suggest how to fix it
+- Don't blame the user
+- Include examples when helpful
+- Link to help/support if applicable
 
-### 表单标签与说明
-**差**："DOB (MM/DD/YYYY)"
-**好**："Date of birth"（用占位符显示格式）
+### Form Labels & Instructions
+**Bad**: "DOB (MM/DD/YYYY)"
+**Good**: "Date of birth" (with placeholder showing format)
 
-**差**："Enter value here"
-**好**："Your email address" 或 "Company name"
+**Bad**: "Enter value here"
+**Good**: "Your email address" or "Company name"
 
-**原则**：
-- 使用清晰、具体的标签（不是通用占位符）
-- 用示例显示格式期望
-- 解释为什么问（不明显时）
-- 在字段前而非后放说明
-- 保持必填字段标识清晰
+**Principles**:
+- Use clear, specific labels (not generic placeholders)
+- Show format expectations with examples
+- Explain why you're asking (when not obvious)
+- Put instructions before the field, not after
+- Keep required field indicators clear
 
-### 按钮与 CTA 文本
-**差**："Click here" | "Submit" | "OK"
-**好**："Create account" | "Save changes" | "Got it, thanks"
+### Button & CTA Text
+**Bad**: "Click here" | "Submit" | "OK"
+**Good**: "Create account" | "Save changes" | "Got it, thanks"
 
-**原则**：
-- 具体描述动作
-- 使用主动语态（动词 + 名词）
-- 匹配用户的心智模型
-- 要具体（"Save" 比 "OK" 好）
+**Principles**:
+- Describe the action specifically
+- Use active voice (verb + noun)
+- Match user's mental model
+- Be specific ("Save" is better than "OK")
 
-### 帮助文本与工具提示
-**差**："This is the username field"
-**好**："Choose a username. You can change this later in Settings."
+### Help Text & Tooltips
+**Bad**: "This is the username field"
+**Good**: "Choose a username. You can change this later in Settings."
 
-**原则**：
-- 增加值（不要只是重复标签）
-- 回答隐含问题（"这是什么？"或"为什么需要这个？"）
-- 简短但完整
-- 如有需要链接到详细文档
+**Principles**:
+- Add value (don't just repeat the label)
+- Answer the implicit question ("What is this?" or "Why do you need this?")
+- Keep it brief but complete
+- Link to detailed docs if needed
 
-### 空状态
-**差**："No items"
-**好**："No projects yet. Create your first project to get started."
+### Empty States
+**Bad**: "No items"
+**Good**: "No projects yet. Create your first project to get started."
 
-**原则**：
-- 解释为什么是空的（不明显时）
-- 清晰展示下一步操作
-- 让它感觉友好，不是死胡同
+**Principles**:
+- Explain why it's empty (if not obvious)
+- Show next action clearly
+- Make it welcoming, not dead-end
 
-### 成功消息
-**差**："Success"
-**好**："Settings saved! Your changes will take effect immediately."
+### Success Messages
+**Bad**: "Success"
+**Good**: "Settings saved! Your changes will take effect immediately."
 
-**原则**：
-- 确认发生了什么
-- 解释接下来会发生什么（如相关）
-- 要简短但完整
-- 匹配用户的情感时刻（重大胜利要庆祝）
+**Principles**:
+- Confirm what happened
+- Explain what happens next (if relevant)
+- Be brief but complete
+- Match the user's emotional moment (celebrate big wins)
 
-### 加载状态
-**差**："Loading..."（30+ 秒）
-**好**："Analyzing your data... this usually takes 30-60 seconds"
+### Loading States
+**Bad**: "Loading..." (for 30+ seconds)
+**Good**: "Analyzing your data... this usually takes 30-60 seconds"
 
-**原则**：
-- 设定期望（多久？）
-- 解释正在发生什么（不明显时）
-- 尽可能显示进度
-- 如适当提供退出方式（"Cancel"）
+**Principles**:
+- Set expectations (how long?)
+- Explain what's happening (when it's not obvious)
+- Show progress when possible
+- Offer escape hatch if appropriate ("Cancel")
 
-### 确认对话框
-**差**："Are you sure?"
-**好**："Delete 'Project Alpha'? This can't be undone."
+### Confirmation Dialogs
+**Bad**: "Are you sure?"
+**Good**: "Delete 'Project Alpha'? This can't be undone."
 
-**原则**：
-- 声明具体动作
-- 解释后果（尤其是破坏性动作）
-- 使用清晰的按钮标签（"Delete project" 不是 "Yes"）
-- 不要过度使用确认（只对有风险的动作）
+**Principles**:
+- State the specific action
+- Explain consequences (especially for destructive actions)
+- Use clear button labels ("Delete project" not "Yes")
+- Don't overuse confirmations (only for risky actions)
 
-### 导航与寻路
-**差**：像 "Items" | "Things" | "Stuff" 这样的通用标签
-**好**：像 "Your projects" | "Team members" | "Settings" 这样具体的标签
+### Navigation & Wayfinding
+**Bad**: Generic labels like "Items" | "Things" | "Stuff"
+**Good**: Specific labels like "Your projects" | "Team members" | "Settings"
 
-**原则**：
-- 要具体和有描述性
-- 使用用户能理解的语言（不是内部术语）
-- 使层级清晰
-- 考虑信息气味（面包屑、当前位置）
+**Principles**:
+- Be specific and descriptive
+- Use language users understand (not internal jargon)
+- Make hierarchy clear
+- Consider information scent (breadcrumbs, current location)
 
-## 应用清晰度原则
+## Apply Clarity Principles
 
-每段文案都应遵循以下规则：
+Every piece of copy should follow these rules:
 
-1. **要具体**："Enter email" 不是 "Enter value"
-2. **要简洁**：删除不必要的词（但不要牺牲清晰度）
-3. **要主动**："Save changes" 不是 "Changes will be saved"
-4. **要人性化**："Oops, something went wrong" 不是 "System error encountered"
-5. **要有帮助**：告诉用户做什么，不只是发生了什么
-6. **要一致**：整个产品使用相同术语（不要为多样化而多样化）
+1. **Be specific**: "Enter email" not "Enter value"
+2. **Be concise**: Cut unnecessary words (but don't sacrifice clarity)
+3. **Be active**: "Save changes" not "Changes will be saved"
+4. **Be human**: "Oops, something went wrong" not "System error encountered"
+5. **Be helpful**: Tell users what to do, not just what happened
+6. **Be consistent**: Use same terms throughout (don't vary for variety)
 
-**禁止**：
-- 不解释就用术语
-- 归咎于用户（"You made an error" → "This field is required"）
-- 模糊（"Something went wrong" 没有解释）
-- 不必要地使用被动语态
-- 写过于冗长的解释（要简洁）
-- 对错误使用幽默（要同理心）
-- 假设技术知识
-- 变换术语（选择一个并坚持）
-- 重复信息（标题重述引言、冗余解释）
-- 用占位符作为唯一标签（用户输入时它们就消失了）
+**NEVER**:
+- Use jargon without explanation
+- Blame users ("You made an error" → "This field is required")
+- Be vague ("Something went wrong" without explanation)
+- Use passive voice unnecessarily
+- Write overly long explanations (be concise)
+- Use humor for errors (be empathetic instead)
+- Assume technical knowledge
+- Vary terminology (pick one term and stick with it)
+- Repeat information (headers restating intros, redundant explanations)
+- Use placeholders as the only labels (they disappear when users type)
 
-## 验证改进
+## Verify Improvements
 
-测试文案改进是否有效：
+Test that copy improvements work:
 
-- **可理解性**：用户没有上下文能理解吗？
-- **可操作性**：用户知道下一步做什么吗？
-- **简洁性**：在保持清晰的同时尽可能短了吗？
-- **一致性**：与别处的术语匹配吗？
-- **语气**：适合场景吗？
+- **Comprehension**: Can users understand without context?
+- **Actionability**: Do users know what to do next?
+- **Brevity**: Is it as short as possible while remaining clear?
+- **Consistency**: Does it match terminology elsewhere?
+- **Tone**: Is it appropriate for the situation?
 
-记住：你是一个清晰度专家，拥有出色的沟通能力。写得就像在向一个不熟悉产品的聪明朋友解释。要清晰，要有帮助，要人性化。
+Remember: You're a clarity expert with excellent communication skills. Write like you're explaining to a smart friend who's unfamiliar with the product. Be clear, be helpful, be human.

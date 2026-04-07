@@ -1,91 +1,91 @@
 ---
 name: extract
-description: 提取可复用组件和设计 token，整合到设计系统中。识别系统性复用机会，丰富组件库。Extract and consolidate reusable components, design tokens, and patterns into your design system.
+description: Extract and consolidate reusable components, design tokens, and patterns into your design system. Identifies opportunities for systematic reuse and enriches your component library.
 user-invokable: true
 argument-hint: [TARGET=<value>]
 ---
 
-识别可复用的模式、组件和设计 token，然后提取并整合到设计系统中，实现系统性的复用。
+Identify reusable patterns, components, and design tokens, then extract and consolidate them into the design system for systematic reuse.
 
-## 发现
+## Discover
 
-分析目标区域，识别可提取的机会：
+Analyze the target area to identify extraction opportunities:
 
-1. **找到设计系统**：定位设计系统、组件库或共享 UI 目录（搜索"design system"、"ui"、"components"等）。理解其结构：
-   - 组件组织和命名规范
-   - Design token 结构（如有）
-   - 文档模式
-   - 导入/导出约定
+1. **Find the design system**: Locate your design system, component library, or shared UI directory (grep for "design system", "ui", "components", etc.). Understand its structure:
+   - Component organization and naming conventions
+   - Design token structure (if any)
+   - Documentation patterns
+   - Import/export conventions
    
-   **关键**：如果没有现成的设计系统，先询问再创建。先了解偏好的位置和结构。
+   **CRITICAL**: If no design system exists, ask before creating one. Understand the preferred location and structure first.
 
-2. **识别模式**：寻找：
-   - **重复组件**：多次使用的相似 UI 模式（按钮、卡片、表单等）
-   - **硬编码值**：应该是 token 的颜色、间距、字体、阴影
-   - **不一致的变体**：同一概念的多种实现（3 种不同的按钮样式）
-   - **可复用模式**：值得系统化的布局模式、组合模式、交互模式
+2. **Identify patterns**: Look for:
+   - **Repeated components**: Similar UI patterns used multiple times (buttons, cards, inputs, etc.)
+   - **Hard-coded values**: Colors, spacing, typography, shadows that should be tokens
+   - **Inconsistent variations**: Multiple implementations of the same concept (3 different button styles)
+   - **Reusable patterns**: Layout patterns, composition patterns, interaction patterns worth systematizing
 
-3. **评估价值**：不是所有东西都值得提取。考虑：
-   - 是否使用了 3 次以上，或者可能会被复用？
-   - 系统化是否能提升一致性？
-   - 这是通用模式还是特定上下文的？
-   - 维护成本与收益相比如何？
+3. **Assess value**: Not everything should be extracted. Consider:
+   - Is this used 3+ times, or likely to be reused?
+   - Would systematizing this improve consistency?
+   - Is this a general pattern or context-specific?
+   - What's the maintenance cost vs benefit?
 
-## 规划提取
+## Plan Extraction
 
-创建系统性的提取计划：
+Create a systematic extraction plan:
 
-- **待提取的组件**：哪些 UI 元素成为可复用组件？
-- **待创建的 token**：哪些硬编码值成为 design token？
-- **支持的变体**：每个组件需要哪些变体？
-- **命名规范**：符合现有模式的组件名、token 名、prop 名
-- **迁移路径**：如何重构现有用法以使用新的共享版本
+- **Components to extract**: Which UI elements become reusable components?
+- **Tokens to create**: Which hard-coded values become design tokens?
+- **Variants to support**: What variations does each component need?
+- **Naming conventions**: Component names, token names, prop names that match existing patterns
+- **Migration path**: How to refactor existing uses to consume the new shared versions
 
-**重要**：设计系统是增量生长的。只提取现在明显可复用的，不是所有"某天可能复用"的东西。
+**IMPORTANT**: Design systems grow incrementally. Extract what's clearly reusable now, not everything that might someday be reusable.
 
-## 提取并丰富
+## Extract & Enrich
 
-构建改进的可复用版本：
+Build improved, reusable versions:
 
-- **组件**：创建设计良好的组件，包含：
-  - 清晰的 props API 和合理的默认值
-  - 适合不同用例的变体
-  - 内置无障碍支持（ARIA、键盘导航、焦点管理）
-  - 文档和使用示例
+- **Components**: Create well-designed components with:
+  - Clear props API with sensible defaults
+  - Proper variants for different use cases
+  - Accessibility built in (ARIA, keyboard navigation, focus management)
+  - Documentation and usage examples
   
-- **Design token**：创建 token，包含：
-  - 清晰的命名（原语 token vs 语义 token）
-  - 正确的层级和组织
-  - 每个 token 使用场景的文档
+- **Design tokens**: Create tokens with:
+  - Clear naming (primitive vs semantic)
+  - Proper hierarchy and organization
+  - Documentation of when to use each token
   
-- **模式**：文档化模式，包含：
-  - 何时使用此模式
-  - 代码示例
-  - 变体和组合方式
+- **Patterns**: Document patterns with:
+  - When to use this pattern
+  - Code examples
+  - Variations and combinations
 
-**禁止**：
-- 提取没有泛化的一次性、特定上下文实现
-- 创建过于通用而毫无用处的组件
-- 提取时不考虑现有设计系统规范
-- 跳过正确的 TypeScript 类型或 prop 文档
-- 为每个单一值创建 token（token 应有语义含义）
+**NEVER**:
+- Extract one-off, context-specific implementations without generalization
+- Create components so generic they're useless
+- Extract without considering existing design system conventions
+- Skip proper TypeScript types or prop documentation
+- Create tokens for every single value (tokens should have semantic meaning)
 
-## 迁移
+## Migrate
 
-用新的共享版本替换现有用法：
+Replace existing uses with the new shared versions:
 
-- **找到所有实例**：搜索已提取的模式
-- **系统性替换**：更新每个用法以使用共享版本
-- **彻底测试**：确保视觉和功能一致性
-- **删除死代码**：移除旧的实现
+- **Find all instances**: Search for the patterns you've extracted
+- **Replace systematically**: Update each use to consume the shared version
+- **Test thoroughly**: Ensure visual and functional parity
+- **Delete dead code**: Remove the old implementations
 
-## 文档化
+## Document
 
-更新设计系统文档：
+Update design system documentation:
 
-- 将新组件添加到组件库
-- 文档化 token 用法和值
-- 添加示例和指南
-- 更新 Storybook 或组件目录
+- Add new components to the component library
+- Document token usage and values
+- Add examples and guidelines
+- Update any Storybook or component catalog
 
-记住：一个好的设计系统是活的系统。在模式出现时及时提取，用心丰富，保持一致维护。
+Remember: A good design system is a living system. Extract patterns as they emerge, enrich them thoughtfully, and maintain them consistently.

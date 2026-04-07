@@ -1,202 +1,202 @@
 ---
 name: polish
-description: 交付前的最终质量检查。修复对齐、间距、一致性和细节问题，区分好与优秀。Final quality pass before shipping. Fixes alignment, spacing, consistency, and detail issues.
+description: Final quality pass before shipping. Fixes alignment, spacing, consistency, and detail issues that separate good from great.
 user-invokable: true
 argument-hint: [TARGET=<value>]
 ---
 
-## 强制准备
+## MANDATORY PREPARATION
 
-使用 frontend-design skill——其中包含设计原则、反模式，以及**上下文收集协议**。在继续之前遵循该协议——如果没有现成的设计上下文，必须先运行 teach-impeccable。另外收集：质量标准（MVP 还是旗舰级）。
+Use the frontend-design skill — it contains design principles, anti-patterns, and the **Context Gathering Protocol**. Follow the protocol before proceeding — if no design context exists yet, you MUST run teach-impeccable first. Additionally gather: quality bar (MVP vs flagship).
 
 ---
 
-执行细致的最终检查，发现所有将好工作与优秀工作区分开来的小细节。已交付与已打磨之间的差异。
+Perform a meticulous final pass to catch all the small details that separate good work from great work. The difference between shipped and polished.
 
-## 打磨前评估
+## Pre-Polish Assessment
 
-了解当前状态和目标：
+Understand the current state and goals:
 
-1. **审查完整性**：
-   - 功能上完成了吗？
-   - 有已知需要保留的问题吗（用 TODO 标记）？
-   - 质量标准是什么？（MVP 还是旗舰级功能？）
-   - 何时交付？（打磨时间有多少？）
+1. **Review completeness**:
+   - Is it functionally complete?
+   - Are there known issues to preserve (mark with TODOs)?
+   - What's the quality bar? (MVP vs flagship feature?)
+   - When does it ship? (How much time for polish?)
 
-2. **识别打磨区域**：
-   - 视觉不一致
-   - 间距和对齐问题
-   - 交互状态缺口
-   - 文案不一致
-   - 边缘情况和错误状态
-   - 加载和过渡流畅度
+2. **Identify polish areas**:
+   - Visual inconsistencies
+   - Spacing and alignment issues
+   - Interaction state gaps
+   - Copy inconsistencies
+   - Edge cases and error states
+   - Loading and transition smoothness
 
-**关键**：打磨是最后一步，不是第一步。不要打磨功能上还没完成的工作。
+**CRITICAL**: Polish is the last step, not the first. Don't polish work that's not functionally complete.
 
-## 系统性打磨
+## Polish Systematically
 
-按维度系统性地处理：
+Work through these dimensions methodically:
 
-### 视觉对齐与间距
+### Visual Alignment & Spacing
 
-- **像素级对齐**：所有元素对齐到网格
-- **一致间距**：所有间隙使用间距比例（没有随机的 13px 间隙）
-- **光学对齐**：调整视觉重量（图标可能需要偏移以实现光学居中）
-- **响应式一致性**：间距和对齐在所有断点都正常
-- **网格对齐**：元素吸附到基线网格
+- **Pixel-perfect alignment**: Everything lines up to grid
+- **Consistent spacing**: All gaps use spacing scale (no random 13px gaps)
+- **Optical alignment**: Adjust for visual weight (icons may need offset for optical centering)
+- **Responsive consistency**: Spacing and alignment work at all breakpoints
+- **Grid adherence**: Elements snap to baseline grid
 
-**检查**：
-- 启用网格叠加并验证对齐
-- 用浏览器检查器检查间距
-- 在多个视口尺寸下测试
-- 寻找"感觉不对"的元素
+**Check**:
+- Enable grid overlay and verify alignment
+- Check spacing with browser inspector
+- Test at multiple viewport sizes
+- Look for elements that "feel" off
 
-### 字体细节打磨
+### Typography Refinement
 
-- **层级一致性**：相同元素在整个产品中使用相同尺寸/字重
-- **行长度**：正文 45-75 个字符
-- **行高**：适合字体尺寸和上下文
-- **孤行与寡行**：最后一行不要只有一个词
-- **连字符**：适合语言和栏宽
-- **字间距**：在需要的地方调整字母间距（特别是标题）
-- **字体加载**：不要有 FOUT/FOIT 闪烁
+- **Hierarchy consistency**: Same elements use same sizes/weights throughout
+- **Line length**: 45-75 characters for body text
+- **Line height**: Appropriate for font size and context
+- **Widows & orphans**: No single words on last line
+- **Hyphenation**: Appropriate for language and column width
+- **Kerning**: Adjust letter spacing where needed (especially headlines)
+- **Font loading**: No FOUT/FOIT flashes
 
-### 颜色与对比
+### Color & Contrast
 
-- **对比度**：所有文本符合 WCAG 标准
-- **一致的 token 使用**：没有硬编码颜色，全部使用 design token
-- **主题一致性**：在所有主题变体中正常工作
-- **颜色含义**：相同的颜色始终代表相同的含义
-- **可访问的焦点**：焦点指示器有足够的对比度可见
-- **带色相的中性色**：不要用纯灰或纯黑——添加微妙的色相（0.01 chroma）
-- **彩色背景上的灰色文字**：永远不要在彩色背景上放灰色文字——使用该颜色的色相或透明度
+- **Contrast ratios**: All text meets WCAG standards
+- **Consistent token usage**: No hard-coded colors, all use design tokens
+- **Theme consistency**: Works in all theme variants
+- **Color meaning**: Same colors mean same things throughout
+- **Accessible focus**: Focus indicators visible with sufficient contrast
+- **Tinted neutrals**: No pure gray or pure black—add subtle color tint (0.01 chroma)
+- **Gray on color**: Never put gray text on colored backgrounds—use a shade of that color or transparency
 
-### 交互状态
+### Interaction States
 
-每个交互元素需要所有状态：
+Every interactive element needs all states:
 
-- **默认**：静止状态
-- **悬停**：微妙的反馈（颜色、缩放、阴影）
-- **焦点**：键盘焦点指示器（不要移除除非有替代方案）
-- **激活**：点击/触摸反馈
-- **禁用**：明确不可交互
-- **加载**：异步操作反馈
-- **错误**：验证或错误状态
-- **成功**：成功完成
+- **Default**: Resting state
+- **Hover**: Subtle feedback (color, scale, shadow)
+- **Focus**: Keyboard focus indicator (never remove without replacement)
+- **Active**: Click/tap feedback
+- **Disabled**: Clearly non-interactive
+- **Loading**: Async action feedback
+- **Error**: Validation or error state
+- **Success**: Successful completion
 
-**缺失状态会造成困惑和破碎的体验**。
+**Missing states create confusion and broken experiences**.
 
-### 微交互与过渡
+### Micro-interactions & Transitions
 
-- **流畅过渡**：所有状态变化都有适当动画（150-300ms）
-- **一致的缓动**：使用 ease-out-quart/quint/expo 实现自然减速。永远不要弹跳或弹性——它们显得过时。
-- **无卡顿**：60fps 动画，只动画 transform 和 opacity
-- **适当的动效**：动效服务于目的，不是装饰
-- **减少动画**：尊重 `prefers-reduced-motion`
+- **Smooth transitions**: All state changes animated appropriately (150-300ms)
+- **Consistent easing**: Use ease-out-quart/quint/expo for natural deceleration. Never bounce or elastic—they feel dated.
+- **No jank**: 60fps animations, only animate transform and opacity
+- **Appropriate motion**: Motion serves purpose, not decoration
+- **Reduced motion**: Respects `prefers-reduced-motion`
 
-### 内容与文案
+### Content & Copy
 
-- **一致的术语**：整个产品中相同的事物叫相同的名字
-- **一致的大小写**：标题式和句式的大小写应用一致
-- **语法与拼写**：无拼写错误
-- **适当的长度**：不太啰嗦，不太简洁
-- **标点一致性**：句子用句号，标签不用（除非所有标签都用）
+- **Consistent terminology**: Same things called same names throughout
+- **Consistent capitalization**: Title Case vs Sentence case applied consistently
+- **Grammar & spelling**: No typos
+- **Appropriate length**: Not too wordy, not too terse
+- **Punctuation consistency**: Periods on sentences, not on labels (unless all labels have them)
 
-### 图标与图片
+### Icons & Images
 
-- **一致的样式**：所有图标来自同一家族或匹配的样式
-- **适当的尺寸**：图标尺寸与上下文一致
-- **正确的对齐**：图标在视觉上与相邻文本对齐
-- **替代文字**：所有图片有描述性替代文字
-- **加载状态**：图片不会导致布局偏移，有正确的宽高比
-- **Retina 支持**：高清屏幕用 2x 资源
+- **Consistent style**: All icons from same family or matching style
+- **Appropriate sizing**: Icons sized consistently for context
+- **Proper alignment**: Icons align with adjacent text optically
+- **Alt text**: All images have descriptive alt text
+- **Loading states**: Images don't cause layout shift, proper aspect ratios
+- **Retina support**: 2x assets for high-DPI screens
 
-### 表单与输入
+### Forms & Inputs
 
-- **标签一致性**：所有输入有正确标签
-- **必填标识**：清晰一致
-- **错误消息**：有帮助且一致
-- **Tab 顺序**：符合逻辑的键盘导航
-- **自动聚焦**：适当使用（不要过度使用）
-- **验证时机**：一致（失焦时验证还是提交时验证）
+- **Label consistency**: All inputs properly labeled
+- **Required indicators**: Clear and consistent
+- **Error messages**: Helpful and consistent
+- **Tab order**: Logical keyboard navigation
+- **Auto-focus**: Appropriate (don't overuse)
+- **Validation timing**: Consistent (on blur vs on submit)
 
-### 边缘情况与错误状态
+### Edge Cases & Error States
 
-- **加载状态**：所有异步操作有加载反馈
-- **空状态**：有帮助的空状态，不是空白空间
-- **错误状态**：有恢复路径的清晰错误消息
-- **成功状态**：操作成功确认
-- **长内容**：处理很长的名称、描述等
-- **无内容**：优雅处理缺失数据
-- **离线**：适当的离线处理（如适用）
+- **Loading states**: All async actions have loading feedback
+- **Empty states**: Helpful empty states, not just blank space
+- **Error states**: Clear error messages with recovery paths
+- **Success states**: Confirmation of successful actions
+- **Long content**: Handles very long names, descriptions, etc.
+- **No content**: Handles missing data gracefully
+- **Offline**: Appropriate offline handling (if applicable)
 
-### 响应式
+### Responsiveness
 
-- **所有断点**：测试移动端、平板、桌面
-- **触摸目标**：触摸设备上最小 44x44px
-- **可读文本**：移动端文本不小于 14px
-- **无水平滚动**：内容适应视口
-- **适当的回流**：内容逻辑适应
+- **All breakpoints**: Test mobile, tablet, desktop
+- **Touch targets**: 44x44px minimum on touch devices
+- **Readable text**: No text smaller than 14px on mobile
+- **No horizontal scroll**: Content fits viewport
+- **Appropriate reflow**: Content adapts logically
 
-### 性能
+### Performance
 
-- **快速初始加载**：优化关键路径
-- **无布局偏移**：元素加载后不跳动（CLS）
-- **流畅交互**：不卡顿或抖动
-- **优化图片**：适当格式和尺寸
-- **懒加载**：屏幕外内容懒加载
+- **Fast initial load**: Optimize critical path
+- **No layout shift**: Elements don't jump after load (CLS)
+- **Smooth interactions**: No lag or jank
+- **Optimized images**: Appropriate formats and sizes
+- **Lazy loading**: Off-screen content loads lazily
 
-### 代码质量
+### Code Quality
 
-- **移除 console.log**：生产代码无调试日志
-- **移除注释掉的代码**：清理死代码
-- **移除未使用的导入**：清理未使用的依赖
-- **一致的命名**：变量和函数遵循约定
-- **类型安全**：无 TypeScript `any` 或被忽略的错误
-- **无障碍**：正确的 ARIA 标签和语义 HTML
+- **Remove console logs**: No debug logging in production
+- **Remove commented code**: Clean up dead code
+- **Remove unused imports**: Clean up unused dependencies
+- **Consistent naming**: Variables and functions follow conventions
+- **Type safety**: No TypeScript `any` or ignored errors
+- **Accessibility**: Proper ARIA labels and semantic HTML
 
-## 打磨清单
+## Polish Checklist
 
-系统性检查：
+Go through systematically:
 
-- [ ] 视觉对齐在所有断点都完美
-- [ ] 间距一致使用 design token
-- [ ] 字体层级一致
-- [ ] 所有交互状态已实现
-- [ ] 所有过渡流畅（60fps）
-- [ ] 文案一致且打磨过
-- [ ] 图标一致且尺寸正确
-- [ ] 所有表单正确标签和验证
-- [ ] 错误状态有帮助
-- [ ] 加载状态清晰
-- [ ] 空状态友好
-- [ ] 触摸目标最小 44x44px
-- [ ] 对比度符合 WCAG AA
-- [ ] 键盘导航正常
-- [ ] 焦点指示器可见
-- [ ] 无 console 错误或警告
-- [ ] 加载时无布局偏移
-- [ ] 在所有支持的浏览器中正常
-- [ ] 尊重减少动画偏好
-- [ ] 代码干净（无 TODO、无 console.log、无注释代码）
+- [ ] Visual alignment perfect at all breakpoints
+- [ ] Spacing uses design tokens consistently
+- [ ] Typography hierarchy consistent
+- [ ] All interactive states implemented
+- [ ] All transitions smooth (60fps)
+- [ ] Copy is consistent and polished
+- [ ] Icons are consistent and properly sized
+- [ ] All forms properly labeled and validated
+- [ ] Error states are helpful
+- [ ] Loading states are clear
+- [ ] Empty states are welcoming
+- [ ] Touch targets are 44x44px minimum
+- [ ] Contrast ratios meet WCAG AA
+- [ ] Keyboard navigation works
+- [ ] Focus indicators visible
+- [ ] No console errors or warnings
+- [ ] No layout shift on load
+- [ ] Works in all supported browsers
+- [ ] Respects reduced motion preference
+- [ ] Code is clean (no TODOs, console.logs, commented code)
 
-**重要**：打磨是关于细节的。放大看。眯眼看。自己用。细节积累起来。
+**IMPORTANT**: Polish is about details. Zoom in. Squint at it. Use it yourself. The little things add up.
 
-**禁止**：
-- 功能还没完成就打磨
-- 如果 30 分钟后就交付，不要花数小时打磨（要 triage）
-- 打磨时引入 bug（彻底测试）
-- 忽略系统性问题（如果间距到处都不对，修复系统）
-- 一个东西完美而其他粗糙（保持一致的质量水平）
+**NEVER**:
+- Polish before it's functionally complete
+- Spend hours on polish if it ships in 30 minutes (triage)
+- Introduce bugs while polishing (test thoroughly)
+- Ignore systematic issues (if spacing is off everywhere, fix the system)
+- Perfect one thing while leaving others rough (consistent quality level)
 
-## 最终验证
+## Final Verification
 
-在标记完成之前：
+Before marking as done:
 
-- **自己使用**：实际与功能交互
-- **在真实设备上测试**：不只是浏览器 DevTools
-- **让别人审查**：新鲜的眼睛能发现问题
-- **与设计对比**：匹配预期设计
-- **检查所有状态**：不要只测试快乐路径
+- **Use it yourself**: Actually interact with the feature
+- **Test on real devices**: Not just browser DevTools
+- **Ask someone else to review**: Fresh eyes catch things
+- **Compare to design**: Match intended design
+- **Check all states**: Don't just test happy path
 
-记住：你有无懈可击的细节注意力和卓越的品味。打磨到它感觉毫不费力、看起来有意图、工作无缺陷。注重细节——它们很重要。
+Remember: You have impeccable attention to detail and exquisite taste. Polish until it feels effortless, looks intentional, and works flawlessly. Sweat the details - they matter.

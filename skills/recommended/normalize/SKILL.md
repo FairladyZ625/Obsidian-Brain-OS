@@ -1,70 +1,70 @@
 ---
 name: normalize
-description: 将设计规范化以匹配设计系统，确保一致性。Normalize design to match your design system and ensure consistency.
+description: Normalize design to match your design system and ensure consistency
 user-invokable: true
 argument-hint: [FEATURE=<value>]
 ---
 
-分析和重新设计功能，使其完美匹配设计系统标准、审美和已建立的模式。
+Analyze and redesign the feature to perfectly match our design system standards, aesthetics, and established patterns.
 
-## 强制准备
+## MANDATORY PREPARATION
 
-使用 frontend-design skill——其中包含设计原则、反模式，以及**上下文收集协议**。在继续之前遵循该协议——如果没有现成的设计上下文，必须先运行 teach-impeccable。
+Use the frontend-design skill — it contains design principles, anti-patterns, and the **Context Gathering Protocol**. Follow the protocol before proceeding — if no design context exists yet, you MUST run teach-impeccable first.
 
 ---
 
-## 规划
+## Plan
 
-在做出更改之前，深入了解上下文：
+Before making changes, deeply understand the context:
 
-1. **发现设计系统**：搜索设计系统文档、UI 指南、组件库或风格指南（搜索"design system"、"ui guide"、"style guide"等）。彻底学习直到理解：
-   - 核心设计原则和审美方向
-   - 目标受众和人物画像
-   - 组件模式和约定
-   - Design token（颜色、字体、间距）
+1. **Discover the design system**: Search for design system documentation, UI guidelines, component libraries, or style guides (grep for "design system", "ui guide", "style guide", etc.). Study it thoroughly until you understand:
+   - Core design principles and aesthetic direction
+   - Target audience and personas
+   - Component patterns and conventions
+   - Design tokens (colors, typography, spacing)
    
-   **关键**：如果有不清楚的地方，先询问。不要猜测设计系统原则。
+   **CRITICAL**: If something isn't clear, ask. Don't guess at design system principles.
 
-2. **分析当前功能**：评估什么有效、什么无效：
-   - 它在哪些方面偏离了设计系统模式？
-   - 哪些不一致是 Cosmetic 的、哪些是功能性的？
-   - 根本原因是缺失的 token、一次性实现还是概念性错位？
+2. **Analyze the current feature**: Assess what works and what doesn't:
+   - Where does it deviate from design system patterns?
+   - Which inconsistencies are cosmetic vs. functional?
+   - What's the root cause—missing tokens, one-off implementations, or conceptual misalignment?
 
-3. **创建规范化计划**：定义将使功能与设计系统对齐的具体更改：
-   - 哪些组件可以用设计系统等价物替换？
-   - 哪些样式需要使用 design token 而不是硬编码值？
-   - UX 模式如何匹配已建立的用户流程？
+3. **Create a normalization plan**: Define specific changes that will align the feature with the design system:
+   - Which components can be replaced with design system equivalents?
+   - Which styles need to use design tokens instead of hard-coded values?
+   - How can UX patterns match established user flows?
    
-   **重要**：伟大的设计是有效的设计。先为你用例和用户思考最好的可能体验，再优先考虑 UX 一致性和可用性，而不只是视觉打磨。
+   **IMPORTANT**: Great design is effective design. Prioritize UX consistency and usability over visual polish alone. Think through the best possible experience for your use case and personas first.
 
-## 执行
+## Execute
 
-系统性解决所有这些维度的不一致：
+Systematically address all inconsistencies across these dimensions:
 
-- **字体**：使用设计系统字体、尺寸、字重和行高。用字体 token 或类替换硬编码值。
-- **颜色与主题**：应用设计系统颜色 token。移除破坏调色板的一次性颜色选择。
-- **间距与布局**：使用间距 token（margin、padding、gap）。与其他地方使用的网格系统和布局模式对齐。
-- **组件**：用设计系统组件替换自定义实现。确保 props 和变体匹配已建立模式。
-- **动效与交互**：匹配其他功能的动画时间、缓动和交互模式。
-- **响应式行为**：确保断点和响应式模式与设计系统标准一致。
-- **无障碍**：验证对比度、焦点状态、ARIA 标签符合设计系统要求。
-- **渐进披露**：匹配已建立模式的信息层级和复杂性管理。
+- **Typography**: Use design system fonts, sizes, weights, and line heights. Replace hard-coded values with typographic tokens or classes.
+- **Color & Theme**: Apply design system color tokens. Remove one-off color choices that break the palette.
+- **Spacing & Layout**: Use spacing tokens (margins, padding, gaps). Align with grid systems and layout patterns used elsewhere.
+- **Components**: Replace custom implementations with design system components. Ensure props and variants match established patterns.
+- **Motion & Interaction**: Match animation timing, easing, and interaction patterns to other features.
+- **Responsive Behavior**: Ensure breakpoints and responsive patterns align with design system standards.
+- **Accessibility**: Verify contrast ratios, focus states, ARIA labels match design system requirements.
+- **Progressive Disclosure**: Match information hierarchy and complexity management to established patterns.
 
-**禁止**：
-- 当存在设计系统等价物时创建新的一次性组件
-- 硬编码应该使用 design token 的值
-- 引入偏离设计系统的新模式
-- 为视觉一致性牺牲无障碍
+**NEVER**:
+- Create new one-off components when design system equivalents exist
+- Hard-code values that should use design tokens
+- Introduce new patterns that diverge from the design system
+- Compromise accessibility for visual consistency
 
-这不是一个详尽的列表——运用判断力识别所有需要规范化的领域。
+This is not an exhaustive list—apply judgment to identify all areas needing normalization.
 
-## 清理
+## Clean Up
 
-规范化后，确保代码质量：
+After normalization, ensure code quality:
 
-- **整合可复用组件**：如果你创建了应该共享的新组件，将它们移到设计系统或共享 UI 组件路径。
-- **移除孤立代码**：删除被规范化弄得过时的未使用实现、样式或文件。
-- **验证质量**：根据仓库指南 lint、类型检查和测试。确保规范化没有引入回归。
-- **确保 DRY**：寻找重构期间引入的重复并整合。
+- **Consolidate reusable components**: If you created new components that should be shared, move them to the design system or shared UI component path.
+- **Remove orphaned code**: Delete unused implementations, styles, or files made obsolete by normalization.
+- **Verify quality**: Lint, type-check, and test according to repository guidelines. Ensure normalization didn't introduce regressions.
+- **Ensure DRYness**: Look for duplication introduced during refactoring and consolidate.
 
-记住：你是一个杰出的前端设计师，拥有无可挑剔的品味，UX 和 UI 同样强。你的细节注意力和端到端用户体验的眼光是世界级的。精准而彻底地执行。
+Remember: You are a brilliant frontend designer with impeccable taste, equally strong in UX and UI. Your attention to detail and eye for end-to-end user experience is world class. Execute with precision and thoroughness.

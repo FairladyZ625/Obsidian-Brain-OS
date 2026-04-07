@@ -1,71 +1,71 @@
 ---
 name: teach-impeccable
-description: 一次性设置，收集项目设计上下文并保存到 AI 配置文件中，建立持久的设计准则。One-time setup that gathers design context and saves it to your AI config file.
+description: One-time setup that gathers design context for your project and saves it to your AI config file. Run once to establish persistent design guidelines.
 user-invokable: true
 ---
 
-收集项目设计上下文，然后持久化供所有未来会话使用。
+Gather design context for this project, then persist it for all future sessions.
 
-## 第一步：探索代码库
+## Step 1: Explore the Codebase
 
-在提问之前，彻底扫描项目以发现你能推断的内容：
+Before asking questions, thoroughly scan the project to discover what you can:
 
-- **README 和文档**：项目目的、目标用户、已声明的目标
-- **package.json / 配置文件**：技术栈、依赖项、现有设计库
-- **现有组件**：当前使用的设计模式、间距、字体
-- **品牌资产**：已定义的 logo、favicon、颜色值
-- **Design token / CSS 变量**：现有的调色板、字体栈、间距比例
-- **任何风格指南或品牌文档**
+- **README and docs**: Project purpose, target audience, any stated goals
+- **Package.json / config files**: Tech stack, dependencies, existing design libraries
+- **Existing components**: Current design patterns, spacing, typography in use
+- **Brand assets**: Logos, favicons, color values already defined
+- **Design tokens / CSS variables**: Existing color palettes, font stacks, spacing scales
+- **Any style guides or brand documentation**
 
-记录你学到的东西，以及哪些仍然不清楚。
+Note what you've learned and what remains unclear.
 
-## 第二步：问 UX 相关的问题
+## Step 2: Ask UX-Focused Questions
 
-直接询问你无法从代码库推断的内容。只聚焦于你无法推断的部分：
+ask the user directly to clarify what you cannot infer. Focus only on what you couldn't infer from the codebase:
 
-### 用户与目的
-- 谁是用户？他们使用时的上下文是什么？
-- 他们想完成什么任务？
-- 界面应该唤起什么情感？（信心、愉悦、平静、紧迫感等）
+### Users & Purpose
+- Who uses this? What's their context when using it?
+- What job are they trying to get done?
+- What emotions should the interface evoke? (confidence, delight, calm, urgency, etc.)
 
-### 品牌与个性
-- 用三个词描述品牌个性？
-- 有参考网站或应用能体现正确感觉吗？具体是哪些方面？
-- 明确不应该像什么？有什么反例？
+### Brand & Personality
+- How would you describe the brand personality in 3 words?
+- Any reference sites or apps that capture the right feel? What specifically about them?
+- What should this explicitly NOT look like? Any anti-references?
 
-### 审美偏好
-- 对视觉方向有强烈偏好吗？（极简、大胆、优雅、有趣、技术感、有机等）
-- 浅色模式、深色模式，还是两者都要？
-- 有什么必须使用或必须避免的颜色？
+### Aesthetic Preferences
+- Any strong preferences for visual direction? (minimal, bold, elegant, playful, technical, organic, etc.)
+- Light mode, dark mode, or both?
+- Any colors that must be used or avoided?
 
-### 无障碍与包容性
-- 有特定的无障碍要求吗？（WCAG 级别、已知用户需求）
-- 对减少动画、色盲或其他特殊需求有什么考虑？
+### Accessibility & Inclusion
+- Specific accessibility requirements? (WCAG level, known user needs)
+- Considerations for reduced motion, color blindness, or other accommodations?
 
-对于能从代码库探索中得出答案的问题，跳过不答。
+Skip questions where the answer is already clear from the codebase exploration.
 
-## 第三步：编写设计上下文
+## Step 3: Write Design Context
 
-将你的发现和用户的回答综合成 `## Design Context` 部分：
+Synthesize your findings and the user's answers into a `## Design Context` section:
 
 ```markdown
 ## Design Context
 
-### 用户
-[用户身份、上下文、要完成的任务]
+### Users
+[Who they are, their context, the job to be done]
 
-### 品牌个性
-[语气、语调、三个词的个性、情感目标]
+### Brand Personality
+[Voice, tone, 3-word personality, emotional goals]
 
-### 审美方向
-[视觉基调、参考资料、反例、主题]
+### Aesthetic Direction
+[Visual tone, references, anti-references, theme]
 
-### 设计原则
-[3-5 条从对话中提炼的原则，应指导所有设计决策]
+### Design Principles
+[3-5 principles derived from the conversation that should guide all design decisions]
 ```
 
-将此部分写入项目根目录的 `.impeccable.md`。如果文件已存在，就地更新 Design Context 部分。
+Write this section to `.impeccable.md` in the project root. If the file already exists, update the Design Context section in place.
 
-然后直接询问用户，是否也希望将 Design Context 附加到 `.github/copilot-instructions.md`。如果同意，也在那里追加或更新该部分。
+Then ask the user directly to clarify what you cannot infer. whether they'd also like the Design Context appended to .github/copilot-instructions.md. If yes, append or update the section there as well.
 
-确认完成并总结关键设计原则，这些原则将指导未来的所有工作。
+Confirm completion and summarize the key design principles that will now guide all future work.

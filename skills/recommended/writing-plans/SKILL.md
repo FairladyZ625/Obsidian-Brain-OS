@@ -1,61 +1,60 @@
 ---
 name: writing-plans
-description: >
-  实现计划编写技能。当你有规格说明或多步骤任务需求、准备动手写代码之前使用。Use when: writing implementation plans, spec to tasks, breaking down features, task planning, TDD workflow, multi-step implementation. 拥有规格说明或多步骤任务需求，在碰代码之前使用。
+description: Use when you have a spec or requirements for a multi-step task, before touching code
 ---
 
 # Writing Plans
 
-## 概述
+## Overview
 
-编写全面的实现计划，假设工程师对你的代码库零上下文且品味存疑。记录他们需要知道的一切：每个任务要碰哪些文件、代码、可能需要查阅的文档、如何测试。将完整计划以小粒度任务呈现。DRY。YAGNI。TDD。频繁 commit。
+Write comprehensive implementation plans assuming the engineer has zero context for our codebase and questionable taste. Document everything they need to know: which files to touch for each task, code, testing, docs they might need to check, how to test it. Give them the whole plan as bite-sized tasks. DRY. YAGNI. TDD. Frequent commits.
 
-假设他们是有技能的开发者，但几乎不了解我们的工具集或问题域。假设他们不太擅长测试设计。
+Assume they are a skilled developer, but know almost nothing about our toolset or problem domain. Assume they don't know good test design very well.
 
-**开始时宣布：** "我正在使用 writing-plans 技能创建实现计划。"
+**Announce at start:** "I'm using the writing-plans skill to create the implementation plan."
 
-**上下文：** 应在专用 worktree 中运行（由 brainstorming 技能创建）。
+**Context:** This should be run in a dedicated worktree (created by brainstorming skill).
 
-**保存计划到：** `docs/plans/YYYY-MM-DD-<功能名>.md`
+**Save plans to:** `docs/plans/YYYY-MM-DD-<feature-name>.md`
 
-## 任务粒度
+## Bite-Sized Task Granularity
 
-**每个步骤是一个动作（2-5 分钟）：**
-- "写失败的测试" — 一个步骤
-- "运行确认它失败" — 一个步骤
-- "写最小实现让测试通过" — 一个步骤
-- "运行测试确认通过" — 一个步骤
-- "Commit" — 一个步骤
+**Each step is one action (2-5 minutes):**
+- "Write the failing test" - step
+- "Run it to make sure it fails" - step
+- "Implement the minimal code to make the test pass" - step
+- "Run the tests and make sure they pass" - step
+- "Commit" - step
 
-## 计划文档头部
+## Plan Document Header
 
-**每个计划必须以此头部开始：**
+**Every plan MUST start with this header:**
 
 ```markdown
-# [功能名] 实现计划
+# [Feature Name] Implementation Plan
 
-> **For Claude：** 必需子技能：使用 superpowers:executing-plans 逐步实现此计划。
+> **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
-**目标：** [一句话描述要构建什么]
+**Goal:** [One sentence describing what this builds]
 
-**架构：** [2-3 句话说明方法]
+**Architecture:** [2-3 sentences about approach]
 
-**技术栈：** [关键技术/库]
+**Tech Stack:** [Key technologies/libraries]
 
 ---
 ```
 
-## 任务结构
+## Task Structure
 
 ````markdown
-### 任务 N：[组件名]
+### Task N: [Component Name]
 
-**文件：**
-- 创建：`exact/path/to/file.py`
-- 修改：`exact/path/to/existing.py:123-145`
-- 测试：`tests/exact/path/to/test.py`
+**Files:**
+- Create: `exact/path/to/file.py`
+- Modify: `exact/path/to/existing.py:123-145`
+- Test: `tests/exact/path/to/test.py`
 
-**步骤 1：写失败的测试**
+**Step 1: Write the failing test**
 
 ```python
 def test_specific_behavior():
@@ -63,24 +62,24 @@ def test_specific_behavior():
     assert result == expected
 ```
 
-**步骤 2：运行测试确认失败**
+**Step 2: Run test to verify it fails**
 
-运行：`pytest tests/path/test.py::test_name -v`
-预期：FAIL，提示 "function not defined"
+Run: `pytest tests/path/test.py::test_name -v`
+Expected: FAIL with "function not defined"
 
-**步骤 3：写最小实现**
+**Step 3: Write minimal implementation**
 
 ```python
 def function(input):
     return expected
 ```
 
-**步骤 4：运行测试确认通过**
+**Step 4: Run test to verify it passes**
 
-运行：`pytest tests/path/test.py::test_name -v`
-预期：PASS
+Run: `pytest tests/path/test.py::test_name -v`
+Expected: PASS
 
-**步骤 5：Commit**
+**Step 5: Commit**
 
 ```bash
 git add tests/path/test.py src/path/file.py
@@ -88,30 +87,30 @@ git commit -m "feat: add specific feature"
 ```
 ````
 
-## 注意事项
-- 始终使用精确文件路径
-- 计划中包含完整代码（不是"添加验证"）
-- 包含精确命令和预期输出
-- 用 @ 语法引用相关技能
-- DRY、YAGNI、TDD、频繁 commit
+## Remember
+- Exact file paths always
+- Complete code in plan (not "add validation")
+- Exact commands with expected output
+- Reference relevant skills with @ syntax
+- DRY, YAGNI, TDD, frequent commits
 
-## 执行交接
+## Execution Handoff
 
-保存计划后，提供执行选择：
+After saving the plan, offer execution choice:
 
-**"计划已完成并保存到 `docs/plans/<文件名>.md`。两种执行方式：**
+**"Plan complete and saved to `docs/plans/<filename>.md`. Two execution options:**
 
-**1. 子代理驱动（当前会话）** — 我为每个任务派发新子代理，任务间 review，快速迭代
+**1. Subagent-Driven (this session)** - I dispatch fresh subagent per task, review between tasks, fast iteration
 
-**2. 并行会话（独立）** — 在 worktree 中打开新会话，使用 executing-plans 批量执行带检查点
+**2. Parallel Session (separate)** - Open new session with executing-plans, batch execution with checkpoints
 
-**选哪种？****
+**Which approach?"**
 
-**若选择子代理驱动：**
-- **必需子技能：** 使用 superpowers:subagent-driven-development
-- 留在当前会话
-- 每个任务新子代理 + 代码 review
+**If Subagent-Driven chosen:**
+- **REQUIRED SUB-SKILL:** Use superpowers:subagent-driven-development
+- Stay in this session
+- Fresh subagent per task + code review
 
-**若选择并行会话：**
-- 引导他们在 worktree 中打开新会话
-- **必需子技能：** 新会话使用 superpowers:executing-plans
+**If Parallel Session chosen:**
+- Guide them to open new session in worktree
+- **REQUIRED SUB-SKILL:** New session uses superpowers:executing-plans
