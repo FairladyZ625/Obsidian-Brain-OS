@@ -33,6 +33,21 @@ bash setup.sh
 
 `setup.sh` walks you through everything interactively: vault path, user info, skills, cron, verification. Use `bash setup.sh --test` for a dry run.
 
+### 🚀 One-Click Install (Copy-Paste to Your AI Agent)
+
+Don't want to read docs? Just **copy the message below and send it to your AI agent** (Claude, ChatGPT, Cursor, OpenClaw agent, or any coding assistant). It will clone the repo, read the installer skill, and guide you through setup step by step.
+
+```
+Hi! I want to install Obsidian Brain OS — an AI-driven personal knowledge system. Please:
+1. Clone the repo: git clone https://github.com/FairladyZ625/Obsidian-Brain-OS.git
+2. Read skills/brain-os-installer/SKILL.md — that's the installation guide for you
+3. Follow it to set up my vault: ask me where I want it, my name, timezone, etc.
+4. Run bash setup.sh with my answers (or walk me through manually)
+5. After install, read docs/agents.md and help me configure my agent team
+6. Help me verify everything works with the checklist at the end of setup.sh
+Start now — let's get Brain OS running!
+```
+
 → Full guide: [docs/getting-started.md](docs/getting-started.md) | [中文指南](docs/zh/README.md)
 
 ---

@@ -35,6 +35,21 @@ bash setup.sh
 
 `bash setup.sh --test` 可以无痕测试（输出到 `/tmp/brain-os-test/`）。
 
+### 🚀 一键安装（复制这段话发给你的 AI Agent）
+
+不想看文档？**直接复制下面这段话，发给你的 AI Agent**（Claude / ChatGPT / Cursor / OpenClaw / 任何编程助手）。它会自动拉取仓库、阅读安装向导、一步步帮你装好。
+
+```
+你好！我想安装 Obsidian Brain OS——一个 AI 驱动的个人知识管理系统。请帮我：
+1. 克隆仓库：git clone https://github.com/FairladyZ625/Obsidian-Brain-OS.git
+2. 阅读 skills/brain-os-installer/SKILL.md —— 这是给你的安装指南
+3. 按指南帮我配置：问我 vault 放哪、我叫什么、时区等
+4. 用我的回答运行 bash setup.sh（或手动一步步来）
+5. 装完后读 docs/agents.md，帮我配好 Agent 团队
+6. 最后跑一遍 setup.sh 的验证清单确认一切正常
+现在就开始吧！
+```
+
 → 完整指南：[docs/zh/README.md](docs/zh/README.md) | [English guide](docs/getting-started.md)
 
 ---
