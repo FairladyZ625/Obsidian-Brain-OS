@@ -17,7 +17,7 @@ description: >
 
 ## Phase 1 Scope
 
-- **原始真相层**：直接读取外置硬盘对话目录 `/Volumes/LIZEYU/Converstions`
+- **原始真相层**：直接读取外置硬盘对话目录 `{{TRANSCRIPT_DIR}}`
 - **项目归类层**：先按 project 分组，不依赖重标签体系
 - **QMD 主召回层**：优先用 QMD 的 hybrid / vector / rerank 做高召回候选池（通过 skill-local `qmd-safe.sh` 入口调用，避免裸用漂移的全局运行时）
 - **Surveillance 快扫层**：用轻量快模型做 broad scan，降低漏检风险
@@ -44,14 +44,14 @@ Downstream / upstream contract:
 - 不做无锚点的全量 NotebookLM DeepResearch 自动执行（必须先有 Context Pack）
 - 不依赖重度人工标签体系做主干判断
 - 不对所有主题做外部补强，只生成少量高价值候选
-- 不把原始 transcript 复制进 ZeYu-AI-Brain
+- 不把原始 transcript 复制进 {{BRAIN_PATH}}
 
 ## Inputs
 
-- Raw transcript root: `$TRANSCRIPT_ROOT` (default: `/Volumes/LIZEYU/Converstions`)
+- Raw transcript root: `$TRANSCRIPT_ROOT` (default: `{{TRANSCRIPT_DIR}}`)
 - Brain root: `$BRAIN_ROOT` (default: `{{BRAIN_PATH}}`)
 - Date: default = yesterday (Asia/Shanghai)
-- Optional project hints / active initiatives from ZeYu-AI-Brain
+- Optional project hints / active initiatives from {{BRAIN_PATH}}
 - Brain-side project registry at `$BRAIN_ROOT/05-PROJECTS/` when a project can be identified
 - Existing article-derived knowledge in Brain as read-only routing context
 
@@ -199,7 +199,7 @@ This is the only stage allowed to decide:
 - what should feed next-day briefing
 
 ### Step 6: Write via the approved Brain path
-You must **not directly write ZeYu-AI-Brain** from this skill unless the active environment explicitly allows it.
+You must **not directly write {{BRAIN_PATH}}** from this skill unless the active environment explicitly allows it.
 
 Preferred formal landing path:
 - Codex Main prepares writer-ready package

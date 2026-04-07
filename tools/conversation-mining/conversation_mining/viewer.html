@@ -1,0 +1,2878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conversation Browser</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --bg2: #161b22;
+    --bg3: #21262d;
+    --border: #30363d;
+    --text: #e6edf3;
+    --text2: #8b949e;
+    --text3: #6e7681;
+    --accent: #58a6ff;
+    --user-bg: #1c2128;
+    --asst-bg: #161b22;
+    --code-bg: #1f2428;
+    --badge-claude: #1d4ed8;
+    --badge-codex: #166534;
+    --badge-ag: #6b21a8;
+    --hover: #1f2937;
+    --selected: #0d2137;
+    --selected-border: #58a6ff;
+  }
+  .light {
+    --bg: #f7f2e8;
+    --bg2: #fbf7ef;
+    --bg3: #efe5d5;
+    --border: #dccfb9;
+    --text: #2f2418;
+    --text2: #6a5845;
+    --text3: #94826f;
+    --accent: #b86a2f;
+    --user-bg: #f3e7d6;
+    --asst-bg: #fffdf8;
+    --code-bg: #efe4d2;
+    --badge-claude: #d8e7ff;
+    --badge-codex: #dff2df;
+    --badge-ag: #f0e2ff;
+    --hover: #efe7dc;
+    --selected: #f2dfc7;
+    --selected-border: #b86a2f;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  /* Top bar */
+  #topbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    flex-wrap: wrap;
+  }
+  #topbar h1 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin-right: 4px;
+    white-space: nowrap;
+  }
+  .filter-group {
+    display: flex;
+    gap: 4px;
+  }
+  .filter-btn {
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text2);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .filter-btn:hover { background: var(--hover); color: var(--text); }
+  .filter-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+  .light .filter-btn.active { color: #fff; }
+  #search {
+    flex: 1;
+    min-width: 160px;
+    max-width: 320px;
+    padding: 5px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--bg3);
+    color: var(--text);
+    font-size: 13px;
+    outline: none;
+  }
+  #search:focus { border-color: var(--accent); }
+  #search::placeholder { color: var(--text3); }
+  #stats { font-size: 12px; color: var(--text3); white-space: nowrap; }
+  #theme-btn {
+    padding: 5px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text2);
+    font-size: 12px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  #theme-btn { margin-left: auto; }
+  #theme-btn:hover { background: var(--hover); color: var(--text); }
+  #subbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px 10px;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .subbar-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text3);
+  }
+  #workspace-filter {
+    min-width: 220px;
+    max-width: 360px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg3);
+    color: var(--text);
+    font-size: 12px;
+    outline: none;
+  }
+  #workspace-filter:focus {
+    border-color: var(--accent);
+  }
+  #tag-filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .tag-filter-btn {
+    padding: 5px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text2);
+    font-size: 11px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .tag-filter-btn:hover {
+    background: var(--hover);
+    color: var(--text);
+  }
+  .tag-filter-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+  /* Main layout */
+  #main {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    min-height: 0;
+  }
+  /* Left panel */
+  #left {
+    width: 320px;
+    min-width: 240px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    flex-shrink: 0;
+    min-height: 0;
+  }
+  #conv-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px 0;
+  }
+  #conv-list::-webkit-scrollbar { width: 4px; }
+  #conv-list::-webkit-scrollbar-track { background: transparent; }
+  #conv-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  .date-group-label {
+    padding: 6px 14px 4px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 1;
+  }
+  .conv-card {
+    padding: 10px 14px;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    transition: background 0.1s;
+    position: relative;
+  }
+  .conv-card:hover { background: var(--hover); }
+  .conv-card.selected {
+    background: var(--selected);
+    border-left-color: var(--selected-border);
+  }
+  .conv-card-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 4px;
+  }
+  .conv-title-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+    flex: 1;
+  }
+  .conv-star {
+    font-size: 12px;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+  .badge {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 1px 6px;
+    border-radius: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    flex-shrink: 0;
+  }
+  .badge-claude { background: var(--badge-claude); color: #93c5fd; }
+  .badge-codex  { background: var(--badge-codex);  color: #86efac; }
+  .badge-ag     { background: var(--badge-ag);     color: #d8b4fe; }
+  .light .badge-claude { color: #1d4ed8; }
+  .light .badge-codex  { color: #166534; }
+  .light .badge-ag     { color: #6b21a8; }
+  .conv-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+  }
+  .conv-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .conv-shelf-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+  .conv-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    line-height: 1;
+    padding: 4px 7px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--bg3);
+    color: var(--text3);
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .conv-pill.starred {
+    color: var(--accent);
+    border-color: rgba(88, 166, 255, 0.3);
+  }
+  .conv-pill.novel {
+    color: #d97706;
+    border-color: rgba(217, 119, 6, 0.26);
+  }
+  .conv-count {
+    font-size: 11px;
+    color: var(--text3);
+  }
+  .copy-id-btn {
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text3);
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .copy-id-btn:hover { background: var(--hover); color: var(--text2); }
+  .copy-id-btn.copied { color: #3fb950; border-color: #3fb950; }
+  /* Right panel */
+  #right {
+    flex: 1;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    overflow: hidden;
+    min-width: 0;
+    min-height: 0;
+  }
+  #conv-header {
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg2);
+    flex-shrink: 0;
+  }
+  #conv-header h2 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 2px;
+    line-height: 1.45;
+    word-break: break-word;
+  }
+  .conv-header-main {
+    min-width: 0;
+    flex: 1;
+  }
+  .conv-title-shell {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+    max-height: 132px;
+    overflow: hidden;
+  }
+  .conv-title-preview {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+  }
+  .conv-title-full {
+    display: none;
+    max-height: 84px;
+    overflow-y: auto;
+    padding-right: 4px;
+  }
+  .conv-title-shell.expanded .conv-title-preview {
+    display: none;
+  }
+  .conv-title-shell.expanded .conv-title-full {
+    display: block;
+  }
+  .conv-title-toggle {
+    align-self: flex-start;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text2);
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 11px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .conv-title-toggle:hover {
+    background: var(--hover);
+    color: var(--text);
+  }
+  #conv-header-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  #conv-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .header-action-btn {
+    font-size: 11px;
+    padding: 5px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .header-action-btn:hover {
+    background: var(--hover);
+    color: var(--text);
+  }
+  .header-action-btn.copied {
+    color: #3fb950;
+    border-color: #3fb950;
+  }
+  #conv-header-actions {
+    position: relative;
+  }
+  .subagent-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 320px;
+    max-height: 420px;
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg);
+    box-shadow: 0 18px 44px rgba(0,0,0,0.28);
+    z-index: 30;
+  }
+  .subagent-menu-header {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text2);
+    background: var(--bg2);
+  }
+  .subagent-menu-item {
+    display: block;
+    width: 100%;
+    padding: 10px 12px;
+    border: 0;
+    border-bottom: 1px solid var(--border);
+    background: transparent;
+    color: var(--text);
+    text-align: left;
+    cursor: pointer;
+  }
+  .subagent-menu-item:last-child { border-bottom: 0; }
+  .subagent-menu-item:hover { background: var(--hover); }
+  .subagent-menu-title {
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .subagent-menu-meta {
+    font-size: 11px;
+    color: var(--text3);
+  }
+  #conv-header-meta {
+    font-size: 12px;
+    color: var(--text3);
+  }
+  #conv-header-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+  .reading-modes {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--bg);
+  }
+  .reading-mode-btn {
+    border: 0;
+    background: transparent;
+    color: var(--text2);
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .reading-mode-btn:hover {
+    background: var(--hover);
+    color: var(--text);
+  }
+  .reading-mode-btn.active {
+    background: var(--accent);
+    color: #fff;
+  }
+  .mode-note {
+    font-size: 11px;
+    color: var(--text3);
+  }
+  #curation-bar {
+    display: grid;
+    grid-template-columns: auto auto minmax(180px, 1fr) minmax(220px, 1.2fr) auto;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .curation-toggle-btn,
+  .curation-save-btn {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text2);
+    font-size: 12px;
+    padding: 7px 10px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .curation-toggle-btn:hover,
+  .curation-save-btn:hover {
+    background: var(--hover);
+    color: var(--text);
+  }
+  .curation-toggle-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+  .curation-input {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 12px;
+    padding: 8px 10px;
+    outline: none;
+  }
+  .curation-input:focus {
+    border-color: var(--accent);
+  }
+  .curation-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .curation-preview.empty {
+    font-size: 12px;
+    color: var(--text3);
+  }
+  #messages {
+    overflow-y: auto;
+    height: 100%;
+    min-height: 0;
+    padding: 16px 20px;
+    overscroll-behavior: contain;
+  }
+  #messages::-webkit-scrollbar { width: 6px; }
+  #messages::-webkit-scrollbar-track { background: transparent; }
+  #messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  .messages-inner {
+    max-width: 860px;
+    width: 100%;
+    margin: 0 auto;
+  }
+  .quick-summary {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .summary-card {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--bg2);
+    padding: 12px 14px;
+    min-width: 0;
+  }
+  .summary-card.summary-final {
+    grid-column: 1 / -1;
+  }
+  .summary-card.summary-timeline {
+    grid-column: 1 / -1;
+  }
+  .summary-card.summary-related {
+    grid-column: 1 / -1;
+  }
+  .summary-card.summary-artifacts {
+    grid-column: 1 / -1;
+  }
+  .summary-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .summary-card-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text3);
+  }
+  .summary-jump-btn {
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text2);
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 11px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .summary-jump-btn:hover {
+    background: var(--hover);
+    color: var(--text);
+  }
+  .summary-final-text {
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--text2);
+    white-space: pre-wrap;
+  }
+  .summary-chip-list,
+  .summary-line-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .summary-chip {
+    display: block;
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text2);
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .summary-line {
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--text2);
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+  }
+  .summary-empty {
+    font-size: 12px;
+    color: var(--text3);
+    line-height: 1.6;
+  }
+  .timeline-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .timeline-event {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: 10px;
+    align-items: start;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg3);
+    color: var(--text);
+    padding: 10px 12px;
+    text-align: left;
+    cursor: pointer;
+  }
+  .timeline-event:hover {
+    background: var(--hover);
+  }
+  .timeline-event-kind {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text3);
+    font-weight: 700;
+    padding-top: 2px;
+  }
+  .timeline-event-main {
+    min-width: 0;
+  }
+  .timeline-event-title {
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--text);
+    margin-bottom: 3px;
+  }
+  .timeline-event-meta {
+    font-size: 11px;
+    color: var(--text3);
+    line-height: 1.5;
+  }
+  .related-thread-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .related-thread-btn {
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 10px;
+    align-items: start;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg3);
+    color: var(--text);
+    padding: 10px 12px;
+    text-align: left;
+    cursor: pointer;
+  }
+  .related-thread-btn:hover {
+    background: var(--hover);
+  }
+  .related-thread-main {
+    min-width: 0;
+  }
+  .related-thread-title {
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .related-thread-meta {
+    font-size: 11px;
+    color: var(--text3);
+    line-height: 1.5;
+  }
+  .related-thread-score {
+    font-size: 11px;
+    color: var(--accent);
+    border: 1px solid rgba(88, 166, 255, 0.25);
+    border-radius: 999px;
+    padding: 4px 8px;
+    white-space: nowrap;
+  }
+  .artifact-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .artifact-link {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 10px;
+    align-items: start;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg3);
+    color: var(--text);
+    padding: 10px 12px;
+  }
+  .artifact-link:hover {
+    background: var(--hover);
+  }
+  .artifact-main {
+    min-width: 0;
+  }
+  .artifact-title {
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .artifact-meta,
+  .artifact-path {
+    font-size: 11px;
+    color: var(--text3);
+    line-height: 1.5;
+    word-break: break-all;
+  }
+  .artifact-open {
+    font-size: 11px;
+    color: var(--accent);
+    border: 1px solid rgba(88, 166, 255, 0.25);
+    border-radius: 999px;
+    padding: 4px 8px;
+    white-space: nowrap;
+  }
+  .message {
+    margin-bottom: 16px;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .message.emphasis {
+    border: 1px solid rgba(88, 166, 255, 0.24);
+    box-shadow: 0 0 0 1px rgba(88, 166, 255, 0.08);
+  }
+  .message.flash-focus {
+    box-shadow: 0 0 0 2px rgba(88, 166, 255, 0.45);
+  }
+  .message-role {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 6px 14px;
+    color: var(--text3);
+  }
+  .message.user .message-role { color: #58a6ff; background: var(--user-bg); }
+  .message.assistant .message-role { color: #3fb950; background: var(--asst-bg); }
+  .message.system .message-role { color: var(--text3); background: var(--bg3); }
+  .message-body {
+    padding: 10px 14px 12px;
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--text);
+  }
+  .message.user .message-body { background: var(--user-bg); }
+  .message.assistant .message-body { background: var(--asst-bg); }
+  .message.system .message-body { background: var(--bg3); color: var(--text2); font-size: 12px; }
+  .message.subagent-call {
+    border: 1px dashed var(--border);
+    background: var(--bg2);
+  }
+  .message.subagent-call .message-role {
+    color: var(--accent);
+    background: var(--bg2);
+  }
+  .subagent-shell {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+  }
+  .subagent-block {
+    border-top: 1px solid var(--border);
+  }
+  .subagent-summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    color: var(--text);
+    font-size: 13px;
+  }
+  .subagent-summary::-webkit-details-marker { display: none; }
+  .subagent-summary-main {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+  .subagent-summary-title {
+    font-weight: 600;
+    color: var(--text);
+  }
+  .subagent-summary-meta {
+    font-size: 11px;
+    color: var(--text3);
+  }
+  .subagent-call-origin {
+    padding: 10px 14px 0;
+    font-size: 12px;
+    color: var(--text2);
+  }
+  .subagent-content {
+    padding: 0 14px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .subagent-conv {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--bg);
+  }
+  .subagent-conv-header {
+    padding: 10px 12px;
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+  }
+  .subagent-conv-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+  .subagent-conv-meta {
+    font-size: 11px;
+    color: var(--text3);
+  }
+  .subagent-messages {
+    padding: 10px 12px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .subagent-message {
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .subagent-message-role {
+    padding: 5px 10px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--bg3);
+    color: var(--text3);
+  }
+  .subagent-message.user .subagent-message-role { color: #58a6ff; }
+  .subagent-message.assistant .subagent-message-role { color: #3fb950; }
+  .subagent-message-body {
+    padding: 8px 10px 10px;
+    font-size: 12.5px;
+    line-height: 1.6;
+    background: var(--bg2);
+    color: var(--text);
+  }
+  .subagent-empty {
+    font-size: 12px;
+    color: var(--text3);
+    padding: 10px 12px;
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+  }
+  /* Markdown */
+  .message-body code {
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+    font-size: 12.5px;
+    background: var(--code-bg);
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: #f97583;
+  }
+  .message-body pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 14px;
+    overflow-x: auto;
+    margin: 8px 0;
+  }
+  .message-body pre code {
+    background: none;
+    padding: 0;
+    color: var(--text);
+    font-size: 12.5px;
+    line-height: 1.5;
+  }
+  .message-body strong { font-weight: 600; color: var(--text); }
+  .message-body ul, .message-body ol {
+    padding-left: 20px;
+    margin: 6px 0;
+  }
+  .message-body li { margin: 3px 0; }
+  .message-body p { margin: 6px 0; }
+  .message-body h1, .message-body h2, .message-body h3 {
+    margin: 10px 0 6px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .message-body h1 { font-size: 18px; }
+  .message-body h2 { font-size: 16px; }
+  .message-body h3 { font-size: 14px; }
+  /* Empty / error states */
+  #empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--text3);
+    text-align: center;
+    padding: 40px;
+    gap: 12px;
+  }
+  #empty-state .icon { font-size: 40px; }
+  #empty-state h3 { font-size: 16px; color: var(--text2); }
+  #empty-state p { font-size: 13px; line-height: 1.6; max-width: 480px; }
+  #empty-state code {
+    font-family: monospace;
+    font-size: 12px;
+    background: var(--code-bg);
+    padding: 8px 12px;
+    border-radius: 6px;
+    display: block;
+    text-align: left;
+    color: var(--text2);
+    border: 1px solid var(--border);
+    word-break: break-all;
+  }
+  #no-selection {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--text3);
+    font-size: 14px;
+  }
+  .loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--text3);
+    font-size: 14px;
+    gap: 8px;
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  .spinner {
+    width: 16px; height: 16px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  .highlight { background: #854d0e44; border-radius: 2px; }
+  .light .highlight { background: #fef08a; }
+  @media (max-width: 1100px) {
+    .quick-summary {
+      grid-template-columns: 1fr;
+    }
+    #curation-bar {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 900px) {
+    #topbar {
+      gap: 8px;
+    }
+    #main {
+      flex-direction: column;
+    }
+    #left {
+      width: 100%;
+      min-width: 0;
+      max-height: 38vh;
+      border-right: 0;
+      border-bottom: 1px solid var(--border);
+    }
+    #conv-header-top {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    #conv-header-actions {
+      width: 100%;
+      flex-wrap: wrap;
+    }
+    #conv-header-toolbar {
+      align-items: flex-start;
+    }
+    #curation-bar {
+      grid-template-columns: 1fr;
+    }
+    .subagent-menu {
+      left: 0;
+      right: auto;
+      width: min(320px, calc(100vw - 48px));
+    }
+    #theme-btn {
+      margin-left: 0;
+    }
+  }
+</style>
+</head>
+<body>
+<div id="topbar">
+  <h1>💬 Conversations</h1>
+  <div class="filter-group" id="filter-group">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="claude">Claude</button>
+    <button class="filter-btn" data-filter="codex">Codex</button>
+    <button class="filter-btn" data-filter="ag">AG</button>
+  </div>
+  <div class="filter-group" id="saved-filter-group">
+    <button class="filter-btn" data-saved-filter="starred">收藏</button>
+    <button class="filter-btn" data-saved-filter="novel">新颖</button>
+  </div>
+  <input type="text" id="search" placeholder="Search conversations…" autocomplete="off">
+  <span id="stats"></span>
+  <button id="theme-btn">☀ Light</button>
+</div>
+<div id="subbar">
+  <span class="subbar-label">Group</span>
+  <div class="filter-group" id="group-mode-group">
+    <button class="filter-btn active" data-group-mode="date">按日期</button>
+    <button class="filter-btn" data-group-mode="workspace">按工作区</button>
+  </div>
+  <span class="subbar-label">Workspace</span>
+  <select id="workspace-filter">
+    <option value="all">全部工作区</option>
+  </select>
+  <span class="subbar-label">Tags</span>
+  <div id="tag-filter-bar"></div>
+</div>
+<div id="main">
+  <div id="left">
+    <div id="conv-list">
+      <div class="loading"><div class="spinner"></div> Loading…</div>
+    </div>
+  </div>
+  <div id="right">
+    <div id="no-selection">← Select a conversation</div>
+  </div>
+</div>
+<script type="application/json" id="conv-index">[]</script>
+<script type="application/json" id="conv-messages">{}</script>
+<script>
+const DATA_PATH = (function() {
+  if (window.location.protocol === 'http:' || window.location.protocol === 'https:') {
+    return './conversations.json';
+  }
+  return 'file://{{CLAUDE_HOME}}/exported_conversations/conversations.json';
+})();
+const EXPORT_BASE_PATH = '{{CLAUDE_HOME}}/exported_conversations';
+const THEME_STORAGE_KEY = 'conversation-mining-theme';
+const READING_MODE_STORAGE_KEY = 'conversation-mining-reading-mode';
+const CURATION_STORAGE_KEY = 'conversation-mining-curation-v1';
+
+let allConversations = [];
+let allMessages = {};
+let filtered = [];
+let selectedId = null;
+let activeFilter = 'all';
+let searchQuery = '';
+let isDark = true;
+let readingMode = 'mainline_plus';
+let subagentsByParentSessionId = {};
+let conversationMetaById = {};
+let curationState = { conversations: {} };
+let starredOnly = false;
+let novelOnly = false;
+let workspaceOptions = [];
+let activeWorkspace = 'all';
+let groupMode = 'date';
+let activeTag = '';
+
+function loadData() {
+  var indexEl = document.getElementById('conv-index');
+  var msgsEl = document.getElementById('conv-messages');
+  try {
+    var indexText = indexEl ? indexEl.textContent.trim() : '';
+    if (indexText && indexText !== '[]') {
+      allConversations = JSON.parse(indexText);
+      allMessages = msgsEl ? JSON.parse(msgsEl.textContent) : {};
+      buildDerivedIndexes();
+      requestAnimationFrame(renderList);
+      requestAnimationFrame(selectConversationFromLocation);
+      return;
+    }
+  } catch(e) {}
+  // fallback: fetch (dev mode)
+  fetch(DATA_PATH).then(function(r){ return r.json(); }).then(function(data){
+    allConversations = Array.isArray(data) ? data : (data.conversations || []);
+    buildDerivedIndexes();
+    requestAnimationFrame(renderList);
+    requestAnimationFrame(selectConversationFromLocation);
+  }).catch(showError);
+}
+
+function showError(err) {
+  document.getElementById('conv-list').innerHTML =
+    '<div id="empty-state">' +
+    '<div class="icon">&#9888;&#65039;</div>' +
+    '<h3>Could not load conversations</h3>' +
+    '<p>' + escapeHtml(err.message) + '</p>' +
+    '<p>If you see a CORS/security error, open with:</p>' +
+    '<code>open -a "Google Chrome" --args --allow-file-access-from-files {{CLAUDE_HOME}}/skills/conversation-mining/viewer.html</code>' +
+    '<p style="margin-top:8px">Or use Safari (local file access allowed by default).</p>' +
+    '<p>Expected file:<br><code>{{CLAUDE_HOME}}/exported_conversations/conversations.json</code></p>' +
+    '</div>';
+}
+
+function renderMarkdown(text) {
+  if (!text) return '';
+  let s = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  s = s.replace(/```(\w*)\n?([\s\S]*?)```/g, function(_,lang,code){
+    return '<pre><code>' + code.trimEnd() + '</code></pre>';
+  });
+  s = s.replace(/`([^`\n]+)`/g, '<code>$1</code>');
+  s = s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  s = s.replace(/__(.+?)__/g, '<strong>$1</strong>');
+  s = s.replace(/\*([^*\n]+)\*/g, '<em>$1</em>');
+  s = s.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+  s = s.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+  s = s.replace(/^# (.+)$/gm, '<h1>$1</h1>');
+  s = s.replace(/^[-*] (.+)$/gm, '<li>$1</li>');
+  s = s.replace(/(<li>[\s\S]*?<\/li>\n?)+/g, function(m){ return '<ul>' + m + '</ul>'; });
+  s = s.replace(/\n\n+/g, '</p><p>');
+  s = '<p>' + s + '</p>';
+  s = s.replace(/(?<!>)\n(?!<)/g, '<br>');
+  s = s.replace(/<p>\s*<\/p>/g, '');
+  return s;
+}
+
+function highlight(text, query) {
+  if (!query) return text;
+  var re = new RegExp('(' + query.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')', 'gi');
+  return text.replace(re, '<mark class="highlight">$1</mark>');
+}
+
+function isSubagentConversation(conv) {
+  if (!conv) return false;
+  if (conv.is_subagent) return true;
+  var file = String(conv.file || '').toLowerCase();
+  var project = String(conv.project || '').toLowerCase();
+  return file.indexOf('subagents_') >= 0 || project === 'subagents';
+}
+
+function buildDerivedIndexes() {
+  subagentsByParentSessionId = {};
+  conversationMetaById = {};
+  for (var i = 0; i < allConversations.length; i++) {
+    var conv = allConversations[i];
+    conversationMetaById[conv.id] = buildConversationMeta(conv);
+    if (!isSubagentConversation(conv)) continue;
+    var parentId = conv.parent_session_id || '';
+    if (!parentId) continue;
+    if (!subagentsByParentSessionId[parentId]) subagentsByParentSessionId[parentId] = [];
+    subagentsByParentSessionId[parentId].push(conv);
+  }
+  for (var key in subagentsByParentSessionId) {
+    subagentsByParentSessionId[key].sort(function(a, b) {
+      return String(a.first_ts || a.date || '').localeCompare(String(b.first_ts || b.date || ''));
+    });
+  }
+  workspaceOptions = collectWorkspaceOptions();
+  renderSecondaryControls();
+}
+
+function normalizePromptText(text) {
+  return String(text || '').replace(/\s+/g, ' ').trim();
+}
+
+function normalizeWorkspacePath(project) {
+  var cleaned = String(project || '')
+    .replace(/[\u0000-\u001f]+/g, '')
+    .replace(/file:\/*/g, '/')
+    .replace(/\)+file:\/*/g, '/')
+    .replace(/^Users\//, '/Users/')
+    .replace(/^\/+Users\//, '/Users/')
+    .replace(/\/{2,}/g, '/')
+    .replace(/\/+$/, '')
+    .trim();
+  if (!cleaned) return '';
+  var worktreeMatch = cleaned.match(/^\/Users\/([^/]+)\/\.codex\/worktrees\/[^/]+\/([^/]+)/);
+  if (worktreeMatch) {
+    return '/Users/' + worktreeMatch[1] + '/Projects/' + worktreeMatch[2];
+  }
+  var projectMatch = cleaned.match(/^\/Users\/([^/]+)\/Projects\/([^/]+)/);
+  if (projectMatch) {
+    return '/Users/' + projectMatch[1] + '/Projects/' + projectMatch[2];
+  }
+  return cleaned;
+}
+
+function getWorkspaceKey(conv) {
+  return normalizeWorkspacePath(conv && conv.project) || '(unknown workspace)';
+}
+
+function getWorkspaceLabel(key) {
+  if (!key || key === '(unknown workspace)') return 'Unknown workspace';
+  return key;
+}
+
+function getWorkspaceShortLabel(key) {
+  if (!key || key === '(unknown workspace)') return 'Unknown';
+  var parts = key.split('/').filter(Boolean);
+  if (!parts.length) return key;
+  if (parts.length >= 2) {
+    return parts[parts.length - 1] + ' · ' + parts[parts.length - 2];
+  }
+  return parts[parts.length - 1];
+}
+
+function collectWorkspaceOptions() {
+  var seen = {};
+  var items = [];
+  for (var i = 0; i < allConversations.length; i++) {
+    var conv = allConversations[i];
+    if (isSubagentConversation(conv)) continue;
+    var key = getWorkspaceKey(conv);
+    if (seen[key]) continue;
+    seen[key] = true;
+    items.push(key);
+  }
+  items.sort(function(a, b) {
+    return getWorkspaceLabel(a).localeCompare(getWorkspaceLabel(b));
+  });
+  return items;
+}
+
+function collectSavedTags() {
+  var tags = [];
+  var seen = {};
+  var conversations = (curationState && curationState.conversations) || {};
+  for (var id in conversations) {
+    var record = normalizeCurationRecord(conversations[id]);
+    for (var i = 0; i < record.tags.length; i++) {
+      var tag = record.tags[i];
+      var key = tag.toLowerCase();
+      if (seen[key]) continue;
+      seen[key] = true;
+      tags.push(tag);
+    }
+  }
+  tags.sort(function(a, b) { return a.localeCompare(b); });
+  return tags;
+}
+
+function renderSecondaryControls() {
+  var workspaceSelect = document.getElementById('workspace-filter');
+  if (workspaceSelect) {
+    var workspaceHtml = '<option value="all">全部工作区</option>';
+    for (var i = 0; i < workspaceOptions.length; i++) {
+      var key = workspaceOptions[i];
+      workspaceHtml += '<option value="' + escapeAttr(key) + '"' + (activeWorkspace === key ? ' selected' : '') + '>' + escapeHtml(getWorkspaceShortLabel(key)) + '</option>';
+    }
+    workspaceSelect.innerHTML = workspaceHtml;
+    workspaceSelect.title = activeWorkspace === 'all' ? '全部工作区' : getWorkspaceLabel(activeWorkspace);
+  }
+  var tagBar = document.getElementById('tag-filter-bar');
+  if (tagBar) {
+    var tags = collectSavedTags();
+    if (activeTag && tags.indexOf(activeTag) < 0) activeTag = '';
+    var tagHtml = '<button class="tag-filter-btn' + (!activeTag ? ' active' : '') + '" data-tag-filter="">全部标签</button>';
+    for (var j = 0; j < tags.length; j++) {
+      tagHtml += '<button class="tag-filter-btn' + (activeTag === tags[j] ? ' active' : '') + '" data-tag-filter="' + escapeAttr(tags[j]) + '">#' + escapeHtml(tags[j]) + '</button>';
+    }
+    tagBar.innerHTML = tagHtml;
+  }
+  document.querySelectorAll('#group-mode-group .filter-btn').forEach(function(btn) {
+    btn.classList.toggle('active', btn.dataset.groupMode === groupMode);
+  });
+}
+
+function tokenizeTitleForTaskCluster(text) {
+  var source = String(text || '');
+  var tokens = [];
+  var seen = {};
+  var english = source.toLowerCase().match(/[a-z0-9][a-z0-9._/-]{2,}/g) || [];
+  for (var i = 0; i < english.length; i++) {
+    var token = english[i];
+    if (seen[token]) continue;
+    seen[token] = true;
+    tokens.push(token);
+  }
+  var hanSegments = source.match(/[\u4e00-\u9fff]{2,}/g) || [];
+  for (var j = 0; j < hanSegments.length; j++) {
+    var segment = hanSegments[j];
+    if (segment.length <= 6) {
+      if (!seen[segment]) {
+        seen[segment] = true;
+        tokens.push(segment);
+      }
+      continue;
+    }
+    for (var k = 0; k <= segment.length - 4; k += 2) {
+      var gram = segment.slice(k, k + 4);
+      if (gram.length < 3 || seen[gram]) continue;
+      seen[gram] = true;
+      tokens.push(gram);
+    }
+  }
+  return tokens.slice(0, 18);
+}
+
+function toSetMap(items) {
+  var set = {};
+  for (var i = 0; i < items.length; i++) set[items[i]] = true;
+  return set;
+}
+
+function countSharedItems(a, b) {
+  var count = 0;
+  for (var key in a) {
+    if (b[key]) count += 1;
+  }
+  return count;
+}
+
+function buildConversationMeta(conv) {
+  var messages = getConversationMessages(conv);
+  var curation = getConversationCuration(conv.id || '');
+  var workspaceKey = getWorkspaceKey(conv);
+  var files = extractFileMentions(messages);
+  var titleTokens = tokenizeTitleForTaskCluster(conv.title || conv.name || '');
+  var tags = normalizeTags(curation.tags || []);
+  return {
+    workspaceKey: workspaceKey,
+    files: files,
+    fileSet: toSetMap(files),
+    titleTokens: titleTokens,
+    titleTokenSet: toSetMap(titleTokens),
+    tags: tags,
+    tagSet: toSetMap(tags.map(function(tag) { return tag.toLowerCase(); })),
+    collection: String(curation.collection || '').trim().toLowerCase(),
+  };
+}
+
+function buildRelatedTaskReason(parts) {
+  return parts.join(' · ');
+}
+
+function scoreRelatedConversation(baseConv, candidate) {
+  if (!baseConv || !candidate || baseConv.id === candidate.id) return null;
+  if (isSubagentConversation(candidate)) return null;
+  var baseMeta = conversationMetaById[baseConv.id] || buildConversationMeta(baseConv);
+  var candidateMeta = conversationMetaById[candidate.id] || buildConversationMeta(candidate);
+  var score = 0;
+  var reasons = [];
+
+  if (baseMeta.workspaceKey && candidateMeta.workspaceKey && baseMeta.workspaceKey === candidateMeta.workspaceKey) {
+    score += 4;
+    reasons.push('same workspace');
+  } else {
+    return null;
+  }
+
+  if ((baseConv.source || '') === (candidate.source || '')) {
+    score += 1;
+  }
+
+  if (baseMeta.collection && candidateMeta.collection && baseMeta.collection === candidateMeta.collection) {
+    score += 4;
+    reasons.push('same collection');
+  }
+
+  var sharedTags = countSharedItems(baseMeta.tagSet, candidateMeta.tagSet);
+  if (sharedTags) {
+    score += sharedTags * 3;
+    reasons.push(sharedTags + ' shared tag' + (sharedTags > 1 ? 's' : ''));
+  }
+
+  var sharedFiles = countSharedItems(baseMeta.fileSet, candidateMeta.fileSet);
+  if (sharedFiles) {
+    score += sharedFiles * 4;
+    reasons.push(sharedFiles + ' shared file' + (sharedFiles > 1 ? 's' : ''));
+  }
+
+  var sharedTitleTokens = countSharedItems(baseMeta.titleTokenSet, candidateMeta.titleTokenSet);
+  if (sharedTitleTokens) {
+    score += sharedTitleTokens * 2;
+    reasons.push(sharedTitleTokens + ' title overlap');
+  }
+
+  var baseDate = new Date(baseConv.date || baseConv.created_at || baseConv.timestamp || 0).getTime();
+  var candidateDate = new Date(candidate.date || candidate.created_at || candidate.timestamp || 0).getTime();
+  if (baseDate && candidateDate) {
+    var diffDays = Math.abs(baseDate - candidateDate) / 86400000;
+    if (diffDays <= 2) score += 1;
+  }
+
+  if (score < 6) return null;
+  return {
+    conv: candidate,
+    score: score,
+    reason: buildRelatedTaskReason(reasons),
+  };
+}
+
+function getRelatedTaskConversations(conv) {
+  var matches = [];
+  for (var i = 0; i < allConversations.length; i++) {
+    var candidate = allConversations[i];
+    var scored = scoreRelatedConversation(conv, candidate);
+    if (scored) matches.push(scored);
+  }
+  matches.sort(function(a, b) {
+    if (b.score !== a.score) return b.score - a.score;
+    return String(b.conv.date || '').localeCompare(String(a.conv.date || ''));
+  });
+  return matches.slice(0, 8);
+}
+
+function promptsMatch(a, b) {
+  var na = normalizePromptText(a);
+  var nb = normalizePromptText(b);
+  if (!na || !nb) return false;
+  if (na === nb) return true;
+  var shortA = na.slice(0, 220);
+  var shortB = nb.slice(0, 220);
+  return shortA === shortB || shortA.indexOf(shortB) >= 0 || shortB.indexOf(shortA) >= 0;
+}
+
+function getVisibleConversationBaseCount() {
+  var count = 0;
+  for (var i = 0; i < allConversations.length; i++) {
+    if (!isSubagentConversation(allConversations[i])) count += 1;
+  }
+  return count;
+}
+
+function getConversationMessages(conv) {
+  return allMessages[conv.id] || conv.messages || [];
+}
+
+function getDisplayMessageCount(conv) {
+  var msgs = getConversationMessages(conv);
+  var count = 0;
+  for (var i = 0; i < msgs.length; i++) {
+    if ((msgs[i].role || '').toLowerCase() !== 'subagent_call') count += 1;
+  }
+  return count;
+}
+
+function getRelatedSubagentConversations(conv) {
+  if (!conv || isSubagentConversation(conv)) return [];
+  return (subagentsByParentSessionId[conv.session_id] || []).slice();
+}
+
+function getSubagentDisplayName(conv) {
+  return conv.subagent_summary || conv.title || 'Sub-agent';
+}
+
+function buildSubagentLabelFromCall(msg) {
+  var label = msg.description || msg.text || 'Sub-agent call';
+  return normalizePromptText(label).slice(0, 100) || 'Sub-agent call';
+}
+
+function matchSubagentsForCall(callMsg, candidates, usedIds) {
+  var matches = [];
+  for (var i = 0; i < candidates.length; i++) {
+    var conv = candidates[i];
+    if (usedIds[conv.id]) continue;
+    if (promptsMatch(callMsg.prompt || callMsg.text || '', conv.launch_prompt || '')) {
+      matches.push(conv);
+    }
+  }
+  if (!matches.length) return matches;
+  for (var j = 0; j < matches.length; j++) usedIds[matches[j].id] = true;
+  return matches;
+}
+
+function renderSubagentConversation(conv) {
+  var msgs = getConversationMessages(conv);
+  var html = '<div class="subagent-conv">' +
+    '<div class="subagent-conv-header">' +
+    '<div class="subagent-conv-title">' + escapeHtml(getSubagentDisplayName(conv)) + '</div>' +
+    '<div class="subagent-conv-meta">' + escapeHtml(conv.project || '') +
+    ' &nbsp;&middot;&nbsp; ' + getDisplayMessageCount(conv) + ' messages</div>' +
+    '</div><div class="subagent-messages">';
+  for (var i = 0; i < msgs.length; i++) {
+    var msg = msgs[i];
+    var role = (msg.role || 'user').toLowerCase();
+    if (role === 'subagent_call') continue;
+    var roleLabel = role === 'assistant' ? 'Assistant' : role === 'system' ? 'System' : 'User';
+    html += '<div class="subagent-message ' + role + '">' +
+      '<div class="subagent-message-role">' + roleLabel + '</div>' +
+      '<div class="subagent-message-body">' + renderMarkdown(msg.text || msg.content || '') + '</div>' +
+      '</div>';
+  }
+  html += '</div></div>';
+  return html;
+}
+
+function renderSubagentBlock(callMsg, matches, fallbackTitle) {
+  var title = fallbackTitle || buildSubagentLabelFromCall(callMsg);
+  var meta = matches.length ? (matches.length + ' related sub-agent conversation' + (matches.length > 1 ? 's' : '')) : 'No linked exported transcript';
+  var detailsId = callMsg.detailsId || '';
+  var origin = callMsg.originLabel || ('从这里调用：' + title);
+  var html = '<div class="message subagent-call">' +
+    '<div class="message-role">Sub-agent</div>' +
+    '<div class="subagent-call-origin">' + escapeHtml(origin) + '</div>' +
+    '<div class="subagent-shell">' +
+    '<details class="subagent-block"' + (detailsId ? ' id="' + escapeAttr(detailsId) + '"' : '') + '>' +
+    '<summary class="subagent-summary">' +
+    '<span class="subagent-summary-main">' +
+    '<span class="subagent-summary-title">' + escapeHtml(title) + '</span>' +
+    '<span class="subagent-summary-meta">' + escapeHtml(meta) + '</span>' +
+    '</span>' +
+    '<span>' + (matches.length ? '&#9662;' : '&#9432;') + '</span>' +
+    '</summary>' +
+    '<div class="subagent-content">';
+  if (matches.length) {
+    for (var i = 0; i < matches.length; i++) html += renderSubagentConversation(matches[i]);
+  } else {
+    html += '<div class="subagent-empty">这次 Agent 调用没有找到可嵌入的子会话 transcript。</div>';
+  }
+  html += '</div></details></div></div>';
+  return html;
+}
+
+function groupByDate(convs) {
+  var groups = {};
+  for (var i = 0; i < convs.length; i++) {
+    var c = convs[i];
+    var d = c.date || c.created_at || c.timestamp || '';
+    var label = d ? new Date(d).toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}) : 'Unknown Date';
+    if (!groups[label]) groups[label] = [];
+    groups[label].push(c);
+  }
+  var entries = [];
+  for (var label in groups) entries.push({ label: label, items: groups[label] });
+  return entries;
+}
+
+function groupByWorkspace(convs) {
+  var groups = {};
+  for (var i = 0; i < convs.length; i++) {
+    var c = convs[i];
+    var key = getWorkspaceKey(c);
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(c);
+  }
+  var entries = [];
+  for (var key in groups) {
+    entries.push({
+      label: getWorkspaceShortLabel(key),
+      title: getWorkspaceLabel(key),
+      items: groups[key],
+    });
+  }
+  entries.sort(function(a, b) {
+    return a.title.localeCompare(b.title);
+  });
+  return entries;
+}
+
+function badgeFor(source) {
+  var s = (source || '').toLowerCase();
+  if (s.indexOf('codex') >= 0) return '<span class="badge badge-codex">Codex</span>';
+  if (s.indexOf('ag') >= 0 || s.indexOf('antigravity') >= 0) return '<span class="badge badge-ag">AG</span>';
+  return '<span class="badge badge-claude">Claude</span>';
+}
+
+function sourceKey(source) {
+  var s = (source || '').toLowerCase();
+  if (s.indexOf('codex') >= 0) return 'codex';
+  if (s.indexOf('ag') >= 0 || s.indexOf('antigravity') >= 0) return 'ag';
+  return 'claude';
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function escapeAttr(s) {
+  return String(s).replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function copyText(text, btn, originalLabel) {
+  function markCopied() {
+    if (!btn) return;
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(function() {
+      btn.textContent = originalLabel;
+      btn.classList.remove('copied');
+    }, 1500);
+  }
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(markCopied).catch(function() {
+      fallbackCopyText(text);
+      markCopied();
+    });
+    return;
+  }
+
+  fallbackCopyText(text);
+  markCopied();
+}
+
+function fallbackCopyText(text) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+}
+
+function getConversationFilePath(conv) {
+  if (!conv) return '';
+  if (conv.transcript_path) return String(conv.transcript_path);
+  if (conv.file) return EXPORT_BASE_PATH + '/' + String(conv.file).replace(/^\/+/, '');
+  return '';
+}
+
+function getConversationViewerLink(conv) {
+  var base = window.location.href.split('#')[0];
+  return base + '#conv=' + encodeURIComponent(conv.id || '');
+}
+
+function buildConversationRef(conv) {
+  return [
+    'Conversation reference',
+    '- ID: ' + (conv.id || ''),
+    '- Source: ' + (conv.source || ''),
+    '- Viewer: ' + getConversationViewerLink(conv),
+    '- Transcript: ' + getConversationFilePath(conv),
+    '- Search fallback: {{CLAUDE_HOME}}/exported_conversations/conversations.json',
+  ].join('\n');
+}
+
+function buildConversationPrompt(conv) {
+  return [
+    '请先查看这段历史对话，再继续回答。',
+    '',
+    '定位信息：',
+    '- conversation id: ' + (conv.id || ''),
+    '- viewer deep link: ' + getConversationViewerLink(conv),
+    '- transcript markdown: ' + getConversationFilePath(conv),
+    '',
+    '如果无法直接打开 viewer deep link，就读取 transcript markdown；如果 transcript 不存在，再到 {{CLAUDE_HOME}}/exported_conversations/conversations.json 里按 conversation id 搜索。',
+  ].join('\n');
+}
+
+function syncLocationHash(id) {
+  var nextHash = id ? '#conv=' + encodeURIComponent(id) : '';
+  if (window.location.hash === nextHash) return;
+  history.replaceState(null, '', nextHash || window.location.pathname + window.location.search);
+}
+
+function getConversationIdFromLocation() {
+  if (!window.location.hash) return '';
+  var raw = window.location.hash.replace(/^#/, '');
+  if (!raw) return '';
+  if (raw.indexOf('conv=') === 0) {
+    return decodeURIComponent(raw.slice(5));
+  }
+  return decodeURIComponent(raw);
+}
+
+function selectConversationFromLocation() {
+  var requestedId = getConversationIdFromLocation();
+  if (!requestedId) return;
+  for (var i = 0; i < allConversations.length; i++) {
+    if (allConversations[i].id === requestedId) {
+      selectConversation(requestedId);
+      return;
+    }
+  }
+}
+
+function applyTheme(nextIsDark) {
+  isDark = !!nextIsDark;
+  document.body.classList.toggle('light', !isDark);
+  var btn = document.getElementById('theme-btn');
+  if (btn) {
+    btn.textContent = isDark ? '☀ 白天' : '🌙 夜间';
+    btn.title = isDark ? '切换到白天模式' : '切换到夜间模式';
+  }
+}
+
+function loadThemePreference() {
+  try {
+    var saved = localStorage.getItem(THEME_STORAGE_KEY);
+    if (saved === 'light') {
+      applyTheme(false);
+      return;
+    }
+    if (saved === 'dark') {
+      applyTheme(true);
+      return;
+    }
+  } catch (e) {}
+  applyTheme(true);
+}
+
+function saveThemePreference() {
+  try {
+    localStorage.setItem(THEME_STORAGE_KEY, isDark ? 'dark' : 'light');
+  } catch (e) {}
+}
+
+function applyReadingMode(nextMode) {
+  if (nextMode !== 'mainline' && nextMode !== 'mainline_plus' && nextMode !== 'forensics') {
+    nextMode = 'mainline_plus';
+  }
+  readingMode = nextMode;
+}
+
+function loadReadingModePreference() {
+  try {
+    var saved = localStorage.getItem(READING_MODE_STORAGE_KEY);
+    if (saved) {
+      applyReadingMode(saved);
+      return;
+    }
+  } catch (e) {}
+  applyReadingMode('mainline_plus');
+}
+
+function saveReadingModePreference() {
+  try {
+    localStorage.setItem(READING_MODE_STORAGE_KEY, readingMode);
+  } catch (e) {}
+}
+
+function getReadingModeLabel(mode) {
+  if (mode === 'mainline') return '主线';
+  if (mode === 'forensics') return '全量';
+  return '主线 + 子代理';
+}
+
+function getMessageText(msg) {
+  return String((msg && (msg.content || msg.text)) || '');
+}
+
+function stripMarkdownForText(text) {
+  return String(text || '')
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/!\[[^\]]*\]\([^)]+\)/g, ' ')
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/[*_>#-]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function truncateText(text, maxChars) {
+  var clean = stripMarkdownForText(text);
+  if (clean.length <= maxChars) return clean;
+  return clean.slice(0, Math.max(0, maxChars - 1)).trimEnd() + '…';
+}
+
+function normalizeInlineText(text) {
+  return String(text || '').replace(/\s+/g, ' ').trim();
+}
+
+function buildHeaderTitlePayload(title) {
+  var clean = normalizeInlineText(title);
+  if (!clean) return { preview: 'Untitled', full: '', expandable: false };
+  if (clean.length <= 220) return { preview: clean, full: clean, expandable: false };
+  return {
+    preview: clean.slice(0, 220).trimEnd() + '…',
+    full: clean,
+    expandable: true,
+  };
+}
+
+function findLastRoleIndex(messages, role) {
+  for (var i = messages.length - 1; i >= 0; i--) {
+    if ((messages[i].role || '').toLowerCase() === role) return i;
+  }
+  return -1;
+}
+
+function hasStructuredContent(text) {
+  return /```|^#{1,3}\s|^\s*[-*]\s+|^\s*\d+\.\s+|\n\n|`[^`\n]+`/m.test(String(text || ''));
+}
+
+function containsFileLikeText(text) {
+  return /\/Users\/|(?:^|[`(\s])(?:docs|apps|packages|dashboard|extensions|lib|src)\/[\w./-]+\.(?:py|html|md|tsx?|jsx?|json|sh|css|scss|toml|ya?ml)\b/m.test(String(text || ''));
+}
+
+function containsCommandLikeText(text) {
+  return /```(?:bash|sh|shell|zsh)?|(?:^|\n)\s*(?:\$ )?(?:python3|python|git|npm|pnpm|yarn|uv|pytest|npx|node|bash|sh|rg|ls|cd|open)\b/m.test(String(text || ''));
+}
+
+function isLikelyOperationalAssistantText(text) {
+  var plain = stripMarkdownForText(text).toLowerCase();
+  if (!plain) return false;
+  if (hasStructuredContent(text) && plain.length > 220) return false;
+  if (plain.length > 260) return false;
+  var patterns = [
+    /^let me\b/,
+    /^now let me\b/,
+    /^i(?:'|’)ll\b/,
+    /^i will\b/,
+    /^i'm going to\b/,
+    /^checking\b/,
+    /^looking\b/,
+    /^exploring\b/,
+    /^reviewing\b/,
+    /^我先/,
+    /^让我/,
+    /^我现在/,
+    /^接下来/,
+    /^继续/,
+    /^先看/,
+    /^我去/,
+    /^现在我/,
+    /^我先把/,
+    /^我先检查/,
+    /^我先确认/,
+    /^我现在直接/,
+  ];
+  for (var i = 0; i < patterns.length; i++) {
+    if (patterns[i].test(plain)) return true;
+  }
+  return false;
+}
+
+function isImportantAssistantMessage(msg, index, messages, lastAssistantIndex) {
+  if ((msg.role || '').toLowerCase() !== 'assistant') return false;
+  var text = getMessageText(msg);
+  if (!text.trim()) return false;
+  if (index === lastAssistantIndex) return true;
+  if (hasStructuredContent(text)) return true;
+  if (containsFileLikeText(text) && text.length > 120) return true;
+  if (containsCommandLikeText(text) && text.length > 120) return true;
+  if (!isLikelyOperationalAssistantText(text) && stripMarkdownForText(text).length > 220) return true;
+  return false;
+}
+
+function isSummaryCandidateAssistantMessage(msg, index, messages, lastAssistantIndex) {
+  if ((msg.role || '').toLowerCase() !== 'assistant') return false;
+  var text = getMessageText(msg);
+  var plain = stripMarkdownForText(text);
+  if (!plain) return false;
+  if (isLikelyOperationalAssistantText(text) && index === lastAssistantIndex) return false;
+  if (hasStructuredContent(text)) return true;
+  if (containsFileLikeText(text) && plain.length > 100) return true;
+  if (containsCommandLikeText(text) && plain.length > 100) return true;
+  if (!isLikelyOperationalAssistantText(text) && plain.length > 180) return true;
+  if (/(已经|完成|结果|结论|建议|下一步|总结|处理完|修好了|搞定|done|fixed|recommend|summary|result)/i.test(plain) && plain.length > 80) return true;
+  return false;
+}
+
+function shouldRenderMessageForMode(msg, index, messages, conv, analysis) {
+  var role = (msg.role || 'user').toLowerCase();
+  if (readingMode === 'forensics') return true;
+  if (role === 'user') return true;
+  if (role === 'subagent_call') return readingMode === 'mainline_plus' && !isSubagentConversation(conv);
+  if (role === 'assistant') return !!analysis.importantAssistantIndexes[index];
+  return false;
+}
+
+function normalizePathCandidate(path) {
+  var cleaned = String(path || '')
+    .replace(/^[[(`'"]+/, '')
+    .replace(/[\])`'":;,。！？]+$/, '')
+    .trim();
+  if (!cleaned) return '';
+  if (cleaned.indexOf('/Users/') === 0) return cleaned;
+  if (/^(docs|apps|packages|dashboard|extensions|lib|src)\//.test(cleaned)) return cleaned;
+  if (/^[\w./-]+\.(?:py|html|md|tsx?|jsx?|json|sh|css|scss|toml|ya?ml)$/.test(cleaned)) return cleaned;
+  return '';
+}
+
+function pushUniqueItem(target, seen, value, limit) {
+  if (!value || seen[value]) return;
+  seen[value] = true;
+  if (target.length < limit) target.push(value);
+}
+
+function extractFileMentions(messages) {
+  var files = [];
+  var seen = {};
+  var absolutePathRe = /\/Users\/[^\s<>)\]"'`]+/g;
+  var relativePathRe = /(?:docs|apps|packages|dashboard|extensions|lib|src)\/[\w./-]+\.(?:py|html|md|tsx?|jsx?|json|sh|css|scss|toml|ya?ml)\b/g;
+  var backtickFileRe = /`([^`\n]+?\.(?:py|html|md|tsx?|jsx?|json|sh|css|scss|toml|ya?ml))`/g;
+  for (var i = 0; i < messages.length; i++) {
+    var text = getMessageText(messages[i]);
+    var match;
+    while ((match = absolutePathRe.exec(text)) !== null) {
+      pushUniqueItem(files, seen, normalizePathCandidate(match[0]), 6);
+    }
+    while ((match = relativePathRe.exec(text)) !== null) {
+      pushUniqueItem(files, seen, normalizePathCandidate(match[0]), 6);
+    }
+    while ((match = backtickFileRe.exec(text)) !== null) {
+      pushUniqueItem(files, seen, normalizePathCandidate(match[1]), 6);
+    }
+    absolutePathRe.lastIndex = 0;
+    relativePathRe.lastIndex = 0;
+    backtickFileRe.lastIndex = 0;
+  }
+  return files;
+}
+
+function normalizeCommandLine(line) {
+  var normalized = String(line || '').trim();
+  if (!normalized) return '';
+  normalized = normalized.replace(/^\$\s+/, '');
+  normalized = normalized.replace(/^\([^)]+\)\s+➜\s+/, '');
+  normalized = normalized.replace(/^\/[^\n]*\s+(?=(python3|python|git|npm|pnpm|yarn|uv|pytest|npx|node|bash|sh|rg|ls|cd|open)\b)/, '');
+  normalized = normalized.replace(/^[~\/\w.-]+(?:\s+git:\([^)]+\))?\s+[✗✔]?\s*(?=(python3|python|git|npm|pnpm|yarn|uv|pytest|npx|node|bash|sh|rg|ls|cd|open)\b)/, '');
+  return normalized.trim();
+}
+
+function looksLikeCommandLine(line) {
+  return /^(python3|python|git|npm|pnpm|yarn|uv|pytest|npx|node|bash|sh|rg|ls|cd|open)\b/.test(normalizeCommandLine(line));
+}
+
+function extractCommandMentions(messages) {
+  var commands = [];
+  var seen = {};
+  var fenceRe = /```(?:bash|sh|shell|zsh)?\n?([\s\S]*?)```/g;
+  for (var i = 0; i < messages.length; i++) {
+    var text = getMessageText(messages[i]);
+    var match;
+    while ((match = fenceRe.exec(text)) !== null) {
+      var blockLines = match[1].split(/\n+/);
+      for (var j = 0; j < blockLines.length; j++) {
+        var blockLine = normalizeCommandLine(blockLines[j]);
+        if (looksLikeCommandLine(blockLine)) {
+          pushUniqueItem(commands, seen, truncateText(blockLine, 120), 6);
+        }
+      }
+    }
+    fenceRe.lastIndex = 0;
+    var lines = text.split(/\n+/);
+    for (var k = 0; k < lines.length; k++) {
+      var line = normalizeCommandLine(lines[k]);
+      if (looksLikeCommandLine(line)) {
+        pushUniqueItem(commands, seen, truncateText(line, 120), 6);
+      }
+    }
+  }
+  return commands;
+}
+
+function extractDecisionSignals(messages, analysis) {
+  var signals = [];
+  var seen = {};
+  var keywordRe = /(结论|建议|下一步|计划|风险|原因|判断|推荐|todo|next step|recommend|decision|risk|plan|should|need to)/i;
+  for (var i = 0; i < messages.length; i++) {
+    if (!analysis.importantAssistantIndexes[i]) continue;
+    var text = getMessageText(messages[i]);
+    var lines = text.split(/\n+/);
+    for (var j = 0; j < lines.length; j++) {
+      var line = lines[j].trim();
+      line = line.replace(/^[-*]\s+/, '').replace(/^\d+\.\s+/, '');
+      if (!line || line.length < 14 || line.length > 180) continue;
+      if (!keywordRe.test(line)) continue;
+      pushUniqueItem(signals, seen, truncateText(line, 160), 4);
+    }
+  }
+  return signals;
+}
+
+function analyzeConversation(messages) {
+  var lastAssistantIndex = findLastRoleIndex(messages, 'assistant');
+  var importantAssistantIndexes = {};
+  for (var i = 0; i < messages.length; i++) {
+    if (isImportantAssistantMessage(messages[i], i, messages, lastAssistantIndex)) {
+      importantAssistantIndexes[i] = true;
+    }
+  }
+  var finalAssistantIndex = lastAssistantIndex;
+  for (var j = messages.length - 1; j >= 0; j--) {
+    if ((messages[j].role || '').toLowerCase() === 'assistant' && importantAssistantIndexes[j]) {
+      finalAssistantIndex = j;
+      break;
+    }
+  }
+  var summaryAssistantIndex = -1;
+  for (var k = messages.length - 1; k >= 0; k--) {
+    if (isSummaryCandidateAssistantMessage(messages[k], k, messages, lastAssistantIndex)) {
+      summaryAssistantIndex = k;
+      break;
+    }
+  }
+  return {
+    lastAssistantIndex: lastAssistantIndex,
+    finalAssistantIndex: finalAssistantIndex,
+    summaryAssistantIndex: summaryAssistantIndex,
+    importantAssistantIndexes: importantAssistantIndexes,
+  };
+}
+
+function buildQuickSummary(messages, analysis) {
+  var finalAnswerText = '';
+  var summaryIndex = analysis.summaryAssistantIndex >= 0 ? analysis.summaryAssistantIndex : analysis.finalAssistantIndex;
+  if (summaryIndex >= 0) {
+    finalAnswerText = truncateText(getMessageText(messages[summaryIndex]), 520);
+  }
+  return {
+    finalAnswer: finalAnswerText,
+    finalAssistantIndex: summaryIndex,
+    files: extractFileMentions(messages),
+    commands: extractCommandMentions(messages),
+    signals: extractDecisionSignals(messages, analysis),
+  };
+}
+
+function renderSummarySection(title, items, emptyText, lineClass) {
+  var html = '<div class="summary-card"><div class="summary-card-header">' +
+    '<div class="summary-card-title">' + escapeHtml(title) + '</div>' +
+    '</div>';
+  if (!items.length) {
+    html += '<div class="summary-empty">' + escapeHtml(emptyText) + '</div>';
+  } else {
+    html += '<div class="' + lineClass + '">';
+    for (var i = 0; i < items.length; i++) {
+      var cls = lineClass === 'summary-chip-list' ? 'summary-chip' : 'summary-line';
+      html += '<div class="' + cls + '" title="' + escapeAttr(items[i]) + '">' + escapeHtml(items[i]) + '</div>';
+    }
+    html += '</div>';
+  }
+  html += '</div>';
+  return html;
+}
+
+function renderQuickSummary(summary) {
+  var finalHtml = '<div class="summary-card summary-final"><div class="summary-card-header">' +
+    '<div class="summary-card-title">Final answer</div>';
+  if (summary.finalAssistantIndex >= 0) {
+    finalHtml += '<button class="summary-jump-btn" id="jump-final-answer-btn" data-target-index="' + summary.finalAssistantIndex + '">Jump to reply</button>';
+  }
+  finalHtml += '</div>';
+  if (summary.finalAnswer) {
+    finalHtml += '<div class="summary-final-text">' + escapeHtml(summary.finalAnswer) + '</div>';
+  } else {
+    finalHtml += '<div class="summary-empty">没有找到明确的主回复结论。</div>';
+  }
+  finalHtml += '</div>';
+
+  return '<div class="quick-summary">' +
+    finalHtml +
+    renderSummarySection('Key files', summary.files, '这段对话里没有抓到明显的文件路径。', 'summary-chip-list') +
+    renderSummarySection('Commands', summary.commands, '这段对话里没有抓到明显的命令。', 'summary-chip-list') +
+    renderSummarySection('Signals', summary.signals, '没有抓到明确的“结论 / 建议 / 下一步”标记。', 'summary-line-list') +
+    '</div>';
+}
+
+function renderTimeline(events) {
+  var html = '<div class="summary-card summary-timeline"><div class="summary-card-header">' +
+    '<div class="summary-card-title">Timeline replay</div>' +
+    '</div>';
+  if (!events.length) {
+    html += '<div class="summary-empty">这段对话里没有足够稳定的结构化事件可回放。</div>';
+    html += '</div>';
+    return html;
+  }
+  html += '<div class="timeline-list">';
+  for (var i = 0; i < events.length; i++) {
+    var event = events[i];
+    html += '<button class="timeline-event" data-target-type="' + escapeAttr(event.targetType) + '" data-target-id="' + escapeAttr(event.targetId || '') + '">' +
+      '<div class="timeline-event-kind">' + escapeHtml(event.kind) + '</div>' +
+      '<div class="timeline-event-main">' +
+      '<div class="timeline-event-title">' + escapeHtml(event.title) + '</div>' +
+      (event.meta ? '<div class="timeline-event-meta">' + escapeHtml(event.meta) + '</div>' : '') +
+      '</div>' +
+      '</button>';
+  }
+  html += '</div></div>';
+  return html;
+}
+
+function renderRelatedThreads(related) {
+  var html = '<div class="summary-card summary-related"><div class="summary-card-header">' +
+    '<div class="summary-card-title">Related task threads</div>' +
+    '</div>';
+  if (!related.length) {
+    html += '<div class="summary-empty">当前没有找到足够稳定的相关任务会话。</div>';
+    html += '</div>';
+    return html;
+  }
+  html += '<div class="related-thread-list">';
+  for (var i = 0; i < related.length; i++) {
+    var item = related[i];
+    var conv = item.conv;
+    var title = conv.title || conv.name || conv.id || 'Untitled';
+    var meta = [
+      conv.source || '',
+      conv.date || '',
+      item.reason || '',
+    ].filter(Boolean).join(' · ');
+    html += '<button class="related-thread-btn" data-related-id="' + escapeAttr(conv.id || '') + '">' +
+      '<div class="related-thread-main">' +
+      '<div class="related-thread-title">' + escapeHtml(title) + '</div>' +
+      '<div class="related-thread-meta">' + escapeHtml(meta) + '</div>' +
+      '</div>' +
+      '<div class="related-thread-score">score ' + escapeHtml(String(item.score)) + '</div>' +
+      '</button>';
+  }
+  html += '</div></div>';
+  return html;
+}
+
+function toFileUrl(path) {
+  return encodeURI('file://' + String(path || ''));
+}
+
+function formatArtifactMeta(artifact) {
+  var parts = [];
+  if (artifact.rel_path) parts.push(artifact.rel_path);
+  if (artifact.artifact_type) parts.push(artifact.artifact_type.replace(/^ARTIFACT_TYPE_/, '').toLowerCase());
+  if (artifact.updated_at) parts.push(artifact.updated_at.replace('T', ' ').replace('Z', ''));
+  return parts.join(' · ');
+}
+
+function renderArtifactsSection(conv) {
+  if (!conv || sourceKey(conv.source) !== 'ag') return '';
+  var artifacts = Array.isArray(conv.artifacts) ? conv.artifacts : [];
+  var brainDir = String(conv.brain_dir || '').trim();
+  var html = '<div class="summary-card summary-artifacts"><div class="summary-card-header">' +
+    '<div class="summary-card-title">Artifacts</div>' +
+    '</div>';
+  if (brainDir) {
+    html += '<div class="artifact-list">';
+    html += '<a class="artifact-link" href="' + escapeAttr(toFileUrl(brainDir)) + '" target="_blank" rel="noopener">' +
+      '<div class="artifact-main">' +
+      '<div class="artifact-title">Open brain workspace</div>' +
+      '<div class="artifact-path">' + escapeHtml(brainDir) + '</div>' +
+      '</div>' +
+      '<div class="artifact-open">Open</div>' +
+      '</a>';
+  }
+  if (!artifacts.length) {
+    html += '<div class="summary-empty">这条 AG 会话没有找到已落盘的主产物文件。</div>';
+    if (brainDir) html += '</div>';
+    html += '</div>';
+    return html;
+  }
+  if (!brainDir) html += '<div class="artifact-list">';
+  for (var i = 0; i < artifacts.length; i++) {
+    var artifact = artifacts[i];
+    var title = artifact.title || artifact.name || artifact.rel_path || 'artifact';
+    var meta = formatArtifactMeta(artifact);
+    html += '<a class="artifact-link" href="' + escapeAttr(toFileUrl(artifact.path || '')) + '" target="_blank" rel="noopener">' +
+      '<div class="artifact-main">' +
+      '<div class="artifact-title">' + escapeHtml(title) + '</div>' +
+      (meta ? '<div class="artifact-meta">' + escapeHtml(meta) + '</div>' : '') +
+      (artifact.path ? '<div class="artifact-path">' + escapeHtml(artifact.path) + '</div>' : '') +
+      '</div>' +
+      '<div class="artifact-open">Open</div>' +
+      '</a>';
+  }
+  html += '</div></div>';
+  return html;
+}
+
+function flashAndScrollToElement(element) {
+  if (!element) return;
+  element.classList.add('flash-focus');
+  element.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  setTimeout(function() { element.classList.remove('flash-focus'); }, 1400);
+}
+
+function timelineTitleFromMessage(msg, maxChars) {
+  return truncateText(getMessageText(msg), maxChars || 110) || 'Untitled event';
+}
+
+function pushTimelineEvent(events, seen, event) {
+  if (!event || !event.targetType || !event.targetId) return;
+  var key = event.targetType + ':' + event.targetId;
+  if (seen[key]) return;
+  seen[key] = true;
+  events.push(event);
+}
+
+function openSubagentDetails(detailsId) {
+  if (!detailsId) return;
+  var details = document.getElementById(detailsId);
+  if (!details) return;
+  details.open = true;
+  details.scrollIntoView({ block: 'center', behavior: 'smooth' });
+}
+
+function normalizeTags(tags) {
+  var source = Array.isArray(tags) ? tags : String(tags || '').split(',');
+  var next = [];
+  var seen = {};
+  for (var i = 0; i < source.length; i++) {
+    var tag = String(source[i] || '').trim();
+    if (!tag) continue;
+    var key = tag.toLowerCase();
+    if (seen[key]) continue;
+    seen[key] = true;
+    next.push(tag);
+  }
+  return next.slice(0, 12);
+}
+
+function normalizeCurationRecord(record) {
+  var safe = record || {};
+  return {
+    starred: !!safe.starred,
+    novel: !!safe.novel,
+    collection: String(safe.collection || '').trim(),
+    tags: normalizeTags(safe.tags || []),
+  };
+}
+
+function isEmptyCurationRecord(record) {
+  return !record.starred && !record.novel && !record.collection && !record.tags.length;
+}
+
+function loadCurationState() {
+  try {
+    var saved = localStorage.getItem(CURATION_STORAGE_KEY);
+    if (!saved) {
+      curationState = { conversations: {} };
+      return;
+    }
+    var parsed = JSON.parse(saved);
+    curationState = {
+      conversations: parsed && parsed.conversations ? parsed.conversations : {},
+    };
+  } catch (e) {
+    curationState = { conversations: {} };
+  }
+}
+
+function saveCurationState() {
+  try {
+    localStorage.setItem(CURATION_STORAGE_KEY, JSON.stringify(curationState));
+  } catch (e) {}
+}
+
+function getConversationCuration(id) {
+  return normalizeCurationRecord((curationState.conversations || {})[id] || {});
+}
+
+function updateConversationCuration(id, patch) {
+  var next = normalizeCurationRecord(Object.assign({}, getConversationCuration(id), patch || {}));
+  if (isEmptyCurationRecord(next)) {
+    delete curationState.conversations[id];
+  } else {
+    curationState.conversations[id] = next;
+  }
+  saveCurationState();
+}
+
+function renderCurationPills(record, limit) {
+  var pills = [];
+  if (record.starred) pills.push('<span class="conv-pill starred">★ 收藏</span>');
+  if (record.novel) pills.push('<span class="conv-pill novel">新颖</span>');
+  if (record.collection) pills.push('<span class="conv-pill" title="' + escapeAttr(record.collection) + '">分类：' + escapeHtml(record.collection) + '</span>');
+  var tagLimit = typeof limit === 'number' ? limit : record.tags.length;
+  for (var i = 0; i < record.tags.length && i < tagLimit; i++) {
+    pills.push('<span class="conv-pill" title="' + escapeAttr(record.tags[i]) + '">#' + escapeHtml(record.tags[i]) + '</span>');
+  }
+  return pills.join('');
+}
+
+function rerenderCurrentConversation(preserveScroll) {
+  var scrollTop = 0;
+  var currentMessages = document.getElementById('messages');
+  if (preserveScroll && currentMessages) scrollTop = currentMessages.scrollTop;
+  renderList();
+  if (selectedId) {
+    selectConversation(selectedId);
+    var nextMessages = document.getElementById('messages');
+    if (preserveScroll && nextMessages) nextMessages.scrollTop = scrollTop;
+  }
+}
+
+function renderList() {
+  renderSecondaryControls();
+  var q = searchQuery.toLowerCase();
+  filtered = allConversations.filter(function(c) {
+    var sk = sourceKey(c.source);
+    var curation = getConversationCuration(c.id || '');
+    if (isSubagentConversation(c)) return false;
+    if (activeFilter !== 'all' && sk !== activeFilter) return false;
+    if (starredOnly && !curation.starred) return false;
+    if (novelOnly && !curation.novel) return false;
+    if (activeWorkspace !== 'all' && getWorkspaceKey(c) !== activeWorkspace) return false;
+    if (activeTag && curation.tags.map(function(tag){ return tag.toLowerCase(); }).indexOf(activeTag.toLowerCase()) < 0) return false;
+    if (q) {
+      var title = (c.title || c.name || '').toLowerCase();
+      var msgs = (allMessages[c.id] || c.messages || []).map(function(m){ return m.content || m.text || ''; }).join(' ').toLowerCase();
+      var artifactText = ((c.artifacts || []).map(function(a) {
+        return [a.name || '', a.title || '', a.rel_path || ''].join(' ');
+      }).join(' ') + ' ' + (c.brain_dir || '')).toLowerCase();
+      var meta = (curation.collection + ' ' + curation.tags.join(' ') + ' ' + getWorkspaceLabel(getWorkspaceKey(c)) + ' ' + artifactText).toLowerCase();
+      if (title.indexOf(q) < 0 && msgs.indexOf(q) < 0 && meta.indexOf(q) < 0) return false;
+    }
+    return true;
+  });
+
+  filtered.sort(function(a,b) {
+    var da = new Date(a.date || a.created_at || a.timestamp || 0);
+    var db = new Date(b.date || b.created_at || b.timestamp || 0);
+    return db - da;
+  });
+
+  document.getElementById('stats').textContent = filtered.length + ' / ' + getVisibleConversationBaseCount();
+
+  var groups = groupMode === 'workspace' ? groupByWorkspace(filtered) : groupByDate(filtered);
+  var list = document.getElementById('conv-list');
+
+  if (filtered.length === 0) {
+    list.innerHTML = '<div id="empty-state"><div class="icon">&#128269;</div><h3>No results</h3><p>Try a different search or filter.</p></div>';
+    return;
+  }
+
+  var html = '';
+  for (var g = 0; g < groups.length; g++) {
+    var group = groups[g];
+    html += '<div class="date-group-label"' + (group.title ? ' title="' + escapeAttr(group.title) + '"' : '') + '>' + escapeHtml(group.label) + '</div>';
+    var convs = group.items;
+    for (var i = 0; i < convs.length; i++) {
+      var c = convs[i];
+      var id = c.id || '';
+      var curation = getConversationCuration(id);
+      var title = c.title || c.name || 'Untitled';
+      var msgCount = getDisplayMessageCount(c);
+      var sel = id === selectedId ? ' selected' : '';
+      var displayTitle = highlight(escapeHtml(title), searchQuery);
+      var listPills = renderCurationPills(curation, 2);
+      var starHtml = curation.starred ? '<span class="conv-star">★</span>' : '';
+      if (groupMode !== 'workspace') {
+        var workspaceKey = getWorkspaceKey(c);
+        if (workspaceKey && workspaceKey !== '(unknown workspace)') {
+          listPills = '<span class="conv-pill" title="' + escapeAttr(getWorkspaceLabel(workspaceKey)) + '">工作区：' + escapeHtml(getWorkspaceShortLabel(workspaceKey)) + '</span>' + listPills;
+        }
+      }
+      html += '<div class="conv-card' + sel + '" data-id="' + escapeAttr(id) + '" tabindex="0">' +
+        '<div class="conv-card-header">' + badgeFor(c.source) +
+        '<div class="conv-title-row">' + starHtml +
+        '<span class="conv-title" title="' + escapeAttr(title) + '">' + displayTitle + '</span></div></div>' +
+        (listPills ? '<div class="conv-shelf-meta">' + listPills + '</div>' : '') +
+        '<div class="conv-meta"><span class="conv-count">' + msgCount + ' msg' + (msgCount !== 1 ? 's' : '') + '</span>' +
+        '<button class="copy-id-btn" data-id="' + escapeAttr(id) + '" title="Copy ID">ID</button></div>' +
+        '</div>';
+    }
+  }
+  list.innerHTML = html;
+
+  list.querySelectorAll('.conv-card').forEach(function(card) {
+    card.addEventListener('click', function(e) {
+      if (e.target.classList.contains('copy-id-btn')) return;
+      selectConversation(card.dataset.id);
+    });
+    card.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') selectConversation(card.dataset.id);
+    });
+  });
+
+  list.querySelectorAll('.copy-id-btn').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      copyId(btn.dataset.id, btn);
+    });
+  });
+}
+
+function copyId(id, btn) {
+  copyText(id, btn, 'ID');
+}
+
+function selectConversation(id) {
+  selectedId = id;
+  syncLocationHash(id);
+  document.querySelectorAll('.conv-card').forEach(function(c) {
+    c.classList.toggle('selected', c.dataset.id === id);
+  });
+
+  var conv = null;
+  for (var i = 0; i < allConversations.length; i++) {
+    if (allConversations[i].id === id) { conv = allConversations[i]; break; }
+  }
+  if (!conv) return;
+
+  var right = document.getElementById('right');
+  var title = conv.title || conv.name || 'Untitled';
+  var titlePayload = buildHeaderTitlePayload(title);
+  var messages = allMessages[id] || conv.messages || [];
+  var analysis = analyzeConversation(messages);
+  var summary = buildQuickSummary(messages, analysis);
+  var msgCount = getDisplayMessageCount(conv);
+  var dateStr = conv.date || conv.created_at || conv.timestamp || '';
+  var dateLabel = dateStr ? new Date(dateStr).toLocaleString() : '';
+  var transcriptPath = getConversationFilePath(conv);
+  var viewerLink = getConversationViewerLink(conv);
+  var curation = getConversationCuration(id);
+  var workspaceKey = getWorkspaceKey(conv);
+  var workspaceMeta = workspaceKey && workspaceKey !== '(unknown workspace)' ? ' &nbsp;&middot;&nbsp; <span title="' + escapeAttr(getWorkspaceLabel(workspaceKey)) + '">workspace: ' + escapeHtml(getWorkspaceShortLabel(workspaceKey)) + '</span>' : '';
+  var relatedTaskThreads = getRelatedTaskConversations(conv);
+  var relatedSubagents = getRelatedSubagentConversations(conv);
+  var usedSubagentIds = {};
+  var subagentCallRecords = [];
+  var timelineEvents = [];
+  var timelineSeen = {};
+  var visibleCount = 0;
+
+  var msgsHtml = '';
+  for (var j = 0; j < messages.length; j++) {
+    var msg = messages[j];
+    var role = (msg.role || 'user').toLowerCase();
+    if (role === 'user') {
+      pushTimelineEvent(timelineEvents, timelineSeen, {
+        kind: '用户发起',
+        title: timelineTitleFromMessage(msg, 118),
+        meta: '第 ' + (j + 1) + ' 条消息',
+        targetType: 'message',
+        targetId: 'message-' + j,
+      });
+    }
+    if (role === 'subagent_call' && !isSubagentConversation(conv)) {
+      var matches = matchSubagentsForCall(msg, relatedSubagents, usedSubagentIds);
+      var callLabel = buildSubagentLabelFromCall(msg);
+      var detailsId = 'subagent-details-' + (subagentCallRecords.length + 1);
+      var callIndex = subagentCallRecords.length + 1;
+      subagentCallRecords.push({
+        detailsId: detailsId,
+        title: callLabel,
+        meta: matches.length ? (matches.length + ' 个子代理会话') : '未找到导出的子代理 transcript',
+        originLabel: '第 ' + callIndex + ' 处 Agent 调用',
+      });
+      pushTimelineEvent(timelineEvents, timelineSeen, {
+        kind: '子代理调用',
+        title: callLabel,
+        meta: '第 ' + callIndex + ' 处 Agent 调用',
+        targetType: 'subagent',
+        targetId: detailsId,
+      });
+      msg.detailsId = detailsId;
+      msg.originLabel = '从这里调用子代理 · 第 ' + callIndex + ' 处';
+      if (shouldRenderMessageForMode(msg, j, messages, conv, analysis)) {
+        visibleCount += 1;
+        msgsHtml += renderSubagentBlock(msg, matches, '');
+      }
+      continue;
+    }
+    if (!shouldRenderMessageForMode(msg, j, messages, conv, analysis)) continue;
+    var content = msg.content || msg.text || '';
+    var roleLabel = role === 'assistant' ? 'Assistant' : role === 'system' ? 'System' : 'User';
+    var emphasisClass = role === 'assistant' && j === analysis.finalAssistantIndex ? ' emphasis' : '';
+    if (role === 'assistant') {
+      var eventKind = j === summary.finalAssistantIndex ? '最终答复' : (isLikelyOperationalAssistantText(content) ? '主代理推进' : '主代理输出');
+      pushTimelineEvent(timelineEvents, timelineSeen, {
+        kind: eventKind,
+        title: timelineTitleFromMessage(msg, 124),
+        meta: '第 ' + (j + 1) + ' 条消息',
+        targetType: 'message',
+        targetId: 'message-' + j,
+      });
+    }
+    visibleCount += 1;
+    msgsHtml += '<div class="message ' + role + emphasisClass + '" id="message-' + j + '">' +
+      '<div class="message-role">' + roleLabel + '</div>' +
+      '<div class="message-body">' + renderMarkdown(content) + '</div>' +
+      '</div>';
+  }
+
+  if (!isSubagentConversation(conv) && readingMode !== 'mainline') {
+    var unmatched = [];
+    for (var k = 0; k < relatedSubagents.length; k++) {
+      if (!usedSubagentIds[relatedSubagents[k].id]) unmatched.push(relatedSubagents[k]);
+    }
+    if (unmatched.length) {
+      var unmatchedDetailsId = 'subagent-details-' + (subagentCallRecords.length + 1);
+      subagentCallRecords.push({
+        detailsId: unmatchedDetailsId,
+        title: 'Additional sub-agent calls',
+        meta: unmatched.length + ' 个未精确定位的子代理会话',
+        originLabel: '未匹配到具体调用位置',
+      });
+      pushTimelineEvent(timelineEvents, timelineSeen, {
+        kind: '子代理调用',
+        title: 'Additional sub-agent calls',
+        meta: '未匹配到具体调用位置',
+        targetType: 'subagent',
+        targetId: unmatchedDetailsId,
+      });
+      msgsHtml += renderSubagentBlock({
+        description: 'Additional sub-agent calls',
+        text: '',
+        detailsId: unmatchedDetailsId,
+        originLabel: '未匹配到具体调用位置',
+      }, unmatched, 'Additional sub-agent calls');
+      visibleCount += 1;
+    }
+  }
+
+  var subagentBtnHtml = '';
+  if (!isSubagentConversation(conv) && subagentCallRecords.length) {
+    var subagentMenuHtml = '<div class="subagent-menu" id="subagent-menu" hidden>' +
+      '<div class="subagent-menu-header">当前主会话中的子代理调用</div>';
+    for (var s = 0; s < subagentCallRecords.length; s++) {
+      var record = subagentCallRecords[s];
+      subagentMenuHtml += '<button class="subagent-menu-item" data-details-id="' + escapeAttr(record.detailsId) + '">' +
+        '<div class="subagent-menu-title">' + escapeHtml(record.originLabel + ' · ' + record.title) + '</div>' +
+        '<div class="subagent-menu-meta">' + escapeHtml(record.meta) + '</div>' +
+        '</button>';
+    }
+    subagentMenuHtml += '</div>';
+    subagentBtnHtml =
+      '<button class="header-action-btn" id="toggle-subagents-btn">Sub-agents (' + subagentCallRecords.length + ')</button>' +
+      subagentMenuHtml;
+  }
+
+  var modeButtonsHtml =
+    '<div class="reading-modes" aria-label="阅读模式">' +
+    '<button class="reading-mode-btn' + (readingMode === 'mainline' ? ' active' : '') + '" data-mode="mainline">主线</button>' +
+    '<button class="reading-mode-btn' + (readingMode === 'mainline_plus' ? ' active' : '') + '" data-mode="mainline_plus">主线 + 子代理</button>' +
+    '<button class="reading-mode-btn' + (readingMode === 'forensics' ? ' active' : '') + '" data-mode="forensics">全量</button>' +
+    '</div>';
+
+  var toolbarHtml =
+    '<div id="conv-header-toolbar">' +
+    modeButtonsHtml +
+    '<div class="mode-note">当前视图：' + getReadingModeLabel(readingMode) + ' · 显示 ' + visibleCount + ' / ' + msgCount + ' 条主消息</div>' +
+    '</div>';
+
+  var curationPreview = renderCurationPills(curation);
+  var curationHtml =
+    '<div id="curation-bar">' +
+    '<button class="curation-toggle-btn' + (curation.starred ? ' active' : '') + '" id="bookmark-btn">' + (curation.starred ? '★ 已收藏' : '☆ 收藏') + '</button>' +
+    '<button class="curation-toggle-btn' + (curation.novel ? ' active' : '') + '" id="novel-btn">' + (curation.novel ? '新颖已标记' : '标记新颖') + '</button>' +
+    '<input class="curation-input" id="collection-input" placeholder="分类文件夹，例如：writing / architecture" value="' + escapeAttr(curation.collection) + '">' +
+    '<input class="curation-input" id="tags-input" placeholder="标签，用逗号分隔" value="' + escapeAttr(curation.tags.join(', ')) + '">' +
+    '<button class="curation-save-btn" id="save-curation-btn">保存沉淀</button>' +
+    '</div>' +
+    (curationPreview ? '<div class="curation-preview" id="curation-preview">' + curationPreview + '</div>' : '<div class="curation-preview empty" id="curation-preview">还没加入收藏、标签或分类。</div>');
+
+  right.innerHTML =
+    '<div id="conv-header">' +
+    '<div id="conv-header-top">' +
+    '<div class="conv-header-main"><div class="conv-title-shell' + (titlePayload.expandable ? '' : ' expanded') + '" id="conv-title-shell">' +
+    '<h2 class="conv-title-preview" title="' + escapeAttr(titlePayload.full) + '">' + escapeHtml(titlePayload.preview) + '</h2>' +
+    '<div class="conv-title-full"><h2>' + escapeHtml(titlePayload.full) + '</h2></div>' +
+    (titlePayload.expandable ? '<button class="conv-title-toggle" id="conv-title-toggle">展开标题</button>' : '') +
+    '</div>' +
+    '<div id="conv-header-meta">' + badgeFor(conv.source) +
+    '&nbsp; ' + msgCount + ' messages' +
+    (dateLabel ? ' &nbsp;&middot;&nbsp; ' + dateLabel : '') +
+    workspaceMeta +
+    ' &nbsp;&middot;&nbsp; <span style="color:var(--text3);font-size:11px">' + escapeHtml(id) + '</span>' +
+    '</div></div>' +
+    '<div id="conv-header-actions">' +
+    subagentBtnHtml +
+    (transcriptPath ? '<button class="header-action-btn" id="open-markdown-btn" title="' + escapeAttr(transcriptPath) + '">Open Markdown</button>' : '') +
+    '<button class="header-action-btn" id="copy-ref-btn" title="' + escapeAttr(transcriptPath) + '">Copy ref</button>' +
+    '<button class="header-action-btn" id="copy-prompt-btn" title="' + escapeAttr(viewerLink) + '">Copy prompt</button>' +
+    '</div></div>' +
+    toolbarHtml +
+    curationHtml +
+    '</div>' +
+    '<div id="messages"><div class="messages-inner">' + renderQuickSummary(summary) + renderArtifactsSection(conv) + renderTimeline(timelineEvents) + renderRelatedThreads(relatedTaskThreads) + (msgsHtml || '<div id="no-selection">No messages</div>') + '</div></div>';
+
+  var copyRefBtn = document.getElementById('copy-ref-btn');
+  if (copyRefBtn) {
+    copyRefBtn.addEventListener('click', function() {
+      copyText(buildConversationRef(conv), copyRefBtn, 'Copy ref');
+    });
+  }
+  var openMarkdownBtn = document.getElementById('open-markdown-btn');
+  if (openMarkdownBtn) {
+    openMarkdownBtn.addEventListener('click', function() {
+      window.open(toFileUrl(transcriptPath), '_blank');
+    });
+  }
+  var convTitleToggle = document.getElementById('conv-title-toggle');
+  var convTitleShell = document.getElementById('conv-title-shell');
+  if (convTitleToggle && convTitleShell) {
+    convTitleToggle.addEventListener('click', function() {
+      var expanded = convTitleShell.classList.toggle('expanded');
+      convTitleToggle.textContent = expanded ? '收起标题' : '展开标题';
+    });
+  }
+  var copyPromptBtn = document.getElementById('copy-prompt-btn');
+  if (copyPromptBtn) {
+    copyPromptBtn.addEventListener('click', function() {
+      copyText(buildConversationPrompt(conv), copyPromptBtn, 'Copy prompt');
+    });
+  }
+  var subagentToggleBtn = document.getElementById('toggle-subagents-btn');
+  var subagentMenu = document.getElementById('subagent-menu');
+  if (subagentToggleBtn && subagentMenu) {
+    subagentToggleBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      subagentMenu.hidden = !subagentMenu.hidden;
+    });
+    subagentMenu.querySelectorAll('.subagent-menu-item').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        subagentMenu.hidden = true;
+        if (readingMode === 'mainline') {
+          applyReadingMode('mainline_plus');
+          saveReadingModePreference();
+          selectConversation(selectedId);
+          setTimeout(function() {
+            openSubagentDetails(btn.dataset.detailsId);
+          }, 0);
+          return;
+        }
+        openSubagentDetails(btn.dataset.detailsId);
+      });
+    });
+    document.addEventListener('click', function closeSubagentMenu(ev) {
+      if (!subagentMenu.contains(ev.target) && ev.target !== subagentToggleBtn) {
+        subagentMenu.hidden = true;
+        document.removeEventListener('click', closeSubagentMenu);
+      }
+    });
+  }
+
+  document.querySelectorAll('.reading-mode-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      if (btn.dataset.mode === readingMode) return;
+      applyReadingMode(btn.dataset.mode);
+      saveReadingModePreference();
+      selectConversation(selectedId);
+    });
+  });
+
+  var jumpFinalBtn = document.getElementById('jump-final-answer-btn');
+  if (jumpFinalBtn) {
+    jumpFinalBtn.addEventListener('click', function() {
+      var target = document.getElementById('message-' + jumpFinalBtn.dataset.targetIndex);
+      if (!target) return;
+      flashAndScrollToElement(target);
+    });
+  }
+  document.querySelectorAll('.timeline-event').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      if (btn.dataset.targetType === 'subagent') {
+        if (readingMode === 'mainline') {
+          applyReadingMode('mainline_plus');
+          saveReadingModePreference();
+          selectConversation(selectedId);
+          setTimeout(function() {
+            openSubagentDetails(btn.dataset.targetId);
+          }, 0);
+          return;
+        }
+        openSubagentDetails(btn.dataset.targetId);
+        return;
+      }
+      var target = document.getElementById(btn.dataset.targetId);
+      if (!target) return;
+      flashAndScrollToElement(target);
+    });
+  });
+  document.querySelectorAll('.related-thread-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      selectConversation(btn.dataset.relatedId);
+    });
+  });
+
+  var collectionInput = document.getElementById('collection-input');
+  var tagsInput = document.getElementById('tags-input');
+  var curationPreviewEl = document.getElementById('curation-preview');
+  var buildPendingCurationPatch = function(extraPatch) {
+    return Object.assign({
+      collection: collectionInput ? collectionInput.value : '',
+      tags: tagsInput ? tagsInput.value : '',
+    }, extraPatch || {});
+  };
+  var refreshCurationUi = function() {
+    var record = getConversationCuration(id);
+    if (bookmarkBtn) {
+      bookmarkBtn.textContent = record.starred ? '★ 已收藏' : '☆ 收藏';
+      bookmarkBtn.classList.toggle('active', record.starred);
+    }
+    if (novelBtn) {
+      novelBtn.textContent = record.novel ? '新颖已标记' : '标记新颖';
+      novelBtn.classList.toggle('active', record.novel);
+    }
+    if (curationPreviewEl) {
+      var previewHtml = renderCurationPills(record);
+      curationPreviewEl.classList.toggle('empty', !previewHtml);
+      curationPreviewEl.innerHTML = previewHtml || '还没加入收藏、标签或分类。';
+    }
+    renderList();
+  };
+  var saveCuration = function() {
+    updateConversationCuration(id, buildPendingCurationPatch());
+    rerenderCurrentConversation(true);
+  };
+
+  var bookmarkBtn = document.getElementById('bookmark-btn');
+  if (bookmarkBtn) {
+    bookmarkBtn.addEventListener('click', function() {
+      updateConversationCuration(id, {
+        starred: !getConversationCuration(id).starred,
+      });
+      refreshCurationUi();
+    });
+  }
+  var novelBtn = document.getElementById('novel-btn');
+  if (novelBtn) {
+    novelBtn.addEventListener('click', function() {
+      updateConversationCuration(id, {
+        novel: !getConversationCuration(id).novel,
+      });
+      refreshCurationUi();
+    });
+  }
+  var saveCurationBtn = document.getElementById('save-curation-btn');
+  if (saveCurationBtn) {
+    saveCurationBtn.addEventListener('click', saveCuration);
+  }
+  [collectionInput, tagsInput].forEach(function(input) {
+    if (!input) return;
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') saveCuration();
+    });
+  });
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.target.tagName === 'INPUT') return;
+  if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+  e.preventDefault();
+  var idx = -1;
+  for (var i = 0; i < filtered.length; i++) {
+    if (filtered[i].id === selectedId) { idx = i; break; }
+  }
+  var next = idx;
+  if (e.key === 'ArrowDown') next = Math.min(idx + 1, filtered.length - 1);
+  if (e.key === 'ArrowUp') next = Math.max(idx - 1, 0);
+  if (next !== idx && filtered[next]) {
+    selectConversation(filtered[next].id);
+    var card = document.querySelector('.conv-card[data-id="' + CSS.escape(filtered[next].id) + '"]');
+    if (card) card.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }
+});
+
+document.getElementById('filter-group').addEventListener('click', function(e) {
+  var btn = e.target.closest('.filter-btn');
+  if (!btn) return;
+  activeFilter = btn.dataset.filter;
+  document.querySelectorAll('.filter-btn').forEach(function(b) {
+    b.classList.toggle('active', b === btn);
+  });
+  renderList();
+});
+
+document.getElementById('saved-filter-group').addEventListener('click', function(e) {
+  var btn = e.target.closest('.filter-btn');
+  if (!btn) return;
+  var filterKey = btn.dataset.savedFilter;
+  if (filterKey === 'starred') {
+    starredOnly = !starredOnly;
+    btn.classList.toggle('active', starredOnly);
+  }
+  if (filterKey === 'novel') {
+    novelOnly = !novelOnly;
+    btn.classList.toggle('active', novelOnly);
+  }
+  renderList();
+});
+
+document.getElementById('group-mode-group').addEventListener('click', function(e) {
+  var btn = e.target.closest('.filter-btn');
+  if (!btn) return;
+  groupMode = btn.dataset.groupMode || 'date';
+  renderList();
+});
+
+document.getElementById('workspace-filter').addEventListener('change', function(e) {
+  activeWorkspace = e.target.value || 'all';
+  renderList();
+});
+
+document.getElementById('tag-filter-bar').addEventListener('click', function(e) {
+  var btn = e.target.closest('.tag-filter-btn');
+  if (!btn) return;
+  activeTag = btn.dataset.tagFilter || '';
+  renderList();
+});
+
+document.getElementById('search').addEventListener('input', function(e) {
+  searchQuery = e.target.value.trim();
+  renderList();
+});
+
+document.getElementById('theme-btn').addEventListener('click', function() {
+  applyTheme(!isDark);
+  saveThemePreference();
+});
+
+window.addEventListener('hashchange', selectConversationFromLocation);
+
+loadThemePreference();
+loadReadingModePreference();
+loadCurationState();
+loadData();
+</script>
+</body>
+</html>

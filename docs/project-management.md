@@ -4,12 +4,11 @@
 
 ## Brain OS Philosophy on Projects
 
-Brain OS is not a project management tool. It's a **personal context system** that helps you stay organized.
+Brain OS is not a project management tool. It's a **personal context system**.
 
 For project management, Brain OS provides:
-
 1. **A lightweight project registry** (`04-PROJECTS/`) — just enough to give AI context
-2. **Integration recommendations** for external tools — when you need real task tracking
+2. **Integration recommendations** for external tools
 
 ---
 
@@ -18,7 +17,7 @@ For project management, Brain OS provides:
 ### When to Use It
 
 - You have a project that's < 5 lines of context
-- You want AI to know what you're working on (for briefings and knowledge integration)
+- You want AI to know what you're working on
 - You need a quick reference to external project links
 
 ### When NOT to Use It
@@ -59,7 +58,7 @@ Setting up the article generation pipeline.
 
 ## Source of Truth
 - Code: `https://github.com/user/my-blog`
-- Tasks: `https://linear.app/workspace/project/my-blog`
+- Tasks: `https://github.com/user/my-blog/issues`
 - Docs: `{{BRAIN_PATH}}/04-PROJECTS/01-ACTIVE/my-project.md`
 
 ## Related Knowledge
@@ -70,7 +69,6 @@ Setting up the article generation pipeline.
 | Date | Decision | Reason |
 |------|----------|--------|
 | 2026-04-01 | Use Astro framework | Best static site performance |
-| 2026-04-05 | AI-generated drafts only | Speed over perfection |
 
 ## Search Keywords
 my-blog, astro, content-generation, side-project
@@ -80,30 +78,38 @@ my-blog, astro, content-generation, side-project
 
 ## Recommended External Tools
 
-### 1. Agora — AI-Native Task Management
+### 1. Agora — Multi-Agent Governance Framework
 
-**Best for:** People who want AI deeply integrated into their task workflow.
+**Best for:** Orchestrating multiple AI agents with structured deliberation and human-gated decision making.
 
-[![Agora](https://img.shields.io/badge/Tool-Agora-blue)](https://github.com/nicepkg/aide)
+Agora is an orchestration and governance layer for multi-agent systems. It provides:
 
-Agora provides:
-- AI-native task management with context infrastructure
-- Automatic context packaging for AI agents
-- NotebookLM integration for deep research
-- Built-in knowledge graph for task relationships
+- **Staged deliberation** — Citizens (agents) debate, Archon (human) decides, Craftsman (executor) delivers
+- **Explicit governance semantics** — not prompt folklore, but structured orchestration
+- **Human-gated decisions** — execution only starts after human approval
+- **Auditable delivery** — chat logs ≠ delivery; Agora tracks actual outcomes
 
-**Why we recommend it:** Agora's "context infrastructure" approach pairs perfectly with Brain OS. Brain OS manages your knowledge and personal context; Agora manages your tasks and projects. Together, they give AI the full picture.
+**How it pairs with Brain OS:**
 
-**Setup with Brain OS:**
-1. Install Agora
-2. Create project briefs in `04-PROJECTS/` pointing to Agora task URLs
-3. AI reads project context from Brain OS when working on Agora tasks
+| Brain OS | Agora |
+|----------|-------|
+| Personal knowledge & context | Multi-agent orchestration |
+| What you know | How agents collaborate |
+| Single-user knowledge management | Multi-agent governance |
+| Vault is the knowledge store | Agora is the decision arena |
+
+Brain OS's project briefs give agents **context** about what they're working on. Agora gives them **structure** for how to collaborate on it.
+
+**Integration pattern:**
+1. Create project briefs in `04-PROJECTS/` referencing Agora task URLs
+2. Agora agents read project context from Brain OS when working on tasks
+3. Knowledge generated during Agora deliberation flows back into `03-KNOWLEDGE/`
+
+**Repository:** [github.com/FairladyZ625/Agora](https://github.com/FairladyZ625/Agora)
 
 ### 2. Linear
 
 **Best for:** Software teams that need fast, modern issue tracking.
-
-[![Linear](https://img.shields.io/badge/Tool-Linear-purple)](https://linear.app)
 
 Clean interface, great keyboard shortcuts, good API. Link tasks to Brain OS project briefs.
 
@@ -111,17 +117,7 @@ Clean interface, great keyboard shortcuts, good API. Link tasks to Brain OS proj
 
 **Best for:** Open-source projects or teams already on GitHub.
 
-[![GitHub](https://img.shields.io/badge/Tool-GitHub-black)](https://github.com)
-
 No additional setup needed. Reference issue URLs in project briefs.
-
-### 4. Notion
-
-**Best for:** Teams that need a flexible, all-in-one workspace.
-
-[![Notion](https://img.shields.io/badge/Tool-Notion-white)](https://notion.so)
-
-Powerful but heavy. Good if you're already in the Notion ecosystem.
 
 ---
 
@@ -134,15 +130,13 @@ Brain OS (04-PROJECTS/)
     │  AI reads project briefs for context
     │
     ├──→ Agora / Linear / GitHub Issues
-    │    "What are the specific tasks?"
-    │    Detailed task tracking happens here
+    │    "How do agents collaborate on it?"
+    │    Governance and task tracking happens here
     │
     └──→ 03-KNOWLEDGE/
          "What have I learned?"
          Knowledge from project work flows here
 ```
-
-The project brief in Brain OS is the **bridge** between your task tool and your knowledge base.
 
 ---
 
@@ -161,5 +155,5 @@ The project brief in Brain OS is the **bridge** between your task tool and your 
 When moving a project:
 1. Update `status` in frontmatter
 2. Move the file to the appropriate directory
-3. Add a brief note about why it moved (paused/completed)
+3. Add a brief note about why it moved
 4. For completed projects: add key learnings to `03-KNOWLEDGE/`

@@ -42,6 +42,8 @@ Obsidian Brain OS
 │   │   └── 04-RESEARCH-QUESTIONS/
 │   └── 99-SYSTEM/            AI pipeline outputs (don't read directly)
 ├── 05-PROJECTS/              Project registry layer
+├── 06-PERSONAL-DOCS/       Personal docs (gitignored by default)
+├── 07-WORK-CONTEXT/       Work experience & context
 └── templates/                Document templates
 ```
 
@@ -133,17 +135,25 @@ The AI doesn't replace your thinking — it handles the plumbing so you can focu
 
 ## Documentation
 
+### 📖 使用指南（中文，推荐先读）
+- [总览](docs/guide/00-overview.md) — 从这里开始
+- [核心方法论](docs/guide/00-philosophy.md) — 为什么这样设计
+- [Agent 配置指南](docs/guide/01-agent-setup.md) — 怎么配好你的 AI Agent
+- [频道设计](docs/guide/02-channel-design.md) — 怎么分频道防止上下文污染
+- [日常工作流](docs/guide/03-daily-workflow.md) — 每天怎么用这套系统
+- [迭代指南](docs/guide/04-iteration-guide.md) — 持续优化你的系统
+
+### 📚 技术文档（English）
 - [Getting Started](docs/getting-started.md)
 - [Architecture](docs/architecture.md)
 - [Obsidian Setup](docs/obsidian-setup.md)
-- [QMD Vector Search Setup](docs/qmd-setup.md)
 - [OpenClaw Setup](docs/openclaw-setup.md)
 - [Nightly Pipeline](docs/nightly-pipeline.md)
 - [Personal Ops System](docs/personal-ops.md)
 - [Knowledge Architecture](docs/knowledge-architecture.md)
 - [Skills Guide](docs/skills-guide.md)
+- [Project Management](docs/project-management.md)
 - [FAQ](docs/faq.md)
-- [Contributing](docs/contributing.md)
 
 ---
 

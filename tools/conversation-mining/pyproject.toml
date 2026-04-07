@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "conversation-mining"
+version = "0.1.0"
+description = "Export local Claude Code, Codex, and Antigravity conversations into Markdown and a static HTML viewer."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+  { name = "FairladyZ625" }
+]
+keywords = ["claude", "codex", "antigravity", "conversation", "forensics", "viewer"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: MacOS",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Topic :: Utilities",
+]
+
+[project.urls]
+Homepage = "https://github.com/FairladyZ625/conversation-mining"
+Repository = "https://github.com/FairladyZ625/conversation-mining"
+
+[project.scripts]
+conversation-mining = "conversation_mining.cli:main"
+convs = "conversation_mining.cli:main"
+
+[tool.setuptools]
+packages = ["conversation_mining", "lib"]
+py-modules = ["export_all"]
+
+[tool.setuptools.package-data]
+conversation_mining = ["viewer.html"]

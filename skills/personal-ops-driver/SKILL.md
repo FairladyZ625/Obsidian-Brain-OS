@@ -1,6 +1,7 @@
 ---
 name: personal-ops-driver
-description: {{USER_NAME}}个人事务管理执行技能。用于个人事务收件、待办/提醒/跟进项记录、backlog 状态更新、daily briefing 管理、当前承诺事项整理、00-INBOX/01-PERSONAL-OPS 分层治理。遇到个人事务管理、排序、提醒、承诺跟踪、驾驶舱维护等请求时，应主动使用本技能。
+description: >
+  {{USER_NAME}}个人事务管理执行技能。用于个人事务收件、待办/提醒/跟进项记录、backlog 状态更新、daily briefing 管理、当前承诺事项整理、00-INBOX/01-PERSONAL-OPS 分层治理。Use when: personal ops, daily briefing, todo management, commitment tracking, life management, 00-INBOX/01-PERSONAL-OPS governance. 遇到个人事务管理、排序、提醒、承诺跟踪、驾驶舱维护等请求时，应主动使用本技能。
 ---
 
 # Personal Ops Driver

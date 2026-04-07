@@ -1,6 +1,7 @@
 ---
 name: notebooklm
-description: Complete API for Google NotebookLM - full programmatic access including features not in the web UI. Create notebooks, add sources, generate all artifact types, download in multiple formats. Activates on explicit /notebooklm or intent like "create a podcast about X"
+description: >
+  Google NotebookLM 完整 API——包括 Web UI 未暴露的功能在内的完整程序化访问。创建笔记本、添加来源、生成所有产物类型、多格式下载。Use when: notebooklm, AI research, podcast generation, audio overview, document analysis, study materials, flashcard generation, quiz generation. 当用户说 "/notebooklm"、提到"创建播客"、"生成学习材料"、"分析文档"时激活。
 ---
 <!-- notebooklm-py v0.3.4 -->
 
