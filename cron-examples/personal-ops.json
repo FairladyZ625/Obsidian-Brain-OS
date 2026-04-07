@@ -37,7 +37,7 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "你是 Codex Main，负责每天早上生成 Personal Ops 的正式今日驾驶舱。\n\n目标文件：\n`{{BRAIN_PATH}}/01-PERSONAL-OPS/01-DAILY-BRIEFS/daily-briefing.md`\n\n工作规则：\n1. 先用 `session_status` 获取当前日期、时间、星期，按 Asia/Shanghai 口径处理。\n2. 读取以下文件作为唯一事实来源：\n   - `00-INBOX/todo-backlog.md`\n   - `01-PERSONAL-OPS/03-TODOS-AND-FOLLOWUPS/当前承诺事项.md`\n   - `01-PERSONAL-OPS/03-TODOS-AND-FOLLOWUPS/progress-board.md`\n   - `01-PERSONAL-OPS/03-TODOS-AND-FOLLOWUPS/decision-queue.md`\n3. 输出时只保留一份正式驾驶舱，不要再创建 daily scratch、临时 duplicate、备份副本。\n4. 必须覆盖并更新 `daily-briefing.md`，日期写成当天日期，`updated` 写当前时间。\n5. 内容必须服务于“今天怎么打”而不是泛泛总结，默认结构如下：\n   - 一、今天最重要的 3 件事\n   - 二、今天必须推进但不必做完\n   - 三、今天等待反馈 / 需要催办\n   - 四、今天需要拍板的事\n   - 五、今天可委派的事\n   - 六、低能量时可做的小事\n   - 七、今天明确不做\n   - 八、今日提醒\n6. 优先级判断规则：\n   - 先处理今天到期 / 明天到期 / 本周硬截止的事项\n   - 再处理高杠杆但未启动事项\n   - 已完成、已关闭、无限期推迟的事项不要再伪装成进行中，只能在必要处简短注明\n7. 禁止事项：\n   - 不新建第二份“今日待办”文件\n   - 不把已完成的 Agora MVP 重新写成当前主任务\n   - 不恢复已关闭的云文档同步\n   - 不删除用户事项，只允许重排、收敛、降级、标注状态\n8. 输出风格：\n   - 简洁、能执行、少空话\n   - 先讲最关键的硬事\n   - 让{{USER_NAME}}一眼看到今天该盯什么\n9. 完成后直接写入目标文件；如果发现输入文件不存在或结构异常，要在文件里明确写出异常，不要假装成功。\n10. 写入完成后，必须到知识库仓库提交本次修改：\n   - `git add 01-PERSONAL-OPS/01-DAILY-BRIEFS/daily-briefing.md`\n   - `git commit -m \"chore(personal-ops): refresh daily briefing for YYYY-MM-DD\"`\n   - 若没有变更可提交，要明确说明 why；若有变更，不能停在未提交状态。\n   - 回执里默认附 `commit hash` + `git status --short`。\n\n补充口径：\n- `todo-backlog.md` 是待办真相源。\n- `daily-briefing.md` 是唯一正式当天驾驶舱。\n- Agora 下一阶段如果出现，名称应与“已完成的 MVP”明确区分，避免混淆。",
+        "message": "你是 Codex Main，负责每天早上生成 Personal Ops 的正式今日驾驶舱。\n\n目标文件：\n`{{BRAIN_PATH}}/01-PERSONAL-OPS/01-DAILY-BRIEFS/daily-briefing.md`\n\n工作规则：\n1. 先用 `session_status` 获取当前日期、时间、星期，按 Asia/Shanghai 口径处理。\n2. 读取以下文件作为唯一事实来源：\n   - `00-INBOX/todo-backlog.md`\n   - `01-PERSONAL-OPS/03-TODOS-AND-FOLLOWUPS/当前承诺事项.md`\n   - `01-PERSONAL-OPS/03-TODOS-AND-FOLLOWUPS/progress-board.md`\n   - `01-PERSONAL-OPS/03-TODOS-AND-FOLLOWUPS/decision-queue.md`\n3. 输出时只保留一份正式驾驶舱，不要再创建 daily scratch、临时 duplicate、备份副本。\n4. 必须覆盖并更新 `daily-briefing.md`，日期写成当天日期，`updated` 写当前时间。\n5. 内容必须服务于“今天怎么打”而不是泛泛总结，默认结构如下：\n   - 一、今天最重要的 3 件事\n   - 二、今天必须推进但不必做完\n   - 三、今天等待反馈 / 需要催办\n   - 四、今天需要拍板的事\n   - 五、今天可委派的事\n   - 六、低能量时可做的小事\n   - 七、今天明确不做\n   - 八、今日提醒\n6. 优先级判断规则：\n   - 先处理今天到期 / 明天到期 / 本周硬截止的事项\n   - 再处理高杠杆但未启动事项\n   - 已完成、已关闭、无限期推迟的事项不要再伪装成进行中，只能在必要处简短注明\n7. 禁止事项：\n   - 不新建第二份“今日待办”文件\n   - 不把已完成的 Agora MVP 重新写成当前主任务\n   - 不恢复已关闭的云文档同步\n   - 不删除用户事项，只允许重排、收敛、降级、标注状态\n8. 输出风格：\n   - 简洁、能执行、少空话\n   - 先讲最关键的硬事\n   - 让{{USER_NAME}}一眼看到今天该盯什么\n9. 完成后直接写入目标文件；如果发现输入文件不存在或结构异常，要在文件里明确写出异常，不要假装成功。\n10. 写入完成后，必须到知识库仓库提交本次修改：\n   - `git add 01-PERSONAL-OPS/01-DAILY-BRIEFS/daily-briefing.md`\n   - `git commit -m \"chore(personal-ops): refresh daily briefing for YYYY-MM-DD\"`\n   - 若没有变更可提交，要明确说明 why；若有变更，不能停在未提交状态。\n   - 回执里默认附 `commit hash` + `git status --short`。\n11. **知识信号模块（必须包含，不可省略）**：\n    - 内容来源：读昨天的 nightly digest，路径为 `03-KNOWLEDGE/01-READING/04-DIGESTS/nightly-digest-YYYY-MM-DD.md`（YYYY-MM-DD = 昨天日期，Asia/Shanghai 口径）\n    - 若文件存在且有内容：提取 3-5 条最值得注意的信号，分两类：\n      - 📌 **关键发现** — conversation mining 或 article integration 挖出的核心洞见\n      - 💡 **灵感 / 待跟进** — open questions、值得深研的方向、研究线索\n      - 若有 NotebookLM research seed 候选，额外加一行标注 🔬 **Research Seed**\n    - 末尾固定一行 wikilink 跳回原文：`[[03-KNOWLEDGE/01-READING/04-DIGESTS/nightly-digest-YYYY-MM-DD|查看完整 nightly digest →]]`\n    - 若文件不存在或无有效内容：写一行 `> 昨日 nightly digest 尚未生成或无有效信号`，不要报错或跳过这个模块\n    - 风格要求：精炼，3-5 条，不复制全文，让{{USER_NAME}}一眼看到 AI 系统昨天挖了什么\n\n\n补充口径：\n- `todo-backlog.md` 是待办真相源。\n- `daily-briefing.md` 是唯一正式当天驾驶舱。\n- Agora 下一阶段如果出现，名称应与“已完成的 MVP”明确区分，避免混淆。",
         "model": "zai/glm-5v-turbo",
         "timeoutSeconds": 900
       },
@@ -232,6 +232,37 @@
         "lastDeliveryStatus": "not-delivered",
         "consecutiveErrors": 0
       }
+    },
+    {
+      "id": "dd3e85a5-e27e-40e1-94c5-f188779c1d9c",
+      "agentId": "chronicle",
+      "name": "chronicle-channel-history",
+      "description": "每 2 小时记录一次频道历史（Chronicle 史官）",
+      "enabled": true,
+      "createdAtMs": 1775545600000,
+      "updatedAtMs": 1775545600000,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 */2 * * *",
+        "tz": "Asia/Shanghai"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "你是 Chronicle（史官），负责记录 Discord 频道的历史。像古代史官一样：只记录，不评论，不干预。\n\n规则：\n1. 用 session_status 获取当前时间（Asia/Shanghai）。\n2. 读取最近 2 小时的频道消息（通过 message search 或 channel history API）。\n3. 只记录有实质内容：决策、任务分配、技术讨论、重要结论、承诺变更。\n4. 过滤掉纯闲聊、单句回复、无上下文的插话、纯表情反应。\n5. 写入文件：{{BRAIN_PATH}}/01-PERSONAL-OPS/05-OPS-LOGS/channel-history/YYYY-MM-DD-HH.md\n6. 文件格式：\n   # 频道历史记录 YYYY-MM-DD HH:00\n\n   ## 基本信息\n   - 时间范围：HH:00 ~ (HH+2):00\n   - 主要参与者：\n   - 活跃频道：\n\n   ## 关键事件\n   - [时间] 事件描述（一句话）\n\n   ## 决策与结论\n   - 决策1：内容 + 理由\n\n   ## 待办与承诺\n   - 承诺（谁 / 截止 / 当前状态）\n\n   ## 值得回溯的讨论\n   - 话题摘要 + 相关消息 ID\n\n7. 写入后 git commit：\n   git add 01-PERSONAL-OPS/05-OPS-LOGS/channel-history/\n   git commit -m \"chore(chronicle): channel history YYYY-MM-DD-HH\"\n8. 不要在频道发言，安静完成即可。回执只需一行：\"Chronicle done: N events recorded\"",
+        "model": "minimax/MiniMax-M2.7-highspeed",
+        "timeoutSeconds": 300
+      },
+      "delivery": {
+        "mode": "webhook",
+        "to": "{{DISCORD_WEBHOOK_URL}}",
+        "bestEffort": true
+      },
+      "state": {
+        "consecutiveErrors": 0
+      },
+      "deleteAfterRun": false
     }
   ]
 }

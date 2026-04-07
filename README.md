@@ -158,6 +158,7 @@ The AI doesn't replace your thinking — it handles the plumbing so you can focu
 - [Personal Context Guide (06 & 07)](docs/personal-context-guide.md)
 - [Skills Guide](docs/skills-guide.md)
 - [Project Management](docs/project-management.md)
+- [Chronicle 史官系统](docs/chronicle-agent.md)
 - [FAQ](docs/faq.md)
 
 ---

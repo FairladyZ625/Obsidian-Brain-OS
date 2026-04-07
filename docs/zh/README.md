@@ -32,4 +32,5 @@
 - [OpenClaw 配置](openclaw-setup.md)
 - [Skills 指南](skills-guide.md)
 - [项目管理](project-management.md)
+- [Chronicle 史官系统](../chronicle-agent.md)
 - [常见问题](faq.md)
