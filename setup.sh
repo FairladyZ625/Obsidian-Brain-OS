@@ -8,6 +8,20 @@
 set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+# --test mode: redirect all outputs to /tmp/brain-os-test/
+TEST_MODE=false
+TEST_BASE="/tmp/brain-os-test"
+for arg in "$@"; do
+  [[ "$arg" == "--test" ]] && TEST_MODE=true
+done
+
+if $TEST_MODE; then
+  rm -rf "$TEST_BASE"
+  mkdir -p "$TEST_BASE"
+  echo "[TEST MODE] All outputs → $TEST_BASE"
+fi
+
 CONFIG_FILE="$REPO_DIR/scripts/config.env"
 CONFIG_EXAMPLE="$REPO_DIR/scripts/config.env.example"
 
@@ -47,6 +61,11 @@ print_err() {
 ask() {
   local prompt="$1"
   local default="${2:-}"
+  if $TEST_MODE; then
+    REPLY="$default"
+    echo -e "${BOLD}${prompt}${NC} [TEST: using default] ${GREEN}${default}${NC}"
+    return
+  fi
   if [[ -n "$default" ]]; then
     echo -ne "${BOLD}${prompt}${NC} [${default}]: "
   else
@@ -61,6 +80,12 @@ ask() {
 ask_yn() {
   local prompt="$1"
   local default="${2:-y}"
+  if $TEST_MODE; then
+    REPLY="$default"
+    echo -e "${BOLD}${prompt}${NC} [TEST: using default] ${GREEN}${default}${NC}"
+    [[ "$default" =~ ^[Yy] ]]
+    return
+  fi
   echo -ne "${BOLD}${prompt}${NC} [y/n, default=${default}]: "
   read -r REPLY
   if [[ -z "$REPLY" ]]; then
@@ -88,7 +113,11 @@ echo -e "${YELLOW}You can re-run this script at any time to reconfigure.${NC}"
 # =============================================================================
 print_step "Step 1: Vault Location"
 
-DEFAULT_VAULT="$HOME/my-brain"
+if $TEST_MODE; then
+  DEFAULT_VAULT="$TEST_BASE/vault"
+else
+  DEFAULT_VAULT="$HOME/my-brain"
+fi
 ask "Where do you want to create your Brain OS vault?" "$DEFAULT_VAULT"
 BRAIN_PATH="$REPLY"
 
@@ -125,10 +154,12 @@ LANGUAGE="$REPLY"
 print_step "Step 3: Path Configuration"
 
 DEFAULT_WORKSPACE="$HOME/.openclaw/workspace"
+if $TEST_MODE; then DEFAULT_WORKSPACE="$TEST_BASE/workspace"; fi
 ask "Your OpenClaw workspace path" "$DEFAULT_WORKSPACE"
 WORKSPACE_PATH="$REPLY"
 
 DEFAULT_SKILLS="$HOME/.agents/skills"
+if $TEST_MODE; then DEFAULT_SKILLS="$TEST_BASE/skills"; fi
 ask "Your skills directory path" "$DEFAULT_SKILLS"
 SKILLS_PATH="$REPLY"
 
@@ -163,6 +194,9 @@ fi
 # =============================================================================
 print_step "Step 5: Writing Configuration"
 
+if $TEST_MODE; then
+  CONFIG_FILE="$TEST_BASE/config.env"
+fi
 mkdir -p "$(dirname "$CONFIG_FILE")"
 
 cat > "$CONFIG_FILE" << ENVEOF
@@ -275,17 +309,29 @@ check() {
   local result="$2"
   if [[ "$result" == "ok" ]]; then
     print_ok "$desc"
-    ((PASS++))
+    PASS=$((PASS+1))
   else
     print_err "$desc — $result"
-    ((FAIL++))
+    FAIL=$((FAIL+1))
   fi
 }
 
 # Check vault
-[[ -d "$BRAIN_PATH/00-INBOX" ]] && check "Vault structure exists" "ok" || check "Vault structure" "00-INBOX not found in $BRAIN_PATH"
-[[ -d "$BRAIN_PATH/03-KNOWLEDGE" ]] && check "Knowledge layer exists" "ok" || check "Knowledge layer" "missing"
-[[ -f "$CONFIG_FILE" ]] && check "config.env written" "ok" || check "config.env" "missing"
+if [[ -d "$BRAIN_PATH/00-INBOX" ]]; then
+  check "Vault structure exists" "ok"
+else
+  check "Vault structure" "00-INBOX not found in $BRAIN_PATH"
+fi
+if [[ -d "$BRAIN_PATH/03-KNOWLEDGE" ]]; then
+  check "Knowledge layer exists" "ok"
+else
+  check "Knowledge layer" "missing"
+fi
+if [[ -f "$CONFIG_FILE" ]]; then
+  check "config.env written" "ok"
+else
+  check "config.env" "missing"
+fi
 
 # Check skills
 if [[ -d "$SKILLS_PATH/personal-ops-driver" ]]; then

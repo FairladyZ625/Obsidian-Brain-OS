@@ -57,3 +57,4 @@ logs/
 # =============================================
 dist/
 build/
+cron-examples/generated/
