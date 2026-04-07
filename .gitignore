@@ -1,0 +1,59 @@
+# .gitignore for Obsidian Brain OS
+
+# =============================================
+# Personal & sensitive files
+# =============================================
+scripts/config.env
+*.env
+.env.*
+!*.env.example
+
+# =============================================
+# Obsidian internals
+# =============================================
+vault-template/.obsidian/workspace.json
+vault-template/.obsidian/workspace-mobile.json
+vault-template/.obsidian/cache
+vault-template/.trash/
+vault-template/.smart-env/
+vault-template/.clawdbot/
+
+# =============================================
+# Personal content (never commit)
+# =============================================
+vault-template/06-PERSONAL-DOCS/
+vault-template/07-WORK-DOCS/
+vault-template/09-ARCHIVE/
+vault-template/memory/*.md
+!vault-template/memory/README.md
+!vault-template/memory/YYYY-MM-DD.example.md
+
+# =============================================
+# OS files
+# =============================================
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# =============================================
+# Python
+# =============================================
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.egg-info/
+
+# =============================================
+# Logs
+# =============================================
+logs/
+*.log
+
+# =============================================
+# Build artifacts
+# =============================================
+dist/
+build/
