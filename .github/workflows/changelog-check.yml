@@ -1,0 +1,37 @@
+name: Changelog Check
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  changelog-check:
+    name: Warn if skills/scripts changed without CHANGELOG update
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check CHANGELOG updated when skills/scripts change
+        run: |
+          BASE="${{ github.event.pull_request.base.sha }}"
+          HEAD="${{ github.event.pull_request.head.sha }}"
+
+          CHANGED=$(git diff --name-only "$BASE" "$HEAD" 2>/dev/null || git diff --name-only HEAD~1 HEAD)
+
+          SKILLS_CHANGED=$(echo "$CHANGED" | grep -E '^(skills|scripts|prompts)/' || true)
+          CHANGELOG_CHANGED=$(echo "$CHANGED" | grep -E '^CHANGELOG\.md$' || true)
+
+          if [ -n "$SKILLS_CHANGED" ] && [ -z "$CHANGELOG_CHANGED" ]; then
+            echo "⚠️  skills/scripts/prompts changed but CHANGELOG.md was not updated."
+            echo ""
+            echo "Changed files:"
+            echo "$SKILLS_CHANGED"
+            echo ""
+            echo "Please add an entry to CHANGELOG.md describing your changes."
+            # Warning only — does not fail the build
+            exit 0
+          else
+            echo "✅ CHANGELOG check passed"
+          fi

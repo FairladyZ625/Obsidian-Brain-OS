@@ -1,0 +1,17 @@
+name: PII Scan
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  pii-scan:
+    name: Check for PII / private paths
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run PII scan
+        run: bash scripts/check-pii.sh --strict

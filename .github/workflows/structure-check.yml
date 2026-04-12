@@ -1,0 +1,40 @@
+name: Structure Check
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  structure-check:
+    name: Verify skill and script structure
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check every skill has SKILL.md
+        run: |
+          FAIL=0
+          for dir in skills/*/; do
+            skill=$(basename "$dir")
+            if [ ! -f "$dir/SKILL.md" ]; then
+              echo "❌ Missing SKILL.md in skills/$skill/"
+              FAIL=1
+            else
+              echo "✅ skills/$skill/SKILL.md"
+            fi
+          done
+          exit $FAIL
+
+      - name: Check scripts have shebang and usage comment
+        run: |
+          FAIL=0
+          for f in scripts/*.sh scripts/*.py; do
+            [ -f "$f" ] || continue
+            if ! head -1 "$f" | grep -qE '^#!'; then
+              echo "❌ Missing shebang: $f"
+              FAIL=1
+            else
+              echo "✅ $f"
+            fi
+          done
+          exit $FAIL

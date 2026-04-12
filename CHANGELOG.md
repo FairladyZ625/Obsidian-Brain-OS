@@ -4,6 +4,22 @@ All notable changes to Obsidian Brain OS are documented here.
 
 ---
 
+## [0.4.0] — 2026-04-12
+
+### Added
+
+- **`skills/brain-os-release/SKILL.md`** — Release SOP skill for maintainers and contributors: version bump rules, PII check, CHANGELOG update, PR template, merge and tag steps.
+- **`scripts/check-pii.sh`** — PII scan script: checks for absolute paths, unresolved `{{PLACEHOLDER}}` tokens, and Discord-style IDs. Run manually or via CI.
+- **`.github/workflows/pii-scan.yml`** — CI: runs `check-pii.sh --strict` on every PR and push to main. Fails if PII found.
+- **`.github/workflows/structure-check.yml`** — CI: verifies every skill has `SKILL.md` and every script has a shebang.
+- **`.github/workflows/changelog-check.yml`** — CI: warns (non-blocking) if `skills/`, `scripts/`, or `prompts/` changed without a CHANGELOG update.
+
+### Changed
+
+- **`prompts/cron/brain-os-daily-sync.md`** (private, not in repo) — Added Step 7: auto-suggest Xiaohongshu/WeChat article direction when A-class syncs >= 3, including recommended angle and draft path.
+
+---
+
 ## [0.3.0] — 2026-04-12
 
 ### Added
