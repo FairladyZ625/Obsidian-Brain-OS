@@ -40,6 +40,7 @@ Karpathy’s gist describes the *idea*. Brain OS is the *running system*:
 - ⏰ **Nightly automation**: 4-stage pipeline runs while you sleep (article integration → conversation mining → amplification → digest)
 - 📋 **Personal ops layer**: daily dashboard, todo tracking, commitment management, morning brief
 - 🍎 **Apple Reminders integration**: bidirectional sync between Brain todos and Apple Reminders — morning push, evening pull-back
+- 📋 **Daily timesheet**: scan git commits + project briefings, align to OKRs, generate draft for confirmation — supports file / Feishu / DingTalk backends
 - 🔬 **Deep research**: NotebookLM + deep-research skill for Stage 0 research seeds
 - 🎯 **22+ agent skills**: pre-built instruction sets for every workflow
 - 🔒 **Governance**: single write entry point, auditable commits, QMD semantic search
@@ -128,9 +129,9 @@ docs/zh/               ← 中文文档（Chinese translations）
 |--------|-------------|
 | `vault-template/` | Complete Obsidian vault (8 directories) |
 | `setup.sh` | Interactive installer (`--test` for dry run) |
-| `scripts/` | Automation scripts (lint, digest, export, reminders sync) |
-| `prompts/` | Nightly pipeline prompt templates (7 files) |
-| `skills/` | 8 core + 18 recommended agent skills |
+| `scripts/` | Automation scripts (lint, digest, export, reminders sync, timesheet) |
+| `prompts/` | Nightly pipeline prompt templates (8 files) |
+| `skills/` | 9 core + 18 recommended agent skills |
 | `tools/conversation-mining/` | Conversation mining tool (embedded) |
 | `cron-examples/` | OpenClaw cron configs (7 jobs) |
 | `docs/` | Full English documentation |

@@ -40,6 +40,7 @@ Karpathy 的 gist 描述的是*想法*。Brain OS 是*运行中的系统*：
 - ⏰ **夜间自动化**：4 阶段流水线在你睡觉时自动运行
 - 📋 **个人事务层**：每日驾驶舱、待办跟踪、承诺管理、早间简报
 - 🍎 **Apple 提醒事项集成**：Brain 待办与 Apple 提醒事项双向同步，早上推送、晚上回写
+- 📋 **每日工时自动填报**：扫描 git 提交 + 项目上下文，对齐 OKR/里程碑，生成草稿待确认——支持文件 / 飞书 / 钉钉多种写入方式
 - 🔬 **深度研究集成**：NotebookLM + deep-research skill 做 Stage 0 研究
 - 🎯 **22+ Agent Skills**：预置指令集覆盖所有工作流
 - 🔒 **治理体系**：单一写入入口、可审计 commit、QMD 语义搜索
@@ -120,9 +121,9 @@ docs/zh/               ← 中文文档（完整翻译）
 |------|------|
 | `vault-template/` | 完整 Obsidian vault 模板（8 个目录） |
 | `setup.sh` | 交互式安装脚本（支持 `--test` 无痕模式） |
-| `scripts/` | 自动化脚本（审计、摘要、导出、提醒事项同步） |
-| `prompts/` | Nightly Pipeline 提示词模板（7 个，覆盖率 100%） |
-| `skills/` | 8 个核心 + 18 个推荐 Agent Skills |
+| `scripts/` | 自动化脚本（审计、摘要、导出、提醒事项同步、工时填报） |
+| `prompts/` | Nightly Pipeline 提示词模板（8 个，覆盖率 100%） |
+| `skills/` | 9 个核心 + 18 个推荐 Agent Skills |
 | `tools/conversation-mining/` | 对话挖掘工具（内嵌，无需额外安装） |
 | `cron-examples/` | OpenClaw Cron 配置（7 个 job） |
 | `docs/` | 完整英文文档（14 篇） |
