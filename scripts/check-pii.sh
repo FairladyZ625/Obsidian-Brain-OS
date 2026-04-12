@@ -16,14 +16,14 @@ echo "🔍 PII scan — $ROOT"
 echo ""
 
 # 1. Absolute paths with likely real usernames
-# Scans all file types — real paths should never appear in any committed file
+# Ignore generic examples like /tmp/... and /home/user/...
 echo "── Absolute paths ──"
 RESULT=$(grep -rn \
   --include="*.md" --include="*.sh" --include="*.py" --include="*.yml" --include="*.yaml" \
   -E '/Users/[a-zA-Z][a-zA-Z0-9_-]+/|/home/[a-zA-Z][a-zA-Z0-9_-]+/' \
   "$ROOT" \
   --exclude-dir=".git" \
-  2>/dev/null || true)
+  2>/dev/null | grep -vE '/tmp/|/home/user/' || true)
 
 if [ -n "$RESULT" ]; then
   echo "$RESULT"
@@ -33,15 +33,15 @@ else
 fi
 echo ""
 
-# 2. Unresolved template tokens — only in scripts and Python files
-# .md and .prompt.md files intentionally contain {{PLACEHOLDER}} for users to fill in
-echo "── Unresolved template tokens (scripts/py only) ──"
+# 2. Unresolved template tokens — only in runtime scripts that should be resolved before execution
+# setup.sh and template/example scripts intentionally contain {{PLACEHOLDER}} and are excluded.
+echo "── Unresolved template tokens (runtime scripts only) ──"
 RESULT=$(grep -rn \
   --include="*.sh" --include="*.py" \
   -E '\{\{[A-Z_]+\}\}' \
   "$ROOT" \
   --exclude-dir=".git" \
-  2>/dev/null || true)
+  2>/dev/null | grep -vE '(^|/)(setup\.sh|scripts/check-pii\.sh|tools/conversation-mining/export_all\.py|skills/.*/scripts/.*|prompts/|cron-examples/)' || true)
 
 if [ -n "$RESULT" ]; then
   echo "$RESULT"
