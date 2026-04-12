@@ -39,6 +39,7 @@ Karpathy’s gist describes the *idea*. Brain OS is the *running system*:
 - 🤖 **Multi-agent team**: main orchestrator + writer + chronicle historian + review auditor
 - ⏰ **Nightly automation**: 4-stage pipeline runs while you sleep (article integration → conversation mining → amplification → digest)
 - 📋 **Personal ops layer**: daily dashboard, todo tracking, commitment management, morning brief
+- 🍎 **Apple Reminders integration**: bidirectional sync between Brain todos and Apple Reminders — morning push, evening pull-back
 - 🔬 **Deep research**: NotebookLM + deep-research skill for Stage 0 research seeds
 - 🎯 **22+ agent skills**: pre-built instruction sets for every workflow
 - 🔒 **Governance**: single write entry point, auditable commits, QMD semantic search
@@ -127,9 +128,9 @@ docs/zh/               ← 中文文档（Chinese translations）
 |--------|-------------|
 | `vault-template/` | Complete Obsidian vault (8 directories) |
 | `setup.sh` | Interactive installer (`--test` for dry run) |
-| `scripts/` | Automation scripts (lint, digest, export) |
-| `prompts/` | Nightly pipeline prompt templates (5 files) |
-| `skills/` | 7 core + 18 recommended agent skills |
+| `scripts/` | Automation scripts (lint, digest, export, reminders sync) |
+| `prompts/` | Nightly pipeline prompt templates (7 files) |
+| `skills/` | 8 core + 18 recommended agent skills |
 | `tools/conversation-mining/` | Conversation mining tool (embedded) |
 | `cron-examples/` | OpenClaw cron configs (7 jobs) |
 | `docs/` | Full English documentation |
@@ -147,6 +148,49 @@ docs/zh/               ← 中文文档（Chinese translations）
 4. **Act** → daily digest + personal ops keeps you moving
 
 The AI handles the plumbing so you can focus on signal.
+
+---
+
+## 🍎 Apple Reminders Integration
+
+Brain OS includes a **bidirectional sync** between your Brain todos and Apple Reminders — so your knowledge system stays connected to your native task manager.
+
+### How it works
+
+```
+07:30 → brain-to-reminders.sh
+         Reads today's priorities from daily-briefing.md
+         Pushes them to Apple Reminders ("Brain Today" list)
+         → You see your Brain todos on iPhone / Apple Watch
+
+21:00 → reminders-to-brain.sh
+         Reads completion status from Apple Reminders
+         Writes a sync report back to Brain
+         → Completed items are reflected in your evening review
+```
+
+### Setup
+
+1. Install [`remindctl`](https://github.com/nicholasgasior/remindctl) — the CLI for Apple Reminders
+2. Configure your list name in `config.env`:
+   ```bash
+   REMINDERS_LIST="Brain Today"   # or any list name you prefer
+   ```
+3. Add the two cron jobs from `prompts/cron/brain-to-reminders-0730.md` and `prompts/cron/reminders-to-brain-2100.md`
+4. Run manually to test:
+   ```bash
+   bash scripts/brain-to-reminders.sh
+   bash scripts/reminders-to-brain.sh
+   ```
+
+### What gets synced
+
+- **Morning (07:30)**: Top priorities extracted from `daily-briefing.md` → pushed to Reminders with due time
+- **Evening (21:00)**: Completion status pulled back → sync report written to `01-PERSONAL-OPS/05-OPS-LOGS/`
+- **Deduplication**: Items already in Reminders are skipped
+- **Overdue tracking**: Uncompleted past-due items are flagged in the evening report
+
+> **macOS only.** Requires `remindctl` and Apple Reminders app.
 
 ---
 

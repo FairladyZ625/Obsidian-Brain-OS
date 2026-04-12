@@ -10,7 +10,7 @@ Read and follow the `conversation-knowledge-flywheel` skill.
 Target date: yesterday in Asia/Shanghai unless explicitly provided.
 
 Required workflow:
-1. Read raw transcripts from `/Volumes/LIZEYU/Converstions`
+1. Read raw transcripts from `{{TRANSCRIPT_DIR}}`
 2. Build a manifest of that day's transcripts
 3. Group transcripts by project
 4. When a project can be identified, resolve and read the corresponding Brain-side project brief from `05-PROJECTS/<slug>/project-brief.md` before final synthesis
