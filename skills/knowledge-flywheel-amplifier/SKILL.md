@@ -1,14 +1,18 @@
 ---
 name: knowledge-flywheel-amplifier
 description: >
-  跨源夜间放大器。合并文章整合结果与对话沉淀结果，输出主题更新、候选模式、开放问题与后续研究输入。Use when: knowledge flywheel, amplify knowledge, cross-source synthesis, nightly amplifier, 04:00 flywheel stage, topic merge, open question clustering.
+  Cross-source nightly amplifier for merging article-derived and
+  conversation-derived signals into topic updates, pattern candidates,
+  open questions, and candidate research seeds. Use when: knowledge flywheel,
+  amplify knowledge, cross-source synthesis, nightly amplifier,
+  04:00 flywheel stage, topic merge, open question clustering.
 ---
 
 # Knowledge Flywheel Amplifier
 
 把 02:00 的文章整合结果与 03:00 的对话沉淀结果做轻量汇合，形成跨源主题、候选模式、开放问题与后续研究输入。
 
-## 目标
+## Purpose
 
 这个技能负责 **跨文章与对话的 amplification 层**，而不是重新做 article integration 或 transcript mining。
 
@@ -19,140 +23,138 @@ description: >
 4. 生成 research seeds / context-pack candidates
 5. 为后续是否值得深研提供条件化升级输入
 
-## 主要输入
+## Primary Inputs
 
-- Stage A 输出：
+- Stage A outputs:
   - article integration reports
   - high-value article candidates
   - updated article-derived relation/index signals
-- Stage B 输出：
+- Stage B outputs:
   - transcript mining brief
   - conversation-derived notes
   - daily suggestions updates
   - candidate research seeds / context-pack candidates
-- 只读 Brain 上下文：
+- Read-only Brain context:
   - `03-KNOWLEDGE/99-SYSTEM/01-INDEXES/`
-  - 相关 domain notes
+  - relevant domain notes
   - `05-PROJECTS/` project briefs
-  - 现有 open questions / topic maps / pattern candidate surfaces
+  - existing open questions / topic maps / pattern candidate surfaces
 
-## 必要输出
+## Required Outputs
 
-成功运行应产生以下部分或全部内容：
-- 1 份机器向运行报告 → `03-KNOWLEDGE/99-SYSTEM/03-INTEGRATION-REPORTS/YYYY-MM-DD/amplifier-report-YYYY-MM-DD.md`
-- 1 份人类向摘要追加 → `03-KNOWLEDGE/01-READING/04-DIGESTS/nightly-digest-YYYY-MM-DD.md`
-- 有正当理由时的 merged topic / open-question / pattern-candidate 更新
-- 零到两个 research seeds
-- 零个或多个 context-pack 草稿
-- 可选的项目/domain 路由建议
-- Brain 改动时的 Brain git commit + post-commit 可见性确认
+A successful run should produce some or all of:
+- 1 machine-facing run report → `03-KNOWLEDGE/99-SYSTEM/03-INTEGRATION-REPORTS/YYYY-MM-DD/amplifier-report-YYYY-MM-DD.md`
+- 1 human-facing digest section append → `03-KNOWLEDGE/01-READING/04-DIGESTS/nightly-digest-YYYY-MM-DD.md`
+- merged topic / open-question / pattern-candidate updates when justified
+- zero to two research seeds
+- zero or more context-pack drafts
+- optional project/domain routing suggestions
+- Brain git commit + post-commit visibility confirmation when Brain changed
 
-## 本技能可读取的内容
+## What This Skill May Read
 
-- `article-notes-integration` 的输出
-- `conversation-knowledge-mining` 的输出
-- 现有 Brain indexes / project briefs / knowledge notes / topic surfaces
+- outputs from `article-notes-integration`
+- outputs from `conversation-knowledge-mining`
+- existing Brain indexes / project briefs / knowledge notes / topic surfaces
 
-## 本技能可写入的内容
+## What This Skill May Write
 
-- topic map / topic index 更新
+- topic map / topic index updates
 - open questions
 - pattern candidates
-- 跨源路由 notes 或轻量 synthesis notes
+- cross-source routing notes or compact synthesis notes
 - amplifier reports
-- context-pack 草稿 / research seed 草稿
+- context-pack drafts / research seed drafts
 
-## 夜间摘要协调协议
+## Nightly Digest Coordination Protocol
 
-本阶段必须撰写**两层内容**：
+This stage must always write **two layers**:
 
-### A层 — 机器向运行报告
-
-写入详细报告至：
+### Layer A — machine-facing run report
+Write a detailed report to:
 - `03-KNOWLEDGE/99-SYSTEM/03-INTEGRATION-REPORTS/YYYY-MM-DD/amplifier-report-YYYY-MM-DD.md`
 
-### B层 — 人类向夜间摘要
-
-在以下文件中追加/更新 `04:00 Amplifier` 部分：
+### Layer B — human-facing nightly digest
+Append / update the `04:00 Amplifier` section in:
 - `03-KNOWLEDGE/01-READING/04-DIGESTS/nightly-digest-YYYY-MM-DD.md`
 
-摘要部分须让 Alex 在 30 秒内读懂，仅包含：
+Digest section must tell {{USER_NAME}} only:
 - 今晚有没有真正形成跨源汇合
 - 如果没有，是因为哪一段缺失 / degraded
 - 如果有，最值得看的 topic / open question / research seed 是什么
 - 是否触发深度研究，若没触发，原因是什么
 
-本阶段应先读共享夜间摘要，必要时再读机器报告。
+This stage should read the shared nightly digest first, then machine-facing reports only when needed.
 
-## 默认夜间行为
+## Default Nightly Behavior
 
-默认 04:00 行为有意设计为轻量级：
-- 合并信号
-- 检测重叠和缺口
-- 只更新少量高价值图谱/index surfaces
-- 有正当理由时才生成 research seeds 或 context-pack candidates
+The default 04:00 behavior is intentionally lightweight:
+- merge signals
+- detect overlaps and gaps
+- update only small, high-value graph/index surfaces
+- generate research seeds or context-pack candidates when warranted
 
-本阶段**禁止**每晚自动升级为重型外部 research。
+It must **not** automatically escalate into heavy external research every night.
 
-## 升级条件
+## Escalation Criteria
 
-仅当以下条件全部满足时，才可派生后续 deep-research 任务：
-- 主题高价值
-- 内部上下文已存在
-- 问题足够窄，不会漂移
-- 预期收益值得额外复杂度
+A follow-up deep-research task may be spawned only when:
+- the theme is high-value
+- internal context already exists
+- the question is narrow enough to avoid drift
+- the likely payoff is worth the additional complexity
 
-若以上未全部满足，维持在 candidate seed / context-pack 级别。
+If these are not met, stay at candidate seed / context-pack level.
 
-## 成功标准
+## Success Criteria
 
-运行成功当且仅当：
-- 文章与对话信号合并，且不混淆其边界
-- 仅做有正当理由的图谱/index 更新
-- 高价值 open questions / pattern candidates 被清晰呈现
-- deep research 保持可选且条件触发
-- Brain 改动已 commit 并在 Obsidian 中可见
+A run is successful when:
+- article and conversation signals are merged without collapsing their boundaries
+- only justified graph/index updates are made
+- high-value open questions / pattern candidates are surfaced clearly
+- deep research remains optional and condition-based
+- Brain changes are committed and Obsidian-visible
 
-## 失败 / 降级模式
+## Failure / Degraded Mode
 
-- **缺少 Stage A 输出** → 仅用 Stage B 继续，但要说明 article 上下文不完整
-- **缺少 Stage B 输出** → 仅用 Stage A 继续，但要说明 conversation 上下文不完整
-- **无跨源信号** → 发出 no-op amplifier 报告；不强制做图谱改动
-- **主题合并不明确** → 保持候选分离，不过度合并
+- **Missing Stage A output** → continue with Stage B only, but say article context is partial
+- **Missing Stage B output** → continue with Stage A only, but say conversation context is partial
+- **No cross-source signal** → emit a no-op amplifier report; do not force graph changes
+- **Unclear topic merge** → keep separate candidates rather than over-merge
 
-## 边界（不做什么）
+## Anti-Scope
 
-本技能**禁止**：
-- 重新运行全量 article note normalization
-- 重新运行全量 transcript mining
-- 默认自动运行重型 NotebookLM / agent-reach deep research
-- 执行大规模图谱重写以假装活跃
-- 抹除 article-derived 与 conversation-derived 知识之间的来源边界
+This skill must **not**:
+- re-run full article note normalization
+- re-run full transcript mining
+- auto-run heavy NotebookLM / agent-reach deep research by default
+- perform large-scale graph rewrites to simulate activity
+- erase source boundaries between article-derived and conversation-derived knowledge
 
-## 输出质量底线
+## Output Quality Bar
 
-- 保守合并；保持来源追溯
-- 倾向紧凑、高价值的更新，而非大幅拓扑改造
-- Open questions 应具体，不应是模糊的头脑风暴
-- Pattern candidates 应保持候选态，除非证据充分
-- Research seeds 应范围明确，便于下游安全放大
+- Merge conservatively; preserve provenance
+- Prefer compact high-value updates over broad topology surgery
+- Open questions should be concrete, not vague brainstorming sludge
+- Pattern candidates should remain candidates unless evidence is strong
+- Research seeds should be scoped enough for safe downstream amplification
 
-## 在分片夜间流水线中的位置
+## Nightly Position in the Split Pipeline
 
-本技能是分片夜间知识系统的 **04:00 阶段**：
+This is the **04:00 stage** in the split nightly knowledge system:
 1. `article-notes-integration` (02:00)
 2. `conversation-knowledge-mining` (03:00)
 3. `knowledge-flywheel-amplifier` (04:00)
 
-上游约定：
-- 读取 Stage A 和 Stage B 的输出（如果存在）
-- 容忍上游部分成功
-- 若输入缺失，绝不假装上游工作已完成
+Upstream contract:
+- read Stage A and Stage B outputs if present
+- tolerate partial upstream success
+- never pretend upstream work succeeded if inputs are missing
 
-## 验收标准
+## Acceptance Standard
 
-只有满足以下条件，才算任务完成：
-- 仅在有正当理由时写入 Brain
-- Brain 改动时已 commit
-- 已确认在 Obsidian / post-commit sync 路径中可见
-- 明确说明 deep research 是仅提议还是实际已升级
+Do not call the job complete unless the result is:
+- written into Brain only where justified
+- committed to git when Brain changed
+- confirmed visible in Obsidian / post-commit sync path
+- explicit about whether deep research was merely proposed or actually escalated

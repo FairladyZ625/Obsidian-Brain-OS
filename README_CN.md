@@ -39,6 +39,7 @@ Karpathy 的 gist 描述的是*想法*。Brain OS 是*运行中的系统*：
 - 🤖 **多 Agent 团队**：主调度 + 写入者 + 史官 + 巡检官
 - ⏰ **夜间自动化**：4 阶段流水线在你睡觉时自动运行
 - 📋 **个人事务层**：每日驾驶舱、待办跟踪、承诺管理、早间简报
+- 🍎 **Apple 提醒事项集成**：Brain 待办与 Apple 提醒事项双向同步，早上推送、晚上回写
 - 🔬 **深度研究集成**：NotebookLM + deep-research skill 做 Stage 0 研究
 - 🎯 **22+ Agent Skills**：预置指令集覆盖所有工作流
 - 🔒 **治理体系**：单一写入入口、可审计 commit、QMD 语义搜索
@@ -119,13 +120,56 @@ docs/zh/               ← 中文文档（完整翻译）
 |------|------|
 | `vault-template/` | 完整 Obsidian vault 模板（8 个目录） |
 | `setup.sh` | 交互式安装脚本（支持 `--test` 无痕模式） |
-| `scripts/` | 自动化脚本（审计、摘要、导出） |
-| `prompts/` | Nightly Pipeline 提示词模板（5 个，覆盖率 100%） |
-| `skills/` | 7 个核心 + 18 个推荐 Agent Skills |
+| `scripts/` | 自动化脚本（审计、摘要、导出、提醒事项同步） |
+| `prompts/` | Nightly Pipeline 提示词模板（7 个，覆盖率 100%） |
+| `skills/` | 8 个核心 + 18 个推荐 Agent Skills |
 | `tools/conversation-mining/` | 对话挖掘工具（内嵌，无需额外安装） |
 | `cron-examples/` | OpenClaw Cron 配置（7 个 job） |
 | `docs/` | 完整英文文档（14 篇） |
 | `docs/zh/` | 完整中文文档（16 篇，含 agents/chronicle/qmd 等） |
+
+---
+
+## 🍎 Apple 提醒事项集成
+
+Brain OS 内置了 Brain 待办与 Apple 提醒事项的**双向同步**——让你的知识库与原生任务管理器保持连通。
+
+### 工作原理
+
+```
+07:30 → brain-to-reminders.sh
+         从 daily-briefing.md 提取今日优先事项
+         推送到 Apple 提醒事项（「Brain今日」列表）
+         → iPhone / Apple Watch 上可直接看到 Brain 待办
+
+21:00 → reminders-to-brain.sh
+         从 Apple 提醒事项读取完成状态
+         将同步报告写回 Brain
+         → 已完成事项在晚间复盘中得到反映
+```
+
+### 配置方法
+
+1. 安装 [`remindctl`](https://github.com/nicholasgasior/remindctl) — Apple 提醒事项的命令行工具
+2. 在 `config.env` 中配置列表名：
+   ```bash
+   REMINDERS_LIST="Brain今日"   # 或任意列表名
+   ```
+3. 添加两个 cron 任务：`prompts/cron/brain-to-reminders-0730.md` 和 `prompts/cron/reminders-to-brain-2100.md`
+4. 手动测试：
+   ```bash
+   bash scripts/brain-to-reminders.sh
+   bash scripts/reminders-to-brain.sh
+   ```
+
+### 同步内容
+
+- **早上（07:30）**：从 `daily-briefing.md` 提取今日优先事项 → 推送到提醒事项（带截止时间）
+- **晚上（21:00）**：回写完成状态 → 同步报告写入 `01-PERSONAL-OPS/05-OPS-LOGS/`
+- **去重**：已存在的提醒事项自动跳过
+- **过期跟踪**：未完成的过期事项在晚间报告中标记
+
+> **仅支持 macOS。** 需要 `remindctl` 和 Apple 提醒事项 App。
 
 ---
 

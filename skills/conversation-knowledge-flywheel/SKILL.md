@@ -44,14 +44,14 @@ Downstream / upstream contract:
 - 不做无锚点的全量 NotebookLM DeepResearch 自动执行（必须先有 Context Pack）
 - 不依赖重度人工标签体系做主干判断
 - 不对所有主题做外部补强，只生成少量高价值候选
-- 不把原始 transcript 复制进 /tmp/brain-os-test/vault
+- 不把原始 transcript 复制进 ZeYu-AI-Brain
 
 ## Inputs
 
 - Raw transcript root: `$TRANSCRIPT_ROOT` (default: `{{TRANSCRIPT_DIR}}`)
-- Brain root: `$BRAIN_ROOT` (default: `/tmp/brain-os-test/vault`)
+- Brain root: `$BRAIN_ROOT` (default: `{{BRAIN_ROOT}}`)
 - Date: default = yesterday (Asia/Shanghai)
-- Optional project hints / active initiatives from /tmp/brain-os-test/vault
+- Optional project hints / active initiatives from ZeYu-AI-Brain
 - Brain-side project registry at `$BRAIN_ROOT/05-PROJECTS/` when a project can be identified
 - Existing article-derived knowledge in Brain as read-only routing context
 
@@ -91,7 +91,7 @@ This report must explicitly state:
 Append / update the `03:00 Conversation Mining` section in:
 - `03-KNOWLEDGE/01-READING/04-DIGESTS/nightly-digest-YYYY-MM-DD.md`
 
-Digest section must be readable by Alex in 30 seconds and include only:
+Digest section must be readable by {{USER_NAME}} in 30 seconds and include only:
 - 昨天对话有没有真正挖出东西
 - 如果没挖出来，卡在哪里（例如 transcript 缺失 / QMD 异常）
 - 如果挖出来了，最值得看的 1-3 个点是什么
@@ -102,9 +102,9 @@ Downstream 04:00 stage should read this digest first, not infer blindly from sca
 ## Nightly Ownership Chain
 
 - **Trigger**: nightly cron job
-- **Dispatcher / integrator**: Brain OS Manager
+- **Dispatcher / integrator**: {{MAIN_AGENT_NAME}}
 - **Recall layers**: project grouping → QMD → Surveillance
-- **Final judgment**: Brain OS Manager only
+- **Final judgment**: {{MAIN_AGENT_NAME}} only
 - **Formal knowledge write**: Writer-Agent only
 - **Acceptance standard**: Brain write + git commit + post-commit sync + Obsidian visible
 
@@ -154,7 +154,7 @@ Use a fast, cheap model layer to quickly scan the recalled candidates.
 
 Surveillance is a **candidate-recall layer**, not a knowledge-authoring layer.
 It should answer:
-- which conversations are most likely worth Brain OS Manager review
+- which conversations are most likely worth {{MAIN_AGENT_NAME}} review
 - which ones may change today's execution quality
 - which ones deserve outside reinforcement later
 
@@ -167,7 +167,7 @@ Recommended signal dimensions:
 Surveillance output should be:
 - top candidate transcript paths per project
 - one-line reason each candidate is worth human review
-- priority bucket (`P1`, `P2`, `P3`) for Brain OS Manager attention
+- priority bucket (`P1`, `P2`, `P3`) for {{MAIN_AGENT_NAME}} attention
 - optional external research seed
 
 ### Step 5: Final human-quality synthesis
@@ -182,7 +182,7 @@ Use that brief as a lightweight routing anchor so the synthesis knows:
 - which recent knowledge is already attached
 - which aliases / search terms are valid
 
-Brain OS Manager then does the final personalized extraction and generates:
+{{MAIN_AGENT_NAME}} then does the final personalized extraction and generates:
 - 1-3 conversation-derived knowledge notes
 - 1 daily learning suggestions block
 - optional external research seeds (not executed by default)
@@ -199,10 +199,10 @@ This is the only stage allowed to decide:
 - what should feed next-day briefing
 
 ### Step 6: Write via the approved Brain path
-You must **not directly write /tmp/brain-os-test/vault** from this skill unless the active environment explicitly allows it.
+You must **not directly write ZeYu-AI-Brain** from this skill unless the active environment explicitly allows it.
 
 Preferred formal landing path:
-- Brain OS Manager prepares writer-ready package
+- {{MAIN_AGENT_NAME}} prepares writer-ready package
 - `sessions_send` to Writer-Agent with explicit target paths
 - Writer-Agent writes, commits, and reports receipt
 
@@ -254,7 +254,7 @@ Only trigger NotebookLM deep research when at least one of these concrete signal
 - A conversation revealed a design decision that lacks external best-practice grounding
 - A recurring problem appeared across multiple transcripts but has no mature internal solution
 - A new concept / framework was mentioned but internal understanding is incomplete
-- Brain OS Manager explicitly flagged a theme as needing external reinforcement
+- {{MAIN_AGENT_NAME}} explicitly flagged a theme as needing external reinforcement
 
 Do NOT trigger for: purely internal process issues, themes already well-covered in Brain, or low-confidence hunches without a clear research question.
 
@@ -272,7 +272,7 @@ Do NOT trigger for: purely internal process issues, themes already well-covered 
    notebooklm use <notebook-id>
    notebooklm ask "<research-seed-questions>" --new
    ```
-5. Brain OS Manager reviews results and extracts only useful ideas back into the system
+5. {{MAIN_AGENT_NAME}} reviews results and extracts only useful ideas back into the system
 
 ### NotebookLM Context Pack requirements
 Before deep research, include at least:
@@ -296,7 +296,7 @@ What must be controlled is not **externality** but **topical drift**.
 
 ### Post-research rule
 NotebookLM output does not land directly into Brain.
-Brain OS Manager must:
+{{MAIN_AGENT_NAME}} must:
 - evaluate whether the external synthesis stayed on target
 - separate actionable findings from interesting-but-irrelevant material
 - decide whether to convert the result into a new knowledge note, a research appendix, or nothing
@@ -322,7 +322,7 @@ Provide a compact block titled:
 
 - **No transcripts found** → still write machine report + digest section; state clearly that transcript root / target date was missing
 - **QMD unhealthy** → first try skill-local `qmd-safe.sh` auto-repair once; if still unhealthy, enter degraded mode explicitly and still write machine report + digest section
-- **Surveillance noisy / low confidence** → still pass only compact candidate shortlist to Brain OS Manager, not long summaries
+- **Surveillance noisy / low confidence** → still pass only compact candidate shortlist to {{MAIN_AGENT_NAME}}, not long summaries
 - **No high-value insights** → produce a short "no-signal" machine report + digest section; no forced note
 - **Writer path unavailable** → emit ready-to-send writer instruction block
 - **Commit not created** → report “not Obsidian-visible yet”
