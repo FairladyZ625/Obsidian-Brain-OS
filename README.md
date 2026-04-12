@@ -201,6 +201,12 @@ Brain OS includes a **bidirectional sync** between your Brain todos and Apple Re
 
 ---
 
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=FairladyZ625/Obsidian-Brain-OS&type=Date)](https://star-history.com/#FairladyZ625/Obsidian-Brain-OS&Date)
+
+---
+
 ## License
 
 MIT © [FairladyZ](https://github.com/FairladyZ625)

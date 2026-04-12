@@ -4,6 +4,26 @@ All notable changes to Obsidian Brain OS are documented here.
 
 ---
 
+## [0.4.0] — 2026-04-12
+
+### Added
+
+- **`skills/brain-os-release/SKILL.md`** — Release SOP skill for maintainers and contributors: version bump rules, PII check, CHANGELOG update, PR template, merge and tag steps.
+- **`scripts/check-pii.sh`** — PII scan script: checks for absolute paths, unresolved `{{PLACEHOLDER}}` tokens, and Discord-style IDs. Run manually or via CI.
+- **`.github/workflows/pii-scan.yml`** — CI: runs `check-pii.sh --strict` on every PR and push to main. Fails if PII found.
+- **`.github/workflows/structure-check.yml`** — CI: verifies every skill has `SKILL.md` and every script has a shebang.
+- **`.github/workflows/changelog-check.yml`** — CI: warns (non-blocking) if `skills/`, `scripts/`, or `prompts/` changed without a CHANGELOG update.
+- **`skills/observer/SKILL.md`** — Observer skill: daily AI team health monitor. Collects session data + gateway logs, updates `.learnings/` ledger, generates iteration plan, announces to observer channel. Three-level safety mechanism (alert / suggest / execute with human confirmation).
+- **`skills/observer/references/plan-template.md`** — Iteration plan template for Observer output.
+- **`prompts/cron/observer-daily-0001.md`** — Daily 00:01 cron prompt template for Observer (disabled by default).
+- **`README.md`** — Added Star History chart.
+
+### Changed
+
+- **`prompts/cron/brain-os-daily-sync.md`** (private, not in repo) — Added Step 7: auto-suggest article direction when A-class syncs >= 3.
+
+---
+
 ## [0.3.0] — 2026-04-12
 
 ### Added
