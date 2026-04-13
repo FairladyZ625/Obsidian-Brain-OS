@@ -104,7 +104,9 @@ echo "  1. Copy the vault template to your chosen location"
 echo "  2. Configure paths in config.env"
 echo "  3. Install skills (optional)"
 echo "  4. Install conversation-mining tool (optional)"
-echo "  5. Verify the installation"
+echo "  5. Initialize Observer .learnings/ directory (optional)"
+echo "  6. Run PII scan verification"
+echo "  7. Verify the installation"
 echo ""
 echo -e "${YELLOW}You can re-run this script at any time to reconfigure.${NC}"
 
@@ -266,9 +268,56 @@ if ask_yn "Install core skills to $SKILLS_PATH?" "y"; then
 fi
 
 # =============================================================================
-# Step 7: Replace placeholders in cron examples
+# Step 9: Replace placeholders in cron examples
+
 # =============================================================================
-print_step "Step 7: Prepare Cron Templates (Optional)"
+# Step 7: Observer .learnings/ directory (Optional)
+# =============================================================================
+print_step "Step 7: Observer .learnings/ Directory (Optional)"
+echo "Observer is the AI team health monitor. It stores its operational memory in"
+echo ".learnings/observer/ inside your vault."
+
+LEARNINGS_DIR=""
+if ask_yn "Initialize Observer .learnings/ directory?" "y"; then
+  LEARNINGS_DIR="$BRAIN_PATH/.learnings"
+  mkdir -p "$LEARNINGS_DIR/observer/plans"
+  mkdir -p "$LEARNINGS_DIR/observer/history"
+
+  INDEX_FILE="$LEARNINGS_DIR/observer/index.json"
+  if [[ ! -f "$INDEX_FILE" ]]; then
+    cat > "$INDEX_FILE" << LEARNINGSEOF
+{
+  "version": "1.0",
+  "lastUpdated": "$(date -I)",
+  "recurrenceMap": {},
+  "promoteCandidates": []
+}
+LEARNINGSEOF
+    print_ok "Observer index created: $INDEX_FILE"
+  else
+    print_warn "Observer index already exists: $INDEX_FILE"
+  fi
+  print_ok ".learnings/ initialized at: $LEARNINGS_DIR"
+fi
+
+# =============================================================================
+# Step 8: PII Scan Verification
+# =============================================================================
+print_step "Step 8: PII Scan Verification"
+echo "Running the PII scanner to check for accidental private data..."
+
+if [[ -f "$REPO_DIR/scripts/check-pii.sh" ]]; then
+  if bash "$REPO_DIR/scripts/check-pii.sh --strict" 2>&1; then
+    print_ok "PII scan passed — no private data found"
+  else
+    print_warn "PII scan found potential issues — review output above"
+    print_warn "Run manually later: bash scripts/check-pii.sh --strict"
+  fi
+else
+  print_warn "check-pii.sh not found — skipping PII verification"
+fi
+# =============================================================================
+print_step "Step 9: Prepare Cron Templates (Optional)"
 echo "If you use OpenClaw, you can import cron jobs for the nightly pipeline."
 
 CRON_OUT_DIR="$REPO_DIR/cron-examples/generated"
@@ -297,9 +346,9 @@ echo ""
 echo -e "${YELLOW}Remember to set DISCORD_WEBHOOK_URL in the generated files if you use webhooks.${NC}"
 
 # =============================================================================
-# Step 8: Bulk placeholder replacement across entire repo
+# Step 10: Bulk placeholder replacement across entire repo
 # =============================================================================
-print_step "Step 8: Bulk Placeholder Replacement"
+print_step "Step 10: Bulk Placeholder Replacement"
 
 echo "Replacing all placeholders in cron templates, skills, prompts, and docs..."
 echo "This makes the entire repo ready to use with your configuration."
@@ -393,9 +442,9 @@ else
   print_ok "Bulk replacement done ($REPLACE_COUNT substitutions)"
 fi
 # =============================================================================
-# Step 9: Verify
+# Step 11: Verify
 # =============================================================================
-print_step "Step 9: Verification"
+print_step "Step 11: Verification"
 
 PASS=0
 FAIL=0
@@ -444,6 +493,20 @@ else
 fi
 
 # Summary
+
+# Check Observer .learnings/
+if [[ -d "$BRAIN_PATH/.learnings/observer" ]]; then
+  check "Observer .learnings/ directory exists" "ok"
+else
+  print_warn "Observer .learnings/ not found (skip if you didn't initialize it)"
+fi
+
+# Check PII scanner exists
+if [[ -f "$REPO_DIR/scripts/check-pii.sh" ]]; then
+  check "PII scanner (check-pii.sh) exists" "ok"
+else
+  print_warn "check-pii.sh not found"
+fi
 echo ""
 echo -e "${BOLD}══════════════════════════════════════${NC}"
 echo -e "${BOLD}Setup Summary${NC}"
@@ -456,10 +519,12 @@ fi
 echo ""
 echo -e "${BOLD}Your Brain OS is ready.${NC}"
 echo ""
-echo "Next steps:"
+echo "Next steps (see also docs/component-guide.md for full inventory):"
 echo "  1. Open Obsidian → File → Open Vault → $BRAIN_PATH"
 echo "  2. Read docs/guide/03-daily-workflow.md to understand daily usage"
-echo "  3. Configure your AI Agent following docs/guide/01-agent-setup.md"
+echo "  3. Read docs/component-guide.md for a complete feature overview
+  4. Enable Observer: edit prompts/cron/observer-daily-0001.md set enabled: true
+  5. Configure your AI Agent following docs/agents.md"
 if [[ $INSTALL_CONVS == "y" ]]; then
   echo "  4. Test conversation export: conversation-mining --no-open --days 1"
 fi
