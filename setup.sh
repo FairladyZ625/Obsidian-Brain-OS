@@ -287,11 +287,10 @@ if ask_yn "Initialize Observer .learnings/ directory?" "y"; then
   if [[ ! -f "$INDEX_FILE" ]]; then
     cat > "$INDEX_FILE" << LEARNINGSEOF
 {
-  "schema_version": "1.0",
-  "created": "$(date -Iseconds)",
-  "learnings": {},
-  "promoted": [],
-  "stats": {"total_learnings": 0, "total_promoted": 0}
+  "version": "1.0",
+  "lastUpdated": "$(date -I)",
+  "recurrenceMap": {},
+  "promoteCandidates": []
 }
 LEARNINGSEOF
     print_ok "Observer index created: $INDEX_FILE"
@@ -308,7 +307,7 @@ print_step "Step 8: PII Scan Verification"
 echo "Running the PII scanner to check for accidental private data..."
 
 if [[ -f "$REPO_DIR/scripts/check-pii.sh" ]]; then
-  if bash "$REPO_DIR/scripts/check-pii.sh" 2>&1; then
+  if bash "$REPO_DIR/scripts/check-pii.sh --strict" 2>&1; then
     print_ok "PII scan passed — no private data found"
   else
     print_warn "PII scan found potential issues — review output above"
