@@ -4,6 +4,33 @@ All notable changes to Obsidian Brain OS are documented here.
 
 ---
 
+## [0.5.1] — 2026-04-13
+
+### Added
+- **`docs/component-guide.md`** — Complete component guide: everything included in v0.5, what each component does, how to start using it, 5-minute quick start. Bilingual (Chinese + English).
+- **README.md** + **`README_CN.md`** — Added component guide as first item in contributor docs section.
+
+---
+
+## [0.5.0] — 2026-04-13
+
+### Added
+- **`CHANGELOG_CN.md`** — Chinese changelog mirroring English version (bilingual).
+- **`docs/agent-playbooks/release-playbook.md`** — Complete release SOP: 7-step process, bilingual PR template, common pitfalls.
+- **`docs/agent-playbooks/observer-playbook.md`** — Observer usage guide: 6-step process, three-level safety mechanism, configuration.
+- **`docs/references/pii-deidentification-guide.md`** — PII deidentification guide: 4 PII categories, standard replacement table, common fixes.
+- **`docs/writing-cron-prompts.md`** — Cron prompt best practices: system date fetch, output format, cross-prompt coordination.
+- **`docs/skill-authoring-guide.md`** — Skill authoring conventions: SKILL.md structure, naming, CI requirements.
+- **`docs/nightly-pipeline-guide.md`** — Full nightly pipeline architecture: 4 stages, handoff protocol, failure handling.
+
+### Changed
+- **`skills/brain-os-release/SKILL.md`** — Step 3 now requires updating BOTH `CHANGELOG.md` and `CHANGELOG_CN.md`; Step 5 adds mandatory bilingual PR template.
+- **`.github/workflows/changelog-check.yml`** — CI now covers `CHANGELOG_CN.md`; docs/ changes are encouraged but not required.
+- **`scripts/check-pii.sh`** — Exclude `pii-deidentification-guide` from scan (contains educational example paths).
+- **`README.md`** + **`README_CN.md`** — Added contributor docs section with links to all new documents.
+
+---
+
 ## [0.4.1] — 2026-04-13
 
 ### Fixed

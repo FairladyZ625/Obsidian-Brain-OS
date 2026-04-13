@@ -119,12 +119,13 @@ docs/zh/               ← 中文文档（Chinese translations）
 
 ### 📋 Contributor & Maintainer Docs / 贡献者与维护者文档
 
-1. **[Release Playbook](docs/agent-playbooks/release-playbook.md)** ⭐ — Complete release SOP (bilingual)
-2. **[Observer Playbook](docs/agent-playbooks/observer-playbook.md)** — Observer skill usage guide
-3. **[PII Deidentification Guide](docs/references/pii-deidentification-guide.md)** — How to keep private data out of the repo
-4. **[Cron Prompt Writing Guide](docs/writing-cron-prompts.md)** — Best practices for reliable cron prompts
-5. **[Skill Authoring Guide](docs/skill-authoring-guide.md)** — How to write well-structured skills
-6. **[Nightly Pipeline Guide (Detailed)](docs/nightly-pipeline-guide.md)** — Full pipeline architecture & handoff protocol
+1. **[Component Guide (⭐ Start Here)](docs/component-guide.md)** ⭐ — Everything included, what each component does, 5-min quick start
+2. **[Release Playbook](docs/agent-playbooks/release-playbook.md)** — Complete release SOP (bilingual)
+3. **[Observer Playbook](docs/agent-playbooks/observer-playbook.md)** — Observer skill usage guide
+4. **[PII Deidentification Guide](docs/references/pii-deidentification-guide.md)** — How to keep private data out of the repo
+5. **[Cron Prompt Writing Guide](docs/writing-cron-prompts.md)** — Best practices for reliable cron prompts
+6. **[Skill Authoring Guide](docs/skill-authoring-guide.md)** — How to write well-structured skills
+7. **[Nightly Pipeline Guide (Detailed)](docs/nightly-pipeline-guide.md)** — Full pipeline architecture & handoff protocol
 
 ### 🇨🇳 中文用户
 
