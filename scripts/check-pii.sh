@@ -23,7 +23,7 @@ RESULT=$(grep -rn \
   -E '/Users/[a-zA-Z][a-zA-Z0-9_-]+/|/home/[a-zA-Z][a-zA-Z0-9_-]+/' \
   "$ROOT" \
   --exclude-dir=".git" \
-  2>/dev/null | grep -vE '/tmp/|/home/user/' || true)
+  2>/dev/null | grep -vE '/tmp/|/home/user/|docs/references/pii-deidentification-guide\.md' || true)
 
 if [ -n "$RESULT" ]; then
   echo "$RESULT"
@@ -41,7 +41,7 @@ RESULT=$(grep -rn \
   -E '\{\{[A-Z_]+\}\}' \
   "$ROOT" \
   --exclude-dir=".git" \
-  2>/dev/null | grep -vE '(^|/)(setup\.sh|scripts/check-pii\.sh|tools/conversation-mining/export_all\.py|skills/.*/scripts/.*|prompts/|cron-examples/)' || true)
+  2>/dev/null | grep -vE '(^|/)(setup\.sh|scripts/check-pii\.sh|tools/conversation-mining/export_all\.py|skills/.*/scripts/.*|prompts/|cron-examples/|docs/references/pii-)' || true)
 
 if [ -n "$RESULT" ]; then
   echo "$RESULT"

@@ -1,0 +1,83 @@
+# 变更日志 / Changelog（中文版）
+
+> 完整英文版见 [CHANGELOG.md](CHANGELOG.md)。本文件为中文对照版，内容与英文版一一对应。
+
+---
+
+## [0.4.1] — 2026-04-13
+
+### 修复 / Fixed
+
+- **`prompts/cron/chronicle-every-2h-log.md`** — 新增强制系统日期获取步骤，确保 `YYYY-MM-DD` 始终来自系统时钟而非模型猜测，使用运行机器本地时区。
+- **`prompts/cron/daily-knowledge-graph-canvas-0500.md`** — 新增步骤 0：在生成每日画布前先获取系统日期/星期/时区；commit message 明确要求使用系统日期。
+- **`prompts/cron/knowledge-lint-weekly.md`** — 新增强制目标日期（昨天）获取命令，明确下游 lint/报告路径必须使用系统派生的日期。
+
+---
+
+## [0.4.0] — 2026-04-12
+
+### 新增 / Added
+
+- **`skills/brain-os-release/SKILL.md`** — 发版 SOP skill：版本号规则、PII 检查、CHANGELOG 更新、PR 模板、合并与打 tag 步骤。
+- **`scripts/check-pii.sh`** — PII 扫描脚本：检查绝对路径、未解析 `{{占位符}}`、Discord 风格 ID。支持手动运行或 CI 调用。
+- **`.github/workflows/pii-scan.yml`** — CI：每次 PR 和 main 推送时执行 `check-pii.sh --strict`，发现 PII 则阻断。
+- **`.github/workflows/structure-check.yml`** — CI：验证每个 skill 有 `SKILL.md`、每个脚本有 shebang。
+- **`.github/workflows/changelog-check.yml`** — CI：当 `skills/`、`scripts/` 或 `prompts/` 变更但未更新 CHANGELOG 时发出警告（非阻塞）。
+- **`skills/observer/SKILL.md`** — Observer skill：每日 AI 团队健康监控。采集 session 数据 + 网关日志，更新 `.learnings/` 账本，生成迭代计划并通知观察者频道。三级安全机制（告警 / 建议 / 经人工确认后执行）。
+- **`skills/observer/references/plan-template.md`** — Observer 输出用的迭代计划模板。
+- **`prompts/cron/observer-daily-0001.md`** — Observer 每日 00:01 cron prompt 模板（默认禁用）。
+- **`README.md`** — 新增 Star History 图表。
+
+### 变更 / Changed
+
+- **`prompts/cron/brain-os-daily-sync.md`**（私有，不在仓库中）— 新增步骤 7：当 A 类同步 >= 3 时自动建议文章方向。
+
+---
+
+## [0.3.0] — 2026-04-12
+
+### 新增 / Added
+
+- **`skills/daily-timesheet/`** — 新 skill：每日扫描 git 提交，对齐 OKR 里程碑，生成结构化工时草稿供人工确认。支持三种写入后端：本地文件、飞书多维表格、钉钉 AI 表格。
+- **`skills/daily-timesheet/references/feishu-bitable.md`** — 飞书多维表格 API 参考（字段映射与鉴权流程）。
+- **`skills/daily-timesheet/references/dingtalk-bitable.md`** — 钉钉 AI 表格 API 参考。
+- **`prompts/cron/daily-timesheet-1730.md`** — 工作日 17:30 cron prompt 模板（默认禁用；配置 `TIMESHEET_REPOS` 和 `BRAIN_ROOT` 后启用）。
+- **`scripts/brain-to-reminders.sh`** — 07:30 将 Brain 待办推送到 Apple Reminders。
+- **`scripts/reminders-to-brain.sh`** — 21:00 从 Apple Reminders 拉取完成状态回写 Brain。
+- **`prompts/cron/brain-to-reminders-0730.md`** — 早晨 Reminders 推送的 cron prompt。
+- **`prompts/cron/reminders-to-brain-2100.md`** — 晚上 Reminders 回写的 cron prompt。
+- **`skills/english-tutor/`** — 交互式英语听力辅导 skill，使用 Whisper 转录和 edge-tts 语音合成。
+
+### 变更 / Changed
+
+- **`skills/conversation-knowledge-flywheel/SKILL.md`** — 升级为 transcript-first 三层拆分 nightly pipeline 架构，含明确的上下游交接协议。
+- **`skills/article-notes-integration/SKILL.md`** — 刷新为英文结构、交叉引用协议和 02:00 阶段契约。
+- **`skills/knowledge-flywheel-amplifier/SKILL.md`** — 刷新为跨源综合协议和 04:00 阶段契约。
+- **`prompts/cron/conversation-knowledge-mining-nightly.md`** — 对齐拆分 pipeline（预检检查、digest 优先读取、双层输出）。
+- **`prompts/conversation-knowledge-mining.prompt.md`** + **`conversation-knowledge-flywheel.prompt.md`** — 对齐措辞与新 skill 契约。
+
+### 修复 / Fixed
+
+- **`scripts/brain-to-reminders.sh`** — `BRAIN_ROOT` 改为必填环境变量；未设置时报错退出（之前会静默使用字面量 `{{BRAIN_ROOT}}` 作为路径）。
+- **`scripts/reminders-to-brain.sh`** — 同上修复：`BRAIN_ROOT` 必填，缺失时清晰报错。
+- **`scripts/brain-to-reminders.sh`** — 提取正则扩展支持清单/勾选项格式（`- task`、`- [ ] task`），不仅匹配编号列表。
+
+---
+
+## [0.2.0] — 2026-04-08
+
+### 新增 / Added
+
+- `skills/conversation-knowledge-flywheel/` — 夜间对话挖掘与知识综合 skill。
+- `skills/article-notes-integration/` — 文章摄取与知识图谱集成 skill。
+- `skills/knowledge-flywheel-amplifier/` — 跨源知识放大 skill。
+- `prompts/cron/conversation-knowledge-mining-nightly.md` — 夜间对话挖掘 cron prompt。
+- `cron-examples/` — 7 个 OpenClaw cron job 配置示例。
+
+---
+
+## [0.1.0] — 2026-03-15
+
+### 新增 / Added
+
+- 初始发布：vault 模板、setup.sh、核心 skills、nightly pipeline prompts、文档。

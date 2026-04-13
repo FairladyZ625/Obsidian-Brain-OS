@@ -80,6 +80,19 @@ bash setup.sh
 
 ---
 
+## 文档
+
+### 📋 贡献者与维护者文档
+
+1. **[发版操作手册](docs/agent-playbooks/release-playbook.md)** ⭐ — 完整发版 SOP（中英双语）
+2. **[观察者使用手册](docs/agent-playbooks/observer-playbook.md)** — Observer skill 配置指南
+3. **[PII 脱敏指南](docs/references/pii-deidentification-guide.md)** — 如何避免私有数据进入仓库
+4. **[Cron Prompt 编写指南](docs/writing-cron-prompts.md)** — 可靠 cron prompt 最佳实践
+5. **[Skill 编写指南](docs/skill-authoring-guide.md)** — 如何编写结构良好的 skill
+6. **[Nightly Pipeline 全景指南](docs/nightly-pipeline-guide.md)** — 完整流水线架构与交接协议
+
+---
+
 ## 文档结构
 
 ### 📁 目录说明

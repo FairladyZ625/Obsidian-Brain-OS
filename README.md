@@ -117,6 +117,15 @@ docs/zh/               ← 中文文档（Chinese translations）
 6. **[NotebookLM Integration](docs/notebooklm.md)** — Deep research with Google NotebookLM
 7. **[QMD Semantic Search](docs/qmd-setup.md)** — Vector search for large vaults
 
+### 📋 Contributor & Maintainer Docs / 贡献者与维护者文档
+
+1. **[Release Playbook](docs/agent-playbooks/release-playbook.md)** ⭐ — Complete release SOP (bilingual)
+2. **[Observer Playbook](docs/agent-playbooks/observer-playbook.md)** — Observer skill usage guide
+3. **[PII Deidentification Guide](docs/references/pii-deidentification-guide.md)** — How to keep private data out of the repo
+4. **[Cron Prompt Writing Guide](docs/writing-cron-prompts.md)** — Best practices for reliable cron prompts
+5. **[Skill Authoring Guide](docs/skill-authoring-guide.md)** — How to write well-structured skills
+6. **[Nightly Pipeline Guide (Detailed)](docs/nightly-pipeline-guide.md)** — Full pipeline architecture & handoff protocol
+
 ### 🇨🇳 中文用户
 
 → 从 [docs/zh/README.md](docs/zh/README.md) 开始，顺序同上。
@@ -134,7 +143,10 @@ docs/zh/               ← 中文文档（Chinese translations）
 | `skills/` | 9 core + 18 recommended agent skills |
 | `tools/conversation-mining/` | Conversation mining tool (embedded) |
 | `cron-examples/` | OpenClaw cron configs (7 jobs) |
-| `docs/` | Full English documentation |
+| `docs/` | Full English documentation + contributor guides |
+| `docs/agent-playbooks/` | Agent operation playbooks (release, observer) |
+| `docs/references/` | Reference guides (PII, etc.) |
+| `CHANGELOG_CN.md` | Chinese changelog (mirrors CHANGELOG.md) |
 | `docs/zh/` | Full Chinese documentation |
 
 ---
