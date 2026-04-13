@@ -22,7 +22,13 @@ description: >
 > A) 建立个人知识系统（捕获、整理、积累）
 > B) AI 驱动的个人事务管理（每日计划、待办、提醒）
 > C) Nightly AI 自动处理流水线（睡觉时自动处理知识）
-> D) 全都要"
+> D) 全都要（含 Observer 健康监控）"
+
+### Q5: Observer / CI
+> "你是否需要以下高级功能？（可多选）
+> A) **Observer** — 每日 AI 团队健康巡检，自动检测错误、生成改进建议
+> B) **CI/CD 保护** — GitHub Actions 自动检查 PII 和代码结构（需要推到 GitHub）
+> C) 暂时不需要"
 
 ### Q2: 现状
 > "你已经有 Obsidian vault 了吗？还是从零开始？"
@@ -92,10 +98,12 @@ bash setup.sh
 2. 询问用户名、时区、语言
 3. 询问 OpenClaw workspace 路径和 skills 路径
 4. 询问是否安装 conversation-mining
-5. 写入 `scripts/config.env`（替换所有 `{{PLACEHOLDER}}`）
-6. 安装 skills（有冲突检测，不会覆盖已有 skill）
-7. 生成已填好 placeholder 的 cron 配置到 `cron-examples/generated/`
-8. 运行验证 checklist
+5. **初始化 Observer `.learnings/` 目录**（可选，v0.5 新增）
+6. **运行 PII 扫描验证**（确保仓库无私有数据泄露，v0.5 新增）
+7. 写入 `scripts/config.env`（替换所有 `{{PLACEHOLDER}}`）
+8. 安装 skills（有冲突检测，不会覆盖已有 skill）
+9. 生成已填好 placeholder 的 cron 配置到 `cron-examples/generated/`
+10. 运行验证 checklist（含 Observer 和 PII 检查项）
 
 **作为 AI Agent，你可以帮用户运行这个脚本：**
 - 先收集好用户的回答（Q1-Q4）
@@ -145,9 +153,10 @@ openclaw cron import Obsidian-Brain-OS/cron-examples/generated/personal-ops.json
 安装完成后：
 1. 确认用户能在 Obsidian 中打开 vault
 2. 确认至少一个脚本运行正常
-3. **引导用户阅读 `docs/zh/guide/03-daily-workflow.md`**（了解日常使用方式）
-4. **引导用户阅读 `docs/zh/guide/04-iteration-guide.md`**（了解如何持续优化）
-5. 告诉用户：系统需要迭代，不是装完就完美的
+3. **引导用户阅读 `docs/component-guide.md`** ⭐ v0.5 — 完整组件一览，5 分钟上手
+4. **如启用了 Observer**：引导编辑 `prompts/cron/observer-daily-0001.md`，设 `enabled: true`
+5. **如推到 GitHub**：引导设置 branch protection（PII + Structure check 自动运行）
+6. 告诉用户：系统需要迭代，不是装完就完美的
 
 ---
 
@@ -180,6 +189,12 @@ openclaw cron import Obsidian-Brain-OS/cron-examples/generated/personal-ops.json
 | "conversation-mining 怎么装？" | `tools/conversation-mining/AI_INSTALL.md` |
 | "Chronicle 史官是什么？" | `docs/chronicle-agent.md` |
 | "QMD 语义搜索？" | `docs/qmd-setup.md` |
+| **"Observer 观察者怎么配置？"** | **`docs/agent-playbooks/observer-playbook.md`** ⭐ v0.5 |
+| **"怎么发版？PR 怎么写？"** | **`docs/agent-playbooks/release-playbook.md`** ⭐ v0.5 |
+| **"PII 脱敏怎么做？"** | **`docs/references/pii-deidentification-guide.md`** ⭐ v0.5 |
+| **"仓库里有什么？从哪开始？"** | **`docs/component-guide.md`** ⭐ v0.5 |
+| "Cron Prompt 怎么写才靠谱？" | `docs/writing-cron-prompts.md` (v0.5) |
+| "怎么自己写 Skill？」 | `docs/skill-authoring-guide.md` (v0.5) |
 | "主 Agent 为什么要多模态？" | `docs/agents.md`（主 Agent 章节） |
 
 ---

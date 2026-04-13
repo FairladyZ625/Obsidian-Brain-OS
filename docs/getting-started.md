@@ -146,7 +146,47 @@ bash scripts/knowledge-lint.sh ~/my-brain
 
 # Test nightly digest initialization
 bash scripts/init-nightly-digest.sh ~/my-brain
+
+# Test PII scanner (v0.5+)
+bash scripts/check-pii.sh --strict
+# Expected: ✅ PII scan passed — 0 hits
 ```
+
+---
+
+## Step 7: Enable Observer (Optional, v0.5+)
+
+Observer is your AI team's daily health monitor. It runs automatically and produces improvement suggestions.
+
+```bash
+# 1. Edit the observer cron prompt
+nano prompts/cron/observer-daily-0001.md
+
+# 2. Set enabled: true
+# 3. Replace {{YOUR_CHANNEL_ID}} with your Discord channel (or remove announce)
+# 4. Add to OpenClaw cron jobs
+openclaw cron import prompts/cron/observer-daily-0001.md
+```
+
+Read [Observer Playbook](agent-playbooks/observer-playbook.md) for full configuration details.
+
+---
+
+## Step 8: Set Up CI/CD (Optional, v0.5+)
+
+If you host your vault on GitHub, enable automatic quality checks:
+
+```bash
+# After pushing to GitHub:
+# 1. Go to Settings → Branches → main → Branch protection
+# 2. Require: PII scan + Structure check pass before merge
+# 3. These workflows run automatically on every PR:
+#    - .github/workflows/pii-scan.yml
+#    - .github/workflows/structure-check.yml
+#    - .github/workflows/changelog-check.yml
+```
+
+Read [Release Playbook](agent-playbooks/release-playbook.md) for the complete release process.
 
 ---
 
@@ -170,3 +210,6 @@ See [FAQ](faq.md) for common issues.
 - Scripts fail → source `scripts/config.env` first
 - Cron jobs not running → verify OpenClaw is running (`openclaw gateway status`)
 - Knowledge lint finds nothing → confirm `BRAIN_PATH` points to vault root
+- PII scan fails → read [PII Deidentification Guide](references/pii-deidentification-guide.md)
+- Want to see everything included? → read [Component Guide (⭐)](component-guide.md)
+- Want to contribute? → read [Release Playbook](agent-playbooks/release-playbook.md)

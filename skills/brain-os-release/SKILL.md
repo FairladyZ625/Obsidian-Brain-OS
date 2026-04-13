@@ -53,6 +53,18 @@ For every new script:
 - Has a comment block explaining purpose and required env vars
 - Does not hardcode absolute paths
 
+### Step 2.5: Doc & installer sync check (new in v0.5)
+
+When adding **new features**, also check if these need updating:
+- **`setup.sh`** — Does the new feature need an install step or config var?
+- **`skills/brain-os-installer/SKILL.md`** — Does the installer need a new phase or option?
+- **`docs/getting-started.md`** — Does the onboarding guide need a new section?
+- **`docs/architecture.md`** — Does the architecture diagram need a new component?
+- **README.md / README_CN.md** — Does the top-level feature list need updating?
+
+Rule of thumb: if a user would wonder "how do I set this up?" after reading current docs, something needs updating.
+This check is manual for now — add it to your PR review checklist.
+
 ---
 
 ## Step 3: Update CHANGELOG（双语，必须两份都更新）
