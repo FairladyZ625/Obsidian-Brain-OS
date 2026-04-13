@@ -21,16 +21,16 @@ jobs:
           CHANGED=$(git diff --name-only "$BASE" "$HEAD" 2>/dev/null || git diff --name-only HEAD~1 HEAD)
 
           SKILLS_CHANGED=$(echo "$CHANGED" | grep -E '^(skills|scripts|prompts|setup\.sh)' || true)
-          CHANGELOG_CHANGED=$(echo "$CHANGED" | grep -E '^CHANGELOG\.md$' || true)
+          CHANGELOG_CHANGED=$(echo "$CHANGED" | grep -E '^CHANGELOG(_CN)?\.md$' || true)
 
           if [ -n "$SKILLS_CHANGED" ] && [ -z "$CHANGELOG_CHANGED" ]; then
-            echo "⚠️  skills/scripts/prompts changed but CHANGELOG.md was not updated."
+            echo "⚠️  skills/scripts/prompts changed but neither CHANGELOG.md nor CHANGELOG_CN.md was updated."
             echo ""
             echo "Changed files:"
             echo "$SKILLS_CHANGED"
             echo ""
-            echo "Please add an entry to CHANGELOG.md describing your changes."
-            # Warning only — does not fail the build
+            echo "Please add entries to BOTH CHANGELOG.md (English) and CHANGELOG_CN.md (Chinese)."
+            # Warning only — does not fail the build; docs/ changes are encouraged but not required
             exit 0
           else
             echo "✅ CHANGELOG check passed"

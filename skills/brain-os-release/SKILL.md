@@ -55,26 +55,32 @@ For every new script:
 
 ---
 
-## Step 3: Update CHANGELOG.md
+## Step 3: Update CHANGELOG（双语，必须两份都更新）
 
-Add a new entry at the top of `CHANGELOG.md`:
+每次发版必须同时更新两个文件：
+
+1. **`CHANGELOG.md`**（英文版）— 新增条目在文件顶部
+2. **`CHANGELOG_CN.md`**（中文版）— 同步新增中文对照条目
+
+格式：
 
 ```markdown
 ## [X.Y.Z] — YYYY-MM-DD
 
-### Added
+### Added / 新增
+- **`path/to/file`** — English description / 中文说明
+
+### Changed / 变更
 - ...
 
-### Changed
-- ...
-
-### Fixed
+### Fixed / 修复
 - ...
 ```
 
 Rules:
-- Every PR that touches `skills/`, `scripts/`, `prompts/`, or `setup.sh` must update CHANGELOG
-- Use present tense, imperative mood: "Add X", not "Added X" or "Adds X"
+- Every PR that touches `skills/`, `scripts/`, `prompts/`, or `setup.sh` must update BOTH changelogs
+- Use present tense, imperative mood for English; use Chinese natural phrasing for CN version
+- 两份内容必须一一对应，不能有遗漏
 - Link to relevant files with backtick paths
 
 ---
@@ -93,19 +99,43 @@ Commit types: `feat` / `fix` / `docs` / `refactor` / `chore`
 
 ---
 
-## Step 5: Push and open PR
+## Step 5: Push and open PR（中英双语，强制模板）
 
 ```bash
 git push origin feat/<short-description>
 ```
 
-PR title format: `feat: vX.Y.Z — <one-line summary>`
+PR title format: `feat: vX.Y.Z — <one-line English summary>`
 
-PR body must include:
-1. Version number
-2. Summary of changes (grouped by Added / Changed / Fixed)
-3. PII check result: `✅ PII scan passed` or list of items reviewed
-4. Any breaking changes clearly marked
+PR body **必须使用以下中英双语模板**：
+
+```markdown
+## 📋 更新概览 / Overview
+
+### 中文
+本次更新包含 [一句话中文总结]。
+
+### English
+This update includes [one-line English summary].
+
+---
+
+### 变更详情 / Changes
+
+#### 🆕 新增 / Added
+- **`path/to/file`** — 中文说明 / English description
+
+#### 🔄 变更 / Changed
+- ...
+
+#### 🐛 修复 / Fixed
+- ...
+
+---
+
+### PII 检查结果 / PII Check Result
+✅ PII scan passed — 0 hits
+```
 
 ---
 
@@ -140,3 +170,4 @@ git push origin vX.Y.Z
 - This repo contains no secrets or personal data by design. If you find any, open an issue.
 - The `{{PLACEHOLDER}}` convention is used throughout — replace with your own values, never commit real paths.
 - When in doubt about PII, run `bash scripts/check-pii.sh` and check the output.
+- **Bilingual rule**: All public-facing content (PR body, CHANGELOG, release notes) MUST be bilingual (Chinese + English). Commit messages stay in English per git convention.
