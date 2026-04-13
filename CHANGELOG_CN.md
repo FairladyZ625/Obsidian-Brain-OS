@@ -4,6 +4,33 @@
 
 ---
 
+## [0.5.1] — 2026-04-13
+
+### 新增 / Added
+- **`docs/component-guide.md`** — 完整组件指南：v0.5 包含的所有内容、每个组件的作用、5 分钟快速上手。中英双语。
+- **README.md** + **`README_CN.md`** — 在贡献者文档板块首位添加组件指南链接。
+
+---
+
+## [0.5.0] — 2026-04-13
+
+### 新增 / Added
+- **`CHANGELOG_CN.md`** — 中文版变更日志，与英文版一一对应（双语）。
+- **`docs/agent-playbooks/release-playbook.md`** — 完整发版 SOP：7 步流程、中英双语 PR 模板、常见陷阱。
+- **`docs/agent-playbooks/observer-playbook.md`** — Observer 使用指南：6 步流程、三级安全机制、配置说明。
+- **`docs/references/pii-deidentification-guide.md`** — PII 脱敏完整指南：4 类 PII 模式、标准替换表、常见错误修复。
+- **`docs/writing-cron-prompts.md`** — Cron Prompt 编写最佳实践：系统日期获取、输出格式约束、跨 prompt 协调。
+- **`docs/skill-authoring-guide.md`** — Skill 编写规范：SKILL.md 结构、命名约定、CI 要求。
+- **`docs/nightly-pipeline-guide.md`** — Nightly Pipeline 全景指南：4 阶段架构、交接协议、故障处理。
+
+### 变更 / Changed
+- **`skills/brain-os-release/SKILL.md`** — Step 3 改为必须同时更新两个 CHANGELOG；Step 5 加入强制中英双语 PR 模板。
+- **`.github/workflows/changelog-check.yml`** — CI 检查覆盖 `CHANGELOG_CN.md`；docs/ 变更为可选提醒。
+- **`scripts/check-pii.sh`** — 排除 PII 脱敏指南本身（含教学用示例路径）。
+- **`README.md`** + **`README_CN.md`** — 新增「贡献者与维护者文档」板块，引用全部新文档。
+
+---
+
 ## [0.4.1] — 2026-04-13
 
 ### 修复 / Fixed
