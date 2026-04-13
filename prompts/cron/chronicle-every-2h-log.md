@@ -21,6 +21,7 @@ delivery_mode: webhook
 6. obsidian-brain（Brain OS 迭代）：1491085246702157955
 
 【目标】
+- 第一行先执行系统日期命令（如 `date "+%Y-%m-%d"`）获取**当天日期**，后续所有 `YYYY-MM-DD` 都用这个系统值，禁止自己猜；默认使用运行机器的本地时区
 - 维护当天唯一日志：~/.openclaw/workspace-chronicle/logs/channel-log-YYYY-MM-DD.md
 - 记录上述 5 个频道在“最近2小时时间窗”内的新增消息
 - 在同一份日志里按频道分节描述历史，而不是只写公屏或把所有频道混成一团

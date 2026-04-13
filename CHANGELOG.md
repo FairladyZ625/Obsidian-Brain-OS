@@ -4,6 +4,16 @@ All notable changes to Obsidian Brain OS are documented here.
 
 ---
 
+## [0.4.1] — 2026-04-13
+
+### Fixed
+
+- **`prompts/cron/chronicle-every-2h-log.md`** — Added mandatory system date fetch step so `YYYY-MM-DD` is always derived from the system clock, not guessed by the model, using the running machine's local timezone.
+- **`prompts/cron/daily-knowledge-graph-canvas-0500.md`** — Added Step 0 to fetch system date/day-of-week/timezone before generating the daily canvas; commit message note now explicitly requires system-derived dates.
+- **`prompts/cron/knowledge-lint-weekly.md`** — Added mandatory `target date (yesterday)` fetch via system command and clarified that downstream lint/report paths must use the system-derived date in the running machine's local timezone.
+
+---
+
 ## [0.4.0] — 2026-04-12
 
 ### Added

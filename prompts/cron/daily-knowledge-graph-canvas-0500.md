@@ -12,6 +12,8 @@ delivery_mode: webhook
 
 每日知识图谱生成任务（05:00）。
 
+步骤0：先执行系统日期命令（如 `date "+%Y-%m-%d %A %H:%M %Z"`）获取**今天日期、星期与时区**，后续所有 YYYY-MM-DD 都必须使用系统值，默认使用运行机器的本地时区。
+
 步骤1：运行脚本生成今日知识图谱 Canvas：
 python3 {{USER_HOME}}/.openclaw/workspace/scripts/knowledge-graph-canvas.py
 
@@ -25,7 +27,7 @@ python3 {{USER_HOME}}/.openclaw/workspace/scripts/knowledge-graph-canvas.py
 
 步骤5：git add + git commit。
 Brain仓库：{{USER_HOME}}/Documents/ZeYu-AI-Brain
-commit message：auto: knowledge graph YYYY-MM-DD + agent annotations
+commit message：auto: knowledge graph YYYY-MM-DD + agent annotations（YYYY-MM-DD 使用系统日期）
 
 步骤6：向Discord频道1489421056379846716发送完成通知（2-3行）：
 🧠 知识图谱已更新 YYYY-MM-DD | 节点 X | 连线 Y（含 Z 条Agent标注）| RQ XX/YY
