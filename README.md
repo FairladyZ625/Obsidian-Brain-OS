@@ -37,6 +37,7 @@ English | [中文](README_CN.md)
 Karpathy’s gist describes the *idea*. Brain OS is the *running system*:
 
 - 🤖 **Multi-agent team**: main orchestrator + writer + chronicle historian + review auditor
+- 🔭 **Observer (self-evolution monitor)**: daily AI team health check — collects session data & gateway logs, detects recurring errors, generates improvement suggestions, maintains an operational memory ledger. Three-level safety: alert only → suggest fix → execute with human confirmation. [Observer Playbook →](docs/agent-playbooks/observer-playbook.md)
 - ⏰ **Nightly automation**: 4-stage pipeline runs while you sleep (article integration → conversation mining → amplification → digest)
 - 📋 **Personal ops layer**: daily dashboard, todo tracking, commitment management, morning brief
 - 🍎 **Apple Reminders integration**: bidirectional sync between Brain todos and Apple Reminders — morning push, evening pull-back
