@@ -1,214 +1,213 @@
 ---
 name: deep-research
-description: >
-  深度研究技能。当用户请求对某一主题进行类似学术期刊或白皮书级别的全面、深入研究时使用。采用多阶段研究方式，利用网络搜索和内容分析，通过多个子代理实现高并行度，最终产出带引用来源的详细 Markdown 报告。Use when: 深度研究, comprehensive research, in-depth analysis, academic research, whitepaper, multi-source synthesis, research report.
+description: This skill should be used when users request comprehensive, in-depth research on a topic that requires detailed analysis similar to an academic journal or whitepaper. The skill conducts multi-phase research using web search and content analysis, employing high parallelism with multiple subagents, and produces a detailed markdown report with citations.
 license: MIT
 ---
 
 # Deep Research
 
-深度研究技能，对复杂主题进行全面调研，产出类似学术期刊或白皮书级别的详细报告。
+This skill conducts comprehensive research on complex topics, producing detailed reports similar to academic journals or whitepapers.
 
-## 目标
+## Purpose
 
-深度研究技能将广泛的研究问题转化为详尽、有据可查的报告，方式包括：
+The deep-research skill transforms broad research questions into thorough, well-cited reports by:
 
-1. 进行结构化访谈，了解研究目标
-2. 执行迭代式深入，识别关键领域
-3. 启动并行研究子代理，实现全面覆盖
-4. 将发现综合为连贯的、学术风格的报告
-5. 维护独立的参考文献，记录所有来源
+1. Conducting structured interviews to understand research goals
+2. Performing iterative deepening to identify key areas
+3. Launching parallel research subagents for comprehensive coverage
+4. Synthesizing findings into a cohesive, academically-styled report
+5. Maintaining a separate bibliography with all sources
 
-## 何时使用本技能
+## When to Use This Skill
 
-在以下情况下使用本技能：
-- 对复杂主题进行深入研究
-- 需要全面报告或分析
-- 研究需要多个来源和综合分析
-- 需要类似学术或白皮书级别的深度分析
-- 需要有proper引用的详细分析
+Use this skill when the user requests:
+- In-depth research on a complex topic
+- A comprehensive report or analysis
+- Research that requires multiple sources and synthesis
+- Deep investigation similar to academic or whitepaper standards
+- Detailed analysis with proper citations
 
-**不要**使用本技能：
-- 简单的事实查询
-- 单来源信息查找
-- 仅限代码仓库内的研究
-- 快速探索性搜索
+Do NOT use this skill for:
+- Simple fact-finding queries
+- Single-source information lookup
+- Code-only research within repositories
+- Quick exploratory searches
 
-## 研究流程
+## Research Process
 
-### 阶段 1：访谈与范围定义
+### Phase 1: Interview and Scope Definition
 
-首先向用户访谈，了解其研究需求。询问以下方面：
+Start by interviewing the user to understand their research needs. Ask questions about:
 
-1. **研究目标**：想理解什么或决定什么？
-2. **深度与广度**：研究需要多全面？
-3. **目标读者**：谁会读这份报告？
-4. **关键问题**：需要回答哪些具体问题？
-5. **时间限制**：这是有时效性的信息吗？
-6. **范围边界**：哪些应明确包含或排除？
+1. **Research objectives**: What are they trying to understand or decide?
+2. **Depth and breadth**: How comprehensive should the research be?
+3. **Target audience**: Who will read this report?
+4. **Key questions**: What specific questions need answering?
+5. **Time constraints**: Is this time-sensitive information?
+6. **Scope boundaries**: What should be explicitly included or excluded?
 
-访谈应充分但高效。使用 AskUserQuestion 工具，最多 2-3 轮问题内完成信息收集。
+The interview should be thorough but efficient. Use the AskUserQuestion tool to gather this information in 2-3 rounds of questions maximum.
 
-### 阶段 2：初步侦察（迭代式深入）
+### Phase 2: Initial Reconnaissance (Iterative Deepening)
 
-访谈后，执行初步侦察以识别研究全貌：
+After the interview, perform initial reconnaissance to identify the research landscape:
 
-1. 进行 3-5 次广泛网络搜索，映射主题空间
-2. 识别关键子主题、领域和关注点
-3. 记录有价值的来源、权威声音和研究空白
-4. 创建研究计划，列出 10+ 个具体研究线索
+1. Conduct 3-5 broad web searches to map the topic space
+2. Identify key subtopics, domains, and areas of focus
+3. Note promising sources, authoritative voices, and research gaps
+4. Create a research plan outlining 10+ specific research threads
 
-此阶段应相对快速（5-10 次搜索），但要有策略。目标是创建有依据的计划，为并行探索阶段做准备。
+This phase should be relatively quick (5-10 searches) but strategic. The goal is to create an informed plan for the parallel exploration phase.
 
-在工作中记录发现，但暂不创建最终报告。
+Document findings in working notes but do not create the final report yet.
 
-### 阶段 3：并行探索（高并行度）
+### Phase 3: Parallel Exploration (High Parallelism)
 
-使用 `Task` 工具（`subagent_type="general-purpose"`）启动 10+ 个并行研究子代理。每个代理调查阶段 2 中识别的特定研究线索。
+Launch 10+ parallel research subagents using the Task tool with subagent_type="general-purpose". Each agent should investigate a specific research thread identified in Phase 2.
 
-**代理分配策略：**
-- 给每个代理分配聚焦的研究问题或子主题
-- 确保代理有清晰、不重叠的目标
-- 指示代理广泛使用 WebSearch 和 WebFetch 工具
-- 要求每个代理返回结构化的发现和来源
+**Agent assignment strategy:**
+- Assign each agent a focused research question or subtopic
+- Ensure agents have clear, non-overlapping objectives
+- Instruct agents to use WebSearch and WebFetch tools extensively
+- Request that each agent return structured findings with sources
 
-**示例代理任务：**
-- "研究 [具体方法] 的技术实现"
-- "调查 [主题] 的历史背景和演变"
-- "对比 [方法 A] 与 [方法 B]"
-- "分析 [子主题] 当前研究状态"
-- "识别 [领域] 的关键挑战和局限性"
+**Example agent tasks:**
+- "Research the technical implementation of [specific approach]"
+- "Investigate the historical context and evolution of [topic]"
+- "Compare and contrast [approach A] vs [approach B]"
+- "Analyze the current state of research on [subtopic]"
+- "Identify key challenges and limitations in [area]"
 
-在单条消息中启动所有代理（多条 Task 工具调用），以获得最大效率。
+Launch all agents in parallel (in a single message with multiple Task tool calls) for maximum efficiency.
 
-### 阶段 4：综合与报告生成
+### Phase 4: Synthesis and Report Generation
 
-所有子代理完成后：
+After all subagents complete:
 
-1. 回顾并行研究阶段的所有发现
-2. 识别共同主题、冲突和关键洞察
-3. 使用混合格式构建报告（见下文）
-4. 以学术严谨性和proper引用撰写报告
-5. 创建独立的 sources bibliography 文件
+1. Review all findings from the parallel research phase
+2. Identify common themes, conflicts, and key insights
+3. Structure the report using a hybrid format (see below)
+4. Write the report with academic rigor and proper citations
+5. Create a separate sources bibliography file
 
-**报告结构（混合格式）：**
+**Report structure (hybrid format):**
 
-报告始终应包含以下核心部分：
-- **执行摘要**：关键发现 2-3 段概述
-- **【自适应中间部分】**：根据主题构建（比较、历史分析、技术深入等）
-- **批判性分析**：深度评估、综合与解读
-- **结论**：发现摘要与影响
-- **参考文献**：全文使用的编号引用
+The report should always include these core sections:
+- **Executive Summary**: 2-3 paragraph overview of key findings
+- **[Adaptive Middle Sections]**: Structure based on topic (comparisons, historical analysis, technical deep-dives, etc.)
+- **Critical Analysis**: Deep evaluation, synthesis, and interpretation
+- **Conclusions**: Summary of findings and implications
+- **References**: Numbered citations used throughout
 
-中间部分应根据研究主题进行调整：
-- 比较研究：并排分析部分
-- 技术主题：架构、实现、权衡部分
-- 历史主题：时间线、演变、影响部分
-- 调研研究：图景、分类、评估部分
+The middle sections should adapt to the research topic:
+- For comparative research: Side-by-side analysis sections
+- For technical topics: Architecture, implementation, tradeoffs sections
+- For historical topics: Timeline, evolution, impact sections
+- For survey research: Landscape, categories, evaluation sections
 
-**引用风格：**
-- 正文使用编号引用：[1]、[2] 等
-- 相关时包含内联来源上下文："根据 Smith 等人 [3]，..."
-- 文末保留完整参考文献部分
-- 创建独立的 `sources-bibliography.md` 文件，包含完整来源详情
+**Citation style:**
+- Use numbered citations in the text: [1], [2], etc.
+- Include inline source context when relevant: "According to Smith et al. [3], ..."
+- Maintain a complete references section at the end
+- Create a separate `sources-bibliography.md` file with full source details
 
-### 阶段 5：输出
+### Phase 5: Output
 
-在当前工作目录保存两个文件：
+Save two files in the current working directory:
 
-1. **[主题名]-report.md**：主要研究报告
-2. **[主题名]-sources.md**：完整参考文献，包含：
-   - 完整 URL
-   - 访问日期
-   - 来源描述
-   - 关键摘录或引文
-   - 相关性说明
+1. **[topic-name]-report.md**: The main research report
+2. **[topic-name]-sources.md**: Complete bibliography with:
+   - Full URLs
+   - Access dates
+   - Source descriptions
+   - Key excerpts or quotes
+   - Relevance notes
 
-使用基于研究主题的清晰、描述性文件名（如 "quantum-computing-hardware-report.md"）。
+Use clear, descriptive filenames based on the research topic (e.g., "quantum-computing-hardware-report.md").
 
-告知用户文件位置，并提供研究发现简要摘要。
+Inform the user of the file locations and provide a brief summary of the research findings.
 
-## 最佳实践
+## Best Practices
 
-### 研究质量
+### Research Quality
 
-- 优先权威、最近的来源（尤其是时效性主题）
-- 跨多个来源交叉验证声明
-- 记录冲突信息或不同观点
-- 区分事实、专家意见和推测
-- 对可用信息的局限性保持透明
+- Prioritize authoritative, recent sources (especially for time-sensitive topics)
+- Cross-reference claims across multiple sources
+- Note conflicting information or perspectives
+- Distinguish between facts, expert opinions, and speculation
+- Be transparent about limitations in available information
 
-### 写作风格
+### Writing Style
 
-- 使用清晰、精确的学术语言
-- 首次使用时定义技术术语和缩写
-- 为复杂概念提供背景和铺垫
-- 使用结构化格式（标题、列表、表格）提高可读性
-- 在相关时包含数据、统计和具体例子
+- Use clear, precise academic language
+- Define technical terms and acronyms on first use
+- Provide context and background for complex concepts
+- Use structured formatting (headers, lists, tables) for readability
+- Include data, statistics, and concrete examples where relevant
 
-### 来源管理
+### Source Management
 
-- 在整个研究过程中保持细致的来源追踪
-- 纳入信息时立即引用来源
-- 尽可能优先使用原始来源而非二手来源
-- 包含多样化的观点和来源
-- 跨多个来源验证关键声明
+- Maintain meticulous source tracking throughout research
+- Cite sources immediately when incorporating information
+- Prefer primary sources over secondary when possible
+- Include diverse perspectives and sources
+- Verify critical claims across multiple sources
 
-### 效率
+### Efficiency
 
-- 真正并行启动代理（单消息，多工具调用）
-- 成本敏感时对子代理使用 `model="haiku"`
-- 通过清晰的任务划分避免代理间重复研究
-- 迭代进行：侦察 → 并行研究 → 综合
+- Launch agents truly in parallel (single message, multiple tool calls)
+- Use model="haiku" for subagents when appropriate for cost savings
+- Avoid redundant research between agents through clear task delineation
+- Work iteratively: reconnaissance → parallel research → synthesis
 
-## 常见模式
+## Common Patterns
 
-### 比较研究
-比较技术、方法或解决方案时：
-1. 并行研究每个选项
-2. 创建结构化比较部分（特性、性能、成本、权衡）
-3. 使用表格进行并排比较
-4. 提供明确的建议或权衡分析
+### Comparative Research
+When comparing technologies, approaches, or solutions:
+1. Research each option thoroughly in parallel
+2. Create structured comparison sections (features, performance, costs, tradeoffs)
+3. Use tables for side-by-side comparisons
+4. Provide clear recommendations or trade-off analysis
 
-### 技术深入
-研究技术主题时：
-1. 从基础知识和关键概念开始
-2. 深入实现细节和架构
-3. 涵盖实际应用和案例研究
-4. 讨论局限性、挑战和未来方向
+### Technical Deep-Dives
+When researching technical topics:
+1. Start with fundamentals and key concepts
+2. Progress to implementation details and architecture
+3. Cover real-world applications and case studies
+4. Address limitations, challenges, and future directions
 
-### 市场/图景研究
-调研某领域或市场时：
-1. 对图景进行分类（玩家类型、细分、方法）
-2. 描述主要参与者或解决方案
-3. 识别趋势和模式
-4. 分析影响和未来展望
+### Market/Landscape Research
+When surveying a domain or market:
+1. Categorize the landscape (player types, segments, approaches)
+2. Profile key players or solutions
+3. Identify trends and patterns
+4. Analyze implications and future outlook
 
-### 历史/演变研究
-调查某事物如何发展时：
-1. 建立时间线和关键里程碑
-2. 识别推动力和催化剂
-3. 分析影响和后果
-4. 将历史背景与当前状态联系起来
+### Historical/Evolution Research
+When investigating how something developed:
+1. Establish timeline and key milestones
+2. Identify driving forces and catalysts
+3. Analyze impact and consequences
+4. Connect historical context to current state
 
-## 参考文献
+## References
 
-在参考文献文件中存储详细来源信息：
+Store detailed source information in the references file:
 
 ```markdown
-# [主题] 研究来源
+# Research Sources for [Topic]
 
-## [1] 来源标题
+## [1] Source Title
 - **URL**: https://example.com/article
-- **访问日期**: 2025-11-13
-- **类型**: 学术论文 / 博文 / 文档 / 新闻文章
-- **关键要点**:
-  - 主要发现或声明 1
-  - 主要发现或声明 2
-- **相关性**: 此来源对研究的重要性
+- **Accessed**: 2025-11-13
+- **Type**: Academic paper / Blog post / Documentation / News article
+- **Key Points**:
+  - Main finding or claim 1
+  - Main finding or claim 2
+- **Relevance**: Why this source matters to the research
 
-## [2] 来源标题
+## [2] Source Title
 ...
 ```
 
-这使主报告保持整洁，同时保留完整来源详情供验证和后续研究。
+This allows the main report to remain clean while preserving full source details for verification and further research.

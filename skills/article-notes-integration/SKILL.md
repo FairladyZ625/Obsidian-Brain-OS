@@ -59,6 +59,34 @@ A successful run should produce some or all of:
 - Candidate-only pattern / open-question surfaces
 - Integration reports
 
+## Raw Asset Storage Rule（2026-04-13）
+
+这个 skill 必须严格区分：
+
+### 正式知识层（可提交 Git）
+- 提炼后的文章 note `.md`
+- relation / topic / open-question / digest / report 等结构化产物
+
+### 原始抓取层（默认不提交 Git）
+- 微信/小红书抓下来的整套图片
+- OCR 图包
+- 原始 PDF / EPUB / Office 附件
+- debug html
+- `.raw/` / `raw/` 响应
+- 任何可再抓取或可再生成的中间素材
+
+### 默认本地落点
+统一放到：
+- `LOCAL-LARGE-FILES/knowledge-sources/`
+
+例如：
+- `LOCAL-LARGE-FILES/knowledge-sources/ai-agent/2026-04-12-harness-survey/`
+
+### 禁止事项
+- 不要把 `_images-*`、`images/`、`.raw/`、原始 PDF 当作正式知识产物提交到 Brain Git
+- 不要为了“资料完整”把整包截图/附件塞进 `03-KNOWLEDGE/`
+- 如果正文需要引用原始资产，只在 note 中写来源链接或本地路径说明
+
 ## Cross-Reference Protocol（每次 ingest 后执行）
 
 每次处理文章落库后，按以下步骤执行交叉引用：

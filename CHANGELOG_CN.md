@@ -4,6 +4,18 @@
 
 ---
 
+## [0.5.2] — 2026-04-14
+
+### 新增 / Added
+- **`docs/nightly-knowledge-flywheel-ops.md`** — Nightly knowledge flywheel 三阶段（02:00 / 03:00 / 04:00）运维手册：成功定义、重跑规则、告警条件，以及为什么 no-op 也是有效结果。
+
+### 变更 / Changed
+- **`skills/article-notes-integration/SKILL.md`** — 新增 Raw Asset Storage Rule，明确区分正式知识产物与原始抓取资产，要求截图 / OCR 图包 / PDF / raw 响应统一进入 `LOCAL-LARGE-FILES/knowledge-sources/`，不进入 Brain Git。
+- **`prompts/article-notes-integration.prompt.md`** — 同步新增原始资产 guardrails，防止 nightly 02:00 阶段把 `_images-*`、`images/`、`.raw/`、`raw/` 或其他源附件提交进正式知识层。
+- **`skills/deep-research/skill.md`** — 社区版本回退为英文版，提升通用可读性。
+
+---
+
 ## [0.5.1] — 2026-04-13
 
 ### 新增 / Added

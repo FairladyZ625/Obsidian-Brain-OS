@@ -30,3 +30,5 @@ Guardrails:
 - Do not auto-run heavy deep research.
 - Do not create a duplicate truth source outside Brain.
 - Do not write run reports into reading or working layers; they belong in `99-SYSTEM/03-INTEGRATION-REPORTS/`.
+- Raw article assets (image packs, OCR screenshots, PDFs, debug html, raw responses) must go to `LOCAL-LARGE-FILES/knowledge-sources/`, not Brain Git.
+- Do not submit `_images-*`, `images/`, `.raw/`, `raw/`, or source attachments as part of the formal knowledge layer.

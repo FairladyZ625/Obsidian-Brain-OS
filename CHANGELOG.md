@@ -4,6 +4,18 @@ All notable changes to Obsidian Brain OS are documented here.
 
 ---
 
+## [0.5.2] — 2026-04-14
+
+### Added
+- **`docs/nightly-knowledge-flywheel-ops.md`** — Operations guide for the 02:00 / 03:00 / 04:00 nightly knowledge flywheel stages: success definition, rerun rules, alert conditions, and why no-op results are valid.
+
+### Changed
+- **`skills/article-notes-integration/SKILL.md`** — Added the Raw Asset Storage Rule to distinguish formal knowledge outputs from raw captured assets, routing screenshots / OCR bundles / PDFs / raw responses into `LOCAL-LARGE-FILES/knowledge-sources/` instead of Brain Git.
+- **`prompts/article-notes-integration.prompt.md`** — Added matching raw-asset guardrails so the nightly 02:00 stage does not commit `_images-*`, `images/`, `.raw/`, `raw/`, or other source attachments into the formal knowledge layer.
+- **`skills/deep-research/skill.md`** — Reverted the community version back to English for broader readability.
+
+---
+
 ## [0.5.1] — 2026-04-13
 
 ### Added
