@@ -1,6 +1,7 @@
 # 🧠 Obsidian Brain OS
 
-> Inspired by [Karpathy's LLM Wiki](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f), but pushed further into a **digital twin operating system** — where your knowledge, tasks, conversations, boundaries, and agent workflows are continuously compiled into a system that can assist, coordinate, and act within controlled scope.
+> We had already been building and operating this system for a long time before realizing it strongly converged with [Karpathy's LLM Wiki](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f) at the conceptual level.  
+> **But Brain OS goes beyond a wiki into a digital twin operating system** — where your knowledge, tasks, conversations, boundaries, and agent workflows are continuously compiled into a system that can assist, coordinate, and act within controlled scope.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 

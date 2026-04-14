@@ -7,7 +7,7 @@ All notable changes to Obsidian Brain OS are documented here.
 ## [0.5.3] — 2026-04-14
 
 ### Changed
-- **`README.md`** — Switched the default GitHub README to Chinese, preserved the Karpathy / LLM Wiki anchor, and rewrote the first-screen positioning around "digital twin", "second brain", "24-hour personal operator", and boundary-controlled work agents; restored Star History to the default homepage.
+- **`README.md`** — Switched the default GitHub README to Chinese, preserved Karpathy / LLM Wiki as an external reference point (not the project origin), and rewrote the first-screen positioning around "digital twin", "second brain", "24-hour personal operator", and boundary-controlled work agents; restored Star History to the default homepage.
 - **`README_EN.md`** — Added the previous English README as the preserved English entry point.
 - **`README_CN.md`** — Converted into a compatibility redirect to the new default Chinese `README.md`.
 

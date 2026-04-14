@@ -7,7 +7,7 @@
 ## [0.5.3] — 2026-04-14
 
 ### 变更 / Changed
-- **`README.md`** — 将 GitHub 默认首页切换为中文，保留 Karpathy / LLM Wiki 概念入口，并把项目第一屏定位重写为“数字分身 / 第二大脑 / 24 小时贴身管家 / 有边界的工作分身”；同时恢复 Star History 到默认首页。
+- **`README.md`** — 将 GitHub 默认首页切换为中文，保留 Karpathy / LLM Wiki 作为外部参照系而非项目起点，并把项目第一屏定位重写为“数字分身 / 第二大脑 / 24 小时贴身管家 / 有边界的工作分身”；同时恢复 Star History 到默认首页。
 - **`README_EN.md`** — 保留原英文 README，作为英文入口页。
 - **`README_CN.md`** — 改为兼容跳转页，统一指向新的默认中文 `README.md`。
 
