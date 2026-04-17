@@ -99,6 +99,7 @@ ask_yn() {
 # =============================================================================
 print_header
 echo "This script will help you set up Obsidian Brain OS."
+echo "Your vault folder name is fully user-defined, it does not need to be named ZeYu-AI-Brain."
 echo "It will:"
 echo "  1. Copy the vault template to your chosen location"
 echo "  2. Configure paths in config.env"
@@ -120,7 +121,7 @@ if $TEST_MODE; then
 else
   DEFAULT_VAULT="$HOME/my-brain"
 fi
-ask "Where do you want to create your Brain OS vault?" "$DEFAULT_VAULT"
+ask "Where do you want to create your Brain OS vault? (any folder name is fine)" "$DEFAULT_VAULT"
 BRAIN_PATH="$REPLY"
 
 if [[ -d "$BRAIN_PATH" ]]; then

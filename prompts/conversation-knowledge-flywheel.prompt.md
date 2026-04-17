@@ -25,7 +25,7 @@ Required workflow:
 10. Report whether the result is actually Obsidian-visible (commit + hook), not just drafted
 
 Constraints:
-- Do not copy raw transcript dumps into ZeYu-AI-Brain
+- Do not copy raw transcript dumps into {{BRAIN_NAME}}
 - Do not force output when there is no real signal
 - `05-PROJECTS/` is the default Brain-side project routing layer; use it for reading context anchors, not as the execution source of truth
 - Do not auto-run heavy NotebookLM DeepResearch in Phase 1 without first preparing internal context pack + constrained research seed

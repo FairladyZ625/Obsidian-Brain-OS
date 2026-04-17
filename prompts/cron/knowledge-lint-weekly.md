@@ -2,7 +2,7 @@
 name: knowledge-lint-weekly
 schedule: "0 1 * * 1"
 agent: main
-model: glm-5-turbo
+model: zai/glm-5.1
 enabled: true
 description: 每周一 01:00 独立触发知识库内容级 Lint（作为 02:00 article-notes-integration lint pass 的备用独立入口）
 delivery_mode: webhook
@@ -10,14 +10,14 @@ delivery_mode: webhook
 
 # knowledge-lint-weekly
 
-Read and follow the `knowledge-lint` skill at {{USER_HOME}}/.agents/skills/knowledge-lint/SKILL.md.
+Read and follow the `knowledge-lint` skill at {{SKILLS_ROOT}}/knowledge-lint/SKILL.md.
 
-First step (mandatory): run a system date command to get the **target date (yesterday, local machine timezone)**. On macOS, for example: `date -v-1d "+%Y-%m-%d"`. Then run `{{USER_HOME}}/Documents/ZeYu-AI-Brain/scripts/init-nightly-digest.sh {{USER_HOME}}/Documents/ZeYu-AI-Brain <target-date>` so the digest skeleton and run-report directory exist. Then only fill section `## 01:00 Knowledge Lint`.
+First step (mandatory): run a system command to get the **target date (yesterday, local timezone)** — e.g. `date -v-1d "+%Y-%m-%d"` on macOS or `date --date=yesterday "+%Y-%m-%d"` on Linux. Then run `{{USER_HOME}}/Documents/{{BRAIN_NAME}}/scripts/init-nightly-digest.sh {{USER_HOME}}/Documents/{{BRAIN_NAME}} <target-date>` so the digest skeleton and run-report directory exist. Then only fill section `## 01:00 Knowledge Lint`.
 
-Execute a full knowledge base content lint for ZeYu-AI-Brain:
-- Brain root: {{USER_HOME}}/Documents/ZeYu-AI-Brain
+Execute a full knowledge base content lint for {{BRAIN_NAME}}:
+- Brain root: {{USER_HOME}}/Documents/{{BRAIN_NAME}}
 - Run scripts/knowledge-lint.sh (or perform LLM-based equivalent if script is missing)
-- Use the system-derived target date above, not a guessed date; default to the running machine's local timezone
+- Use the system-derived target date above, not a guessed date
 - Write machine-facing report to 03-KNOWLEDGE/99-SYSTEM/03-INTEGRATION-REPORTS/run-reports/YYYY-MM-DD/knowledge-lint-YYYY-MM-DD.md
 - Update human-facing digest at 03-KNOWLEDGE/01-READING/04-DIGESTS/nightly-digest-YYYY-MM-DD.md under section `## 01:00 Knowledge Lint`
 - Commit to Brain git

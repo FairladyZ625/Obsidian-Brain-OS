@@ -34,6 +34,8 @@ openclaw status
 
 ## Skills Setup
 
+Before you start: your vault name is user-defined. In Brain OS docs, `BRAIN_PATH` or `{{BRAIN_ROOT}}` means your own vault root path, not a fixed folder name.
+
 Copy the Brain OS skills to your OpenClaw skills directory:
 
 ```bash
@@ -83,7 +85,7 @@ Edit `~/.openclaw/cron/jobs.json` directly. See `cron-examples/` for the full fo
 
 ### Required Placeholders
 
-Before enabling any cron job, replace these in the config files:
+Before enabling any cron job, replace these in the config files. If you see `BRAIN_PATH` or `{{BRAIN_ROOT}}`, both refer to your own vault root path.
 
 | Placeholder | Replace With | Example |
 |-------------|-------------|---------|

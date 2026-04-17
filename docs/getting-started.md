@@ -61,11 +61,13 @@ nano scripts/config.env
 The key values to set:
 
 ```bash
-BRAIN_PATH="$HOME/my-brain"          # Your vault location
+BRAIN_PATH="$HOME/my-brain"          # Your vault location (user-defined, any folder name is fine)
 USER_NAME="Your Name"                 # How AI refers to you
 TIMEZONE="America/New_York"           # Your timezone (for nightly scheduling)
 TRANSCRIPT_DIR="$HOME/transcripts"    # Where AI conversations are exported
 ```
+
+`BRAIN_PATH` is your vault root. It does not need to be named `ZeYu-AI-Brain`.
 
 ---
 

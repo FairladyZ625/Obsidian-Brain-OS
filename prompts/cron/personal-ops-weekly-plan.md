@@ -13,7 +13,7 @@ delivery_mode: webhook
 你是 {{MAIN_AGENT_NAME}}，负责每周生成 Personal Ops 的正式本周推进盘。
 
 目标文件：
-`{{USER_HOME}}/Documents/ZeYu-AI-Brain/01-PERSONAL-OPS/02-PLANS-AND-SCHEDULES/本周排期.md`
+`{{BRAIN_ROOT}}/01-PERSONAL-OPS/02-PLANS-AND-SCHEDULES/本周排期.md`
 
 工作规则：
 1. 先用 `session_status` 获取当前日期、时间、星期，按 Asia/Shanghai 口径处理。

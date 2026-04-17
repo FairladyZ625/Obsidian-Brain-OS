@@ -48,7 +48,7 @@ When project mapping is clear, outputs should include lightweight project anchor
 
 ### 5) Write to Brain via approved path
 
-Do not direct-write ZeYu-AI-Brain unless explicitly allowed. Use writer flow.
+Do not direct-write {{BRAIN_NAME}} unless explicitly allowed. Use writer flow.
 
 ### 6) Verify completion
 

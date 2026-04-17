@@ -58,7 +58,8 @@ echo '"repos":{'
 
 # 扫描各仓库
 workspace_part=$(scan_repo "workspace" "$HOME/.openclaw/workspace")
-brain_part=$(scan_repo "brain" "$HOME/Documents/ZeYu-AI-Brain")
+brain_root="${BRAIN_ROOT:-$HOME/Documents/${BRAIN_NAME:-My-Brain}}"
+brain_part=$(scan_repo "brain" "$brain_root")
 skills_part=$(scan_repo "skills" "$HOME/.agents/skills")
 
 # 输出（处理逗号分隔）

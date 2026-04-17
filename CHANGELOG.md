@@ -4,6 +4,27 @@ All notable changes to Obsidian Brain OS are documented here.
 
 ---
 
+## [0.6.0] — 2026-04-17
+
+### Added
+- **`scripts/check-brain-config-leaks.sh`** — Added a dedicated config-leak scanner to catch author-specific vault names, private paths, internal names, and fixed IDs before they reach OSS.
+- **`.github/workflows/brain-config-scan.yml`** — Added CI enforcement for the config-leak scanner on PRs and pushes to main.
+- **`prompts/cron/brain-os-daily-sync.md`** — Added the OSS-facing Brain OS daily sync prompt for evaluating local upgrades and generating sync plans.
+- **`docs/references/knowledge-asset-boundaries.md`** — Added an OSS-facing governance guide for separating formal knowledge outputs from raw captured assets.
+- **`docs/references/vault-governance-guide.md`** — Added an OSS-facing vault governance guide for directory discipline, plan placement, and structure evolution.
+
+### Changed
+- **`README.md`**, **`README_EN.md`**, **`docs/getting-started.md`**, **`docs/openclaw-setup.md`**, **`docs/obsidian-setup.md`**, **`setup.sh`** — Clarified that vault naming is user-defined, and aligned `BRAIN_PATH` / `{{BRAIN_ROOT}}` as the user-facing vault root concept.
+- **Multiple prompts, skills, and support scripts** — Replaced author-specific vault names, private absolute paths, internal agent names, and fixed IDs with reusable placeholders or environment-based path resolution.
+- **`scripts/scan-today-changes.sh`** — Switched Brain path discovery from a hardcoded vault name to `BRAIN_ROOT` with a safe fallback.
+- **`scripts/check-pii.sh`** — Aligned PII scanning with the new config-leak scanner so the two checks do not conflict.
+
+### Fixed
+- Removed lingering OSS confusion where parts of the repo still implied users had to name their vault `ZeYu-AI-Brain` or match the maintainer's local machine layout.
+- Reduced onboarding ambiguity by making install, docs, prompts, and CI use the same path and naming model.
+
+---
+
 ## [0.5.3] — 2026-04-14
 
 ### Changed

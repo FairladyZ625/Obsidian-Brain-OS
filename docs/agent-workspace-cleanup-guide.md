@@ -174,5 +174,5 @@ ls ~/.openclaw/workspace/*.md ~/.openclaw/workspace/*.sh 2>/dev/null
 
 ---
 
-*版本：v1.0 | 2026-04-08 by {{MAIN_AGENT_NAME}}（小宁）*
+*版本：v1.0 | 2026-04-08 by {{MAIN_AGENT_NAME}}*
 *适用于 OpenClaw workspace 架构，其他框架可参考适配*

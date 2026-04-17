@@ -2,6 +2,8 @@
 
 ---
 
+Your Obsidian vault folder name is user-defined. Throughout Brain OS docs, `BRAIN_PATH` or `{{BRAIN_ROOT}}` means your own vault root path.
+
 ## Core Plugins
 
 These Obsidian plugins are recommended for Brain OS. Install from **Settings → Community Plugins → Browse**.

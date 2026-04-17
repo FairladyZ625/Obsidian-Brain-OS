@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Check for potential duplicate knowledge notes in ZeYu-AI-Brain before writing.
+# Check for potential duplicate knowledge notes in {{BRAIN_NAME}} before writing.
 #
 # Usage:
 #   check-duplicates.sh "<keyword or title>"

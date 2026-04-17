@@ -59,7 +59,7 @@ RESULT=$(grep -rn \
   -E '\b[0-9]{17,19}\b' \
   "$ROOT" \
   --exclude-dir=".git" \
-  2>/dev/null || true)
+  2>/dev/null | grep -vE 'scripts/check-brain-config-leaks\.sh' || true)
 
 if [ -n "$RESULT" ]; then
   echo "$RESULT"

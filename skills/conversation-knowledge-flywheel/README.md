@@ -10,7 +10,7 @@ This skill exists because cron prompts are too thin for the full workflow. The l
 
 - `/Volumes/LIZEYU/Converstions`
 
-The skill reads from that root and does not move raw transcripts into ZeYu-AI-Brain.
+The skill reads from that root and does not move raw transcripts into {{BRAIN_NAME}}.
 
 ## Phase 1 deliverables
 
@@ -21,7 +21,7 @@ The skill reads from that root and does not move raw transcripts into ZeYu-AI-Br
 - Surveillance pre-screen shortlist
 - knowledge-note draft generation
 - daily suggestions draft generation
-- writer-ready output for ZeYu-AI-Brain
+- writer-ready output for {{BRAIN_NAME}}
 - commit / visibility checklist
 
 ## NotebookLM role

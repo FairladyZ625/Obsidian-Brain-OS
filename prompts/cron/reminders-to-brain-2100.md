@@ -16,7 +16,7 @@ enabled: true
 
 1. 运行脚本：
    ```
-   bash {{USER_HOME}}/Documents/ZeYu-AI-Brain/scripts/reminders-to-brain.sh
+   bash {{BRAIN_ROOT}}/scripts/reminders-to-brain.sh
    ```
 
 2. 读取脚本输出，找出：

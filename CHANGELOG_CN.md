@@ -4,6 +4,27 @@
 
 ---
 
+## [0.6.0] — 2026-04-17
+
+### 新增 / Added
+- **`scripts/check-brain-config-leaks.sh`** — 新增专门的配置泄露扫描脚本，用于在进入 OSS 前拦截作者私有 vault 名、绝对路径、内部称呼和固定 ID。
+- **`.github/workflows/brain-config-scan.yml`** — 新增 CI 工作流，在 PR 和 main push 上自动执行配置泄露扫描。
+- **`prompts/cron/brain-os-daily-sync.md`** — 新增面向 OSS 的 Brain OS 每日同步 prompt，用于判断本地升级并生成同步计划。
+- **`docs/references/knowledge-asset-boundaries.md`** — 新增面向 OSS 的知识资产边界治理文档，明确正式知识产物与原始抓取资产的分层。
+- **`docs/references/vault-governance-guide.md`** — 新增面向 OSS 的 vault 治理文档，覆盖目录纪律、计划归位与结构演进规则。
+
+### 变更 / Changed
+- **`README.md`**、**`README_EN.md`**、**`docs/getting-started.md`**、**`docs/openclaw-setup.md`**、**`docs/obsidian-setup.md`**、**`setup.sh`** — 明确说明 vault 名字由用户自定义，并统一 `BRAIN_PATH` / `{{BRAIN_ROOT}}` 的对外语义为“用户自己的知识库根路径”。
+- **多处 prompts、skills 与辅助脚本** — 将作者私有 vault 名称、绝对路径、内部 agent 名称和固定 ID 替换为可复用占位符或基于环境变量的路径解析。
+- **`scripts/scan-today-changes.sh`** — 将 Brain 路径发现方式从写死的 vault 名改为优先读取 `BRAIN_ROOT`，并提供安全 fallback。
+- **`scripts/check-pii.sh`** — 调整与新的配置泄露扫描器对齐，避免两套检查规则互相冲突。
+
+### 修复 / Fixed
+- 移除了仓库中残留的误导性假设，避免让 OSS 用户以为自己的 vault 必须命名为 `ZeYu-AI-Brain`，或必须匹配维护者本机环境。
+- 降低了安装与理解成本，让安装脚本、文档、prompts 与 CI 使用同一套路径和命名模型。
+
+---
+
 ## [0.5.3] — 2026-04-14
 
 ### 变更 / Changed
