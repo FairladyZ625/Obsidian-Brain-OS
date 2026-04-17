@@ -67,7 +67,7 @@ TIMEZONE="America/New_York"           # Your timezone (for nightly scheduling)
 TRANSCRIPT_DIR="$HOME/transcripts"    # Where AI conversations are exported
 ```
 
-`BRAIN_PATH` is your vault root. It does not need to be named `ZeYu-AI-Brain`.
+`BRAIN_PATH` is your vault root. Any folder name is fine.
 
 ---
 

@@ -20,7 +20,7 @@ All notable changes to Obsidian Brain OS are documented here.
 - **`scripts/check-pii.sh`** — Aligned PII scanning with the new config-leak scanner so the two checks do not conflict.
 
 ### Fixed
-- Removed lingering OSS confusion where parts of the repo still implied users had to name their vault `ZeYu-AI-Brain` or match the maintainer's local machine layout.
+- Removed lingering OSS confusion where parts of the repo still implied users had to match the maintainer's vault naming or local machine layout.
 - Reduced onboarding ambiguity by making install, docs, prompts, and CI use the same path and naming model.
 
 ---
