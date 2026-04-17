@@ -51,7 +51,6 @@ Karpathy’s gist describes the *idea*. Brain OS is the *running system*:
 ---
 
 ## Quick Start
-> Your vault name is user-defined. `{{BRAIN_ROOT}}` means your own vault root path, it does not need to be named `ZeYu-AI-Brain`.
 
 ```bash
 # Clone & install
