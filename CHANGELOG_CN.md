@@ -7,6 +7,14 @@
 ## [0.6.0] — 2026-04-17
 
 ### 新增 / Added
+- **`prompts/cron/knowledge-soft-link-sync-nightly.md`** — 新增独立 nightly prompt，用于执行 Knowledge ↔ Project 软关联双向同步，让 project 引用修复与主 02:00–04:00 pipeline 解耦。
+- **`scripts/sync-knowledge-soft-links.py`** — 新增可复用脚本，用于在 knowledge notes、project briefs 与 projects index 之间同步显式声明的 Knowledge ↔ Project 关系。
+
+### 变更 / Changed
+- **`scripts/knowledge-lint.sh`** — 升级为 project-aware 的 lint 脚本：新增 `project_ref` / `related_projects` 校验、project 侧知识路径检查，并同时写出 review report 与 run-report，适合接入 nightly 运维。
+
+
+### 新增 / Added
 - **`scripts/check-brain-config-leaks.sh`** — 新增专门的配置泄露扫描脚本，用于在进入 OSS 前拦截作者私有 vault 名、绝对路径、内部称呼和固定 ID。
 - **`.github/workflows/brain-config-scan.yml`** — 新增 CI 工作流，在 PR 和 main push 上自动执行配置泄露扫描。
 - **`prompts/cron/brain-os-daily-sync.md`** — 新增面向 OSS 的 Brain OS 每日同步 prompt，用于判断本地升级并生成同步计划。

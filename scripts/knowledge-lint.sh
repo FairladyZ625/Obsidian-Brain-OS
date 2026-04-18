@@ -1,21 +1,72 @@
 #!/usr/bin/env bash
-# knowledge-lint.sh — Brain OS 知识库内容健康检查脚本
-# 用法: ./scripts/knowledge-lint.sh [BRAIN_ROOT]
-# 或者: source scripts/config.env && ./scripts/knowledge-lint.sh
+# knowledge-lint.sh — content-level health check for a Brain vault
+# Usage: ./scripts/knowledge-lint.sh [BRAIN_ROOT] [TARGET_DATE]
 
 set -euo pipefail
 
-# ── 配置 ──────────────────────────────────────────────────────
-# 优先用命令行参数，其次用环境变量，最后用默认值
-BRAIN_ROOT="${1:-${BRAIN_PATH:-./vault-template}}"
+BRAIN_ROOT="${1:-${BRAIN_ROOT:-$HOME/my-brain}}"
 DOMAINS_DIR="$BRAIN_ROOT/03-KNOWLEDGE/01-READING/01-DOMAINS"
+WORKING_DIR="$BRAIN_ROOT/03-KNOWLEDGE/02-WORKING"
+INDEXES_DIR="$BRAIN_ROOT/03-KNOWLEDGE/06-INDEXES"
 REVIEWS_DIR="$BRAIN_ROOT/12-REVIEWS/KNOWLEDGEBASE"
 DATE=$(date +%Y-%m-%d)
+TARGET_DATE="${2:-$(date -v-1d +%Y-%m-%d 2>/dev/null || date -d 'yesterday' +%Y-%m-%d)}"
+RUN_REPORT_DIR="$BRAIN_ROOT/03-KNOWLEDGE/99-SYSTEM/03-INTEGRATION-REPORTS/run-reports/$TARGET_DATE"
+RUN_REPORT="$RUN_REPORT_DIR/knowledge-lint-$TARGET_DATE.md"
 REPORT="$REVIEWS_DIR/lint-$DATE.md"
 
-mkdir -p "$REVIEWS_DIR"
+mkdir -p "$REVIEWS_DIR" "$RUN_REPORT_DIR"
 
-# 计数器
+PROJECT_REGISTRY_TSV=$(mktemp)
+trap 'rm -f "$PROJECT_REGISTRY_TSV"' EXIT
+
+python3 - "$BRAIN_ROOT" > "$PROJECT_REGISTRY_TSV" <<'PYEOF'
+import re, sys
+from pathlib import Path
+
+brain_root = Path(sys.argv[1])
+projects_dir = brain_root / "05-PROJECTS"
+
+for brief in projects_dir.rglob("project-brief.md"):
+    text = brief.read_text(encoding="utf-8")
+    if not text.startswith("---"):
+        continue
+    parts = text.split("---", 2)
+    if len(parts) < 3:
+        continue
+    fm = parts[1]
+    m = re.search(r'^project_ref:\s*"?([^"\n]+)"?\s*$', fm, re.MULTILINE)
+    if not m:
+        continue
+    canonical = m.group(1).strip()
+    aliases = {canonical, canonical.lower(), brief.parent.name, brief.parent.name.lower()}
+
+    m_name = re.search(r'^project_name:\s*"?([^"\n]+)"?\s*$', fm, re.MULTILINE)
+    if m_name:
+        name = m_name.group(1).strip()
+        aliases.add(name)
+        aliases.add(name.lower())
+
+    lines = fm.splitlines()
+    in_aliases = False
+    for line in lines:
+        if re.match(r'^aliases:\s*$', line):
+            in_aliases = True
+            continue
+        if in_aliases:
+            m_alias = re.match(r'^\s*-\s+(.+?)\s*$', line)
+            if m_alias:
+                alias = m_alias.group(1).strip().strip('"')
+                aliases.add(alias)
+                aliases.add(alias.lower())
+                continue
+            if line.strip() and not line.startswith(' '):
+                in_aliases = False
+
+    for alias in sorted(aliases):
+        print(f"{alias}\t{canonical}")
+PYEOF
+
 RED=0
 YELLOW=0
 BLUE=0
@@ -23,137 +74,196 @@ RED_CONTENT=""
 YELLOW_CONTENT=""
 BLUE_CONTENT=""
 
-echo "🔍 Knowledge Lint 开始扫描..."
+echo "🔍 Knowledge Lint start..."
 echo "   Brain root: $BRAIN_ROOT"
-echo "   扫描目录: $DOMAINS_DIR"
+echo "   Scan roots: $DOMAINS_DIR | $WORKING_DIR"
 echo ""
 
-# ── Check A: 必填字段 ──────────────────────────────────────────
-echo "  [A] 检查 frontmatter 必填字段..."
-A_ISSUES=""
-REQUIRED_FIELDS=("title" "status" "date" "tags")
+resolve_project_ref() {
+  local key="$1"
+  awk -F '\t' -v key="$key" '$1 == key {print $2; exit}' "$PROJECT_REGISTRY_TSV"
+}
 
+scan_note_roots() {
+  for dir in "$DOMAINS_DIR" "$WORKING_DIR"; do
+    [ -d "$dir" ] || continue
+    find "$dir" -name "*.md" -not -name "*.template.md" -print0
+  done
+}
+
+echo "  [A] Required frontmatter fields..."
+A_ISSUES=""
+REQUIRED_FIELDS=("title" "status" "created" "tags")
 while IFS= read -r -d '' f; do
   FNAME=$(basename "$f" .md)
   for field in "${REQUIRED_FIELDS[@]}"; do
     if ! grep -q "^${field}:" "$f" 2>/dev/null; then
-      A_ISSUES="$A_ISSUES\n- [[${FNAME}]] — 缺少 \`${field}\`"
+      A_ISSUES="$A_ISSUES\n- [[${FNAME}]] — missing \`${field}\`"
       RED=$((RED + 1))
     fi
   done
-  # 检查 source 相关字段
   if ! grep -qE "^(source|source_type|source_url):" "$f" 2>/dev/null; then
-    A_ISSUES="$A_ISSUES\n- [[${FNAME}]] — 缺少 source 相关字段"
+    A_ISSUES="$A_ISSUES\n- [[${FNAME}]] — missing source-related field"
     RED=$((RED + 1))
   fi
-done < <(find "$DOMAINS_DIR" -name "*.md" -not -name "*.template.md" -print0 2>/dev/null)
+done < <(scan_note_roots)
+[ -n "$A_ISSUES" ] && RED_CONTENT="$RED_CONTENT\n### [Check A] Missing required fields\n$A_ISSUES\n"
 
-if [ -n "$A_ISSUES" ]; then
-  RED_CONTENT="$RED_CONTENT\n### [Check A] 缺少必填字段\n$A_ISSUES\n"
-fi
-
-# ── Check B: 引号规范 ──────────────────────────────────────────
-echo "  [B] 检查 frontmatter 引号规范..."
-B_ISSUES=""
-
+echo "  [P] project_ref validity..."
+P_ISSUES=""
 while IFS= read -r -d '' f; do
   FNAME=$(basename "$f" .md)
-  TITLE_LINE=$(grep "^title:" "$f" 2>/dev/null | head -1 || true)
-  if echo "$TITLE_LINE" | grep -qE '^title:[[:space:]]*[^"]' 2>/dev/null; then
-    COLON_COUNT=$(echo "$TITLE_LINE" | grep -o ":" | wc -l | tr -d ' ')
-    if [ "$COLON_COUNT" -gt 1 ]; then
-      B_ISSUES="$B_ISSUES\n- [[${FNAME}]] — title 含多个冒号但未加引号"
+  PROJECT_REF=$(grep "^project_ref:" "$f" 2>/dev/null | head -1 | sed 's/^project_ref:[[:space:]]*//' | tr -d '"' || true)
+  if [ -n "$PROJECT_REF" ]; then
+    CANONICAL_REF=$(resolve_project_ref "$PROJECT_REF")
+    if [ -z "$CANONICAL_REF" ]; then
+      P_ISSUES="$P_ISSUES\n- [[${FNAME}]] — project_ref: ${PROJECT_REF} not registered in 05-PROJECTS"
+      YELLOW=$((YELLOW + 1))
+    elif [ "$CANONICAL_REF" != "$PROJECT_REF" ]; then
+      P_ISSUES="$P_ISSUES\n- [[${FNAME}]] — project_ref: ${PROJECT_REF} is not canonical, suggest ${CANONICAL_REF}"
       YELLOW=$((YELLOW + 1))
     fi
   fi
-done < <(find "$DOMAINS_DIR" -name "*.md" -not -name "*.template.md" -print0 2>/dev/null)
+done < <(scan_note_roots)
+[ -n "$P_ISSUES" ] && YELLOW_CONTENT="$YELLOW_CONTENT\n### [Check P] project_ref validity\n$P_ISSUES\n"
 
-if [ -n "$B_ISSUES" ]; then
-  YELLOW_CONTENT="$YELLOW_CONTENT\n### [Check B] 引号规范问题\n$B_ISSUES\n"
+echo "  [RP] related_projects validity..."
+RP_ISSUES=$(python3 - "$BRAIN_ROOT" "$PROJECT_REGISTRY_TSV" <<'PYEOF'
+import re, sys
+from pathlib import Path
+
+brain_root = Path(sys.argv[1])
+registry_tsv = Path(sys.argv[2])
+valid = set()
+for line in registry_tsv.read_text(encoding='utf-8').splitlines():
+    alias, canonical = line.split('\t', 1)
+    valid.add(canonical.strip())
+
+scan_roots = [
+    brain_root / '03-KNOWLEDGE/01-READING',
+    brain_root / '03-KNOWLEDGE/02-WORKING',
+]
+
+for root in scan_roots:
+    if not root.exists():
+        continue
+    for path in root.rglob('*.md'):
+        text = path.read_text(encoding='utf-8')
+        if not text.startswith('---\n'):
+            continue
+        parts = text.split('---\n', 2)
+        if len(parts) < 3:
+            continue
+        fm = parts[1]
+        lines = fm.splitlines()
+        in_block = False
+        refs = []
+        for line in lines:
+            if not in_block and re.match(r'^related_projects:\s*$', line):
+                in_block = True
+                continue
+            if in_block:
+                m = re.match(r'^\s*-\s+(.+?)\s*$', line)
+                if m:
+                    refs.append(m.group(1).strip().strip('"'))
+                    continue
+                if line.strip() and not line.startswith(' '):
+                    break
+        for ref in refs:
+            if ref not in valid:
+                print(f"- [[{path.stem}]] — related_projects: {ref} not registered in 05-PROJECTS")
+PYEOF
+)
+if [ -n "$RP_ISSUES" ]; then
+  RP_COUNT=$(printf "%s\n" "$RP_ISSUES" | grep -c '^-' || true)
+  YELLOW=$((YELLOW + RP_COUNT))
+  YELLOW_CONTENT="$YELLOW_CONTENT\n### [Check RP] related_projects validity\n$RP_ISSUES\n"
 fi
 
-# ── Check C: Tag 统一性 ──────────────────────────────────────
-echo "  [C] 检查 tag 统一性..."
-C_ISSUES=""
+echo "  [PK] project-side knowledge paths..."
+PK_ISSUES=$(python3 - "$BRAIN_ROOT" <<'PYEOF'
+import re, sys
+from pathlib import Path
 
-ALL_TAGS=$(find "$DOMAINS_DIR" -name "*.md" -exec grep -h "^  - " {} \; 2>/dev/null | sed 's/^[[:space:]]*- //' | sort | uniq -c | sort -rn)
-SINGLETON_TAGS=$(echo "$ALL_TAGS" | awk '$1 == 1 {print $2}' | head -10)
-if [ -n "$SINGLETON_TAGS" ]; then
-  C_ISSUES="$C_ISSUES\n**只出现1次的 tag（可能是孤立/拼写错误）**：\n"
-  while IFS= read -r tag; do
-    C_ISSUES="$C_ISSUES- \`$tag\`\n"
-    BLUE=$((BLUE + 1))
-  done <<< "$SINGLETON_TAGS"
+brain_root = Path(sys.argv[1])
+files = [brain_root / '05-PROJECTS/projects-index.md'] + list((brain_root / '05-PROJECTS').rglob('project-brief.md'))
+for path in files:
+    if not path.exists():
+        continue
+    text = path.read_text(encoding='utf-8')
+    for raw in re.findall(r'`(03-KNOWLEDGE/[^`]+\.md)`', text):
+        if not (brain_root / raw).exists():
+            print(f"- `{path.relative_to(brain_root).as_posix()}` → `{raw}` does not exist")
+PYEOF
+)
+if [ -n "$PK_ISSUES" ]; then
+  PK_COUNT=$(printf "%s\n" "$PK_ISSUES" | grep -c '^-' || true)
+  YELLOW=$((YELLOW + PK_COUNT))
+  YELLOW_CONTENT="$YELLOW_CONTENT\n### [Check PK] project-side knowledge path validity\n$PK_ISSUES\n"
 fi
 
-if [ -n "$C_ISSUES" ]; then
-  BLUE_CONTENT="$BLUE_CONTENT\n### [Check C] Tag 统一性\n$C_ISSUES\n"
+echo "  [E] orphan candidate pages..."
+E_ISSUES=""
+SEARCH_SCOPE="$INDEXES_DIR $DOMAINS_DIR"
+if [ -d "$DOMAINS_DIR" ]; then
+  while IFS= read -r -d '' f; do
+    FNAME=$(basename "$f" .md)
+    REF_COUNT=$(grep -rl "\[\[${FNAME}\]\]" $SEARCH_SCOPE 2>/dev/null | grep -v "^${f}$" | wc -l | xargs echo 2>/dev/null || echo "0")
+    REF_COUNT=$(echo "$REF_COUNT" | tr -d '[:space:]')
+    if [[ "$REF_COUNT" =~ ^[0-9]+$ ]] && [ "$REF_COUNT" -eq 0 ]; then
+      E_ISSUES="$E_ISSUES\n- [[${FNAME}]] — not referenced by indexes or domains"
+      BLUE=$((BLUE + 1))
+    fi
+  done < <(find "$DOMAINS_DIR" -not -path "*/Article-Notes/*" -name "*.md" -not -name "*.template.md" -print0 2>/dev/null)
+fi
+[ -n "$E_ISSUES" ] && BLUE_CONTENT="$BLUE_CONTENT\n### [Check E] orphan page candidates\n$E_ISSUES\n"
+
+STATUS="healthy"
+if [ "$RED" -gt 0 ]; then
+  STATUS="needs-attention"
+elif [ "$YELLOW" -gt 0 ]; then
+  STATUS="warning"
 fi
 
-# ── Check D: 过时声明 ──────────────────────────────────────────
-echo "  [D] 检查过时声明（active 但超30天未更新）..."
-D_ISSUES=""
-CUTOFF_DATE=$(date -v-30d +%Y-%m-%d 2>/dev/null || date -d '30 days ago' +%Y-%m-%d 2>/dev/null || echo "1970-01-01")
-
-while IFS= read -r -d '' f; do
-  FNAME=$(basename "$f" .md)
-  STATUS=$(grep "^status:" "$f" 2>/dev/null | head -1 | sed 's/^status:[[:space:]]*//' | tr -d '"' || true)
-  UPDATED=$(grep "^updated:" "$f" 2>/dev/null | head -1 | sed 's/^updated:[[:space:]]*//' | tr -d '"' || true)
-  CREATED=$(grep "^date:" "$f" 2>/dev/null | head -1 | sed 's/^date:[[:space:]]*//' | tr -d '"' || true)
-  DATE_TO_CHECK="${UPDATED:-$CREATED}"
-  if [[ "$STATUS" == "active" ]] && [[ -n "$DATE_TO_CHECK" ]] && [[ "$DATE_TO_CHECK" < "$CUTOFF_DATE" ]]; then
-    D_ISSUES="$D_ISSUES\n- [[${FNAME}]] — status:active 但 ${DATE_TO_CHECK} 未更新"
-    BLUE=$((BLUE + 1))
-  fi
-done < <(find "$DOMAINS_DIR" -name "*.md" -not -name "*.template.md" -print0 2>/dev/null)
-
-if [ -n "$D_ISSUES" ]; then
-  BLUE_CONTENT="$BLUE_CONTENT\n### [Check D] 过时声明候选（待复查）\n$D_ISSUES\n"
-fi
-
-# ── 生成报告 ──────────────────────────────────────────────────
-TOTAL_FILES=$(find "$DOMAINS_DIR" -name "*.md" -not -name "*.template.md" 2>/dev/null | wc -l | tr -d ' ')
-
-cat > "$REPORT" << REPORT_EOF
----
-type: "lint-report"
-date: "$DATE"
-scanner: "knowledge-lint.sh"
----
-
+cat > "$REPORT" <<EOF
 # Knowledge Lint Report — $DATE
 
-## 执行摘要
+status: $STATUS
+red: $RED
+yellow: $YELLOW
+blue: $BLUE
 
-- **扫描文件数**：$TOTAL_FILES
-- 🔴 高优先级问题：$RED 条
-- 🟡 中优先级问题：$YELLOW 条
-- 🔵 低优先级 / 建议：$BLUE 条
+## Summary
+- red: $RED
+- yellow: $YELLOW
+- blue: $BLUE
+$RED_CONTENT
+$YELLOW_CONTENT
+$BLUE_CONTENT
+EOF
 
-REPORT_EOF
+cat > "$RUN_REPORT" <<EOF
+# Knowledge Lint Run Report — $TARGET_DATE
 
-if [ $RED -gt 0 ]; then
-  printf "## 🔴 高优先级（需立即处理）\n" >> "$REPORT"
-  printf "$RED_CONTENT\n" >> "$REPORT"
-fi
+status: $STATUS
+red: $RED
+yellow: $YELLOW
+blue: $BLUE
+report: ${REPORT#$BRAIN_ROOT/}
 
-if [ $YELLOW -gt 0 ]; then
-  printf "## 🟡 中优先级（需跟进）\n" >> "$REPORT"
-  printf "$YELLOW_CONTENT\n" >> "$REPORT"
-fi
-
-if [ $BLUE -gt 0 ]; then
-  printf "## 🔵 低优先级 / 建议\n" >> "$REPORT"
-  printf "$BLUE_CONTENT\n" >> "$REPORT"
-fi
-
-if [ $RED -eq 0 ] && [ $YELLOW -eq 0 ] && [ $BLUE -eq 0 ]; then
-  printf "## ✅ 全部通过\n\n知识库内容健康，未发现问题。\n" >> "$REPORT"
-fi
-
-printf "\n---\n*Generated by knowledge-lint.sh at $(date)*\n" >> "$REPORT"
+## Summary
+- red: $RED
+- yellow: $YELLOW
+- blue: $BLUE
+- review report: `${REPORT#$BRAIN_ROOT/}`
+$RED_CONTENT
+$YELLOW_CONTENT
+$BLUE_CONTENT
+EOF
 
 echo ""
-echo "✅ Lint 完成："
-echo "   🔴 $RED  🟡 $YELLOW  🔵 $BLUE"
-echo "   报告：$REPORT"
+echo "✅ Knowledge Lint complete"
+echo "   status: $STATUS"
+echo "   red: $RED | yellow: $YELLOW | blue: $BLUE"
+echo "   report: $REPORT"
+echo "   run-report: $RUN_REPORT"
