@@ -1,0 +1,38 @@
+name: Install Smoke Test
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  install-smoke:
+    name: Non-interactive setup + verify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run non-interactive setup smoke test
+        run: |
+          bash setup.sh \
+            --test \
+            --non-interactive \
+            --profile minimal \
+            --brain-path /tmp/brain-os-smoke-vault \
+            --user-name SmokeTest \
+            --timezone Asia/Shanghai \
+            --language en \
+            --workspace-path /tmp/brain-os-smoke-workspace \
+            --skills-path /tmp/brain-os-smoke-skills \
+            --skip-conversation-mining \
+            --install-skills \
+            --skip-recommended-skills \
+            --skip-observer \
+            --main-agent-name "Smoke Agent" \
+            --main-model gpt-4o \
+            --light-model gpt-4o-mini
+
+      - name: Verify install
+        run: |
+          BRAIN_OS_CONFIG=/tmp/brain-os-test/config.env bash scripts/verify-install.sh

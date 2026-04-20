@@ -9,11 +9,118 @@ set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-# --test mode: redirect all outputs to /tmp/brain-os-test/
+# Modes and CLI args
 TEST_MODE=false
+NON_INTERACTIVE=false
 TEST_BASE="/tmp/brain-os-test"
-for arg in "$@"; do
-  [[ "$arg" == "--test" ]] && TEST_MODE=true
+
+CLI_BRAIN_PATH=""
+CLI_USER_NAME=""
+CLI_TIMEZONE=""
+CLI_LANGUAGE=""
+CLI_WORKSPACE_PATH=""
+CLI_SKILLS_PATH=""
+CLI_TRANSCRIPT_DIR=""
+CLI_INSTALL_CONVS=""
+CLI_INSTALL_SKILLS=""
+CLI_INSTALL_RECOMMENDED=""
+CLI_INIT_OBSERVER=""
+CLI_MAIN_AGENT_NAME=""
+CLI_MAIN_MODEL=""
+CLI_LIGHT_MODEL=""
+CLI_PROFILE=""
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --test)
+      TEST_MODE=true
+      shift
+      ;;
+    --non-interactive)
+      NON_INTERACTIVE=true
+      shift
+      ;;
+    --brain-path)
+      CLI_BRAIN_PATH="$2"
+      shift 2
+      ;;
+    --user-name)
+      CLI_USER_NAME="$2"
+      shift 2
+      ;;
+    --timezone)
+      CLI_TIMEZONE="$2"
+      shift 2
+      ;;
+    --language)
+      CLI_LANGUAGE="$2"
+      shift 2
+      ;;
+    --workspace-path)
+      CLI_WORKSPACE_PATH="$2"
+      shift 2
+      ;;
+    --skills-path)
+      CLI_SKILLS_PATH="$2"
+      shift 2
+      ;;
+    --transcript-dir)
+      CLI_TRANSCRIPT_DIR="$2"
+      shift 2
+      ;;
+    --profile)
+      CLI_PROFILE="$2"
+      shift 2
+      ;;
+    --with-conversation-mining)
+      CLI_INSTALL_CONVS="y"
+      shift
+      ;;
+    --skip-conversation-mining)
+      CLI_INSTALL_CONVS="n"
+      shift
+      ;;
+    --install-skills)
+      CLI_INSTALL_SKILLS="y"
+      shift
+      ;;
+    --skip-skills)
+      CLI_INSTALL_SKILLS="n"
+      shift
+      ;;
+    --install-recommended-skills)
+      CLI_INSTALL_RECOMMENDED="y"
+      shift
+      ;;
+    --skip-recommended-skills)
+      CLI_INSTALL_RECOMMENDED="n"
+      shift
+      ;;
+    --with-observer)
+      CLI_INIT_OBSERVER="y"
+      shift
+      ;;
+    --skip-observer)
+      CLI_INIT_OBSERVER="n"
+      shift
+      ;;
+    --main-agent-name)
+      CLI_MAIN_AGENT_NAME="$2"
+      shift 2
+      ;;
+    --main-model)
+      CLI_MAIN_MODEL="$2"
+      shift 2
+      ;;
+    --light-model)
+      CLI_LIGHT_MODEL="$2"
+      shift 2
+      ;;
+    *)
+      echo "Unknown argument: $1" >&2
+      exit 1
+      ;;
+  esac
 done
 
 if $TEST_MODE; then
@@ -58,12 +165,19 @@ print_err() {
   echo -e "${RED}✗  $1${NC}"
 }
 
+replace_literal_in_file() {
+  local needle="$1"
+  local replacement="$2"
+  local file="$3"
+  OLD="$needle" NEW="$replacement" perl -0pi -e 's/\Q$ENV{OLD}\E/$ENV{NEW}/g' "$file"
+}
+
 ask() {
   local prompt="$1"
   local default="${2:-}"
-  if $TEST_MODE; then
+  if $TEST_MODE || $NON_INTERACTIVE; then
     REPLY="$default"
-    echo -e "${BOLD}${prompt}${NC} [TEST: using default] ${GREEN}${default}${NC}"
+    echo -e "${BOLD}${prompt}${NC} [auto] ${GREEN}${default}${NC}"
     return
   fi
   if [[ -n "$default" ]]; then
@@ -80,9 +194,9 @@ ask() {
 ask_yn() {
   local prompt="$1"
   local default="${2:-y}"
-  if $TEST_MODE; then
+  if $TEST_MODE || $NON_INTERACTIVE; then
     REPLY="$default"
-    echo -e "${BOLD}${prompt}${NC} [TEST: using default] ${GREEN}${default}${NC}"
+    echo -e "${BOLD}${prompt}${NC} [auto] ${GREEN}${default}${NC}"
     [[ "$default" =~ ^[Yy] ]]
     return
   fi
@@ -100,6 +214,7 @@ ask_yn() {
 print_header
 echo "This script will help you set up Obsidian Brain OS."
 echo "Your vault folder name is fully user-defined, it does not need to be named ZeYu-AI-Brain."
+echo "Default install profile: ${CLI_PROFILE:-minimal}"
 echo "It will:"
 echo "  1. Copy the vault template to your chosen location"
 echo "  2. Configure paths in config.env"
@@ -121,7 +236,7 @@ if $TEST_MODE; then
 else
   DEFAULT_VAULT="$HOME/my-brain"
 fi
-ask "Where do you want to create your Brain OS vault? (any folder name is fine)" "$DEFAULT_VAULT"
+ask "Where do you want to create your Brain OS vault? (any folder name is fine)" "${CLI_BRAIN_PATH:-$DEFAULT_VAULT}"
 BRAIN_PATH="$REPLY"
 
 if [[ -d "$BRAIN_PATH" ]]; then
@@ -142,13 +257,13 @@ fi
 # =============================================================================
 print_step "Step 2: User Info"
 
-ask "Your name (used in templates and daily briefs)" "Alex"
+ask "Your name (used in templates and daily briefs)" "${CLI_USER_NAME:-SmokeTest}"
 USER_NAME="$REPLY"
 
-ask "Your timezone (e.g., Asia/Shanghai, America/New_York)" "$(date +%Z)"
+ask "Your timezone (e.g., Asia/Shanghai, America/New_York)" "${CLI_TIMEZONE:-$(date +%Z)}"
 TIMEZONE="$REPLY"
 
-ask "Your primary language (en/zh/other)" "en"
+ask "Your primary language (en/zh/other)" "${CLI_LANGUAGE:-en}"
 LANGUAGE="$REPLY"
 
 # =============================================================================
@@ -158,12 +273,12 @@ print_step "Step 3: Path Configuration"
 
 DEFAULT_WORKSPACE="$HOME/.openclaw/workspace"
 if $TEST_MODE; then DEFAULT_WORKSPACE="$TEST_BASE/workspace"; fi
-ask "Your OpenClaw workspace path" "$DEFAULT_WORKSPACE"
+ask "Your OpenClaw workspace path" "${CLI_WORKSPACE_PATH:-$DEFAULT_WORKSPACE}"
 WORKSPACE_PATH="$REPLY"
 
 DEFAULT_SKILLS="$HOME/.agents/skills"
 if $TEST_MODE; then DEFAULT_SKILLS="$TEST_BASE/skills"; fi
-ask "Your skills directory path" "$DEFAULT_SKILLS"
+ask "Your skills directory path" "${CLI_SKILLS_PATH:-$DEFAULT_SKILLS}"
 SKILLS_PATH="$REPLY"
 
 # =============================================================================
@@ -176,9 +291,9 @@ echo "Requires: Python 3.9+, pip"
 TRANSCRIPT_DIR=""
 INSTALL_CONVS="n"
 
-if ask_yn "Do you want to set up conversation-mining?" "n"; then
+if ask_yn "Do you want to set up conversation-mining?" "${CLI_INSTALL_CONVS:-n}"; then
   INSTALL_CONVS="y"
-  ask "Where are your AI conversation transcripts stored?" "$HOME/conversations"
+  ask "Where are your AI conversation transcripts stored?" "${CLI_TRANSCRIPT_DIR:-$HOME/conversations}"
   TRANSCRIPT_DIR="$REPLY"
 
   echo ""
@@ -235,41 +350,55 @@ print_ok "config.env written to: $CONFIG_FILE"
 print_step "Step 6: Install Skills (Optional)"
 echo "Skills are Agent instruction files that tell AI how to use Brain OS."
 
-if ask_yn "Install core skills to $SKILLS_PATH?" "y"; then
-  if [[ -d "$SKILLS_PATH" ]]; then
-    # Backup existing skills with same name
-    for skill_dir in "$REPO_DIR/skills"/*/; do
-      skill_name="$(basename "$skill_dir")"
-      target="$SKILLS_PATH/$skill_name"
-      if [[ -d "$target" ]]; then
-        print_warn "Skill '$skill_name' already exists — skipping (use --force to overwrite)"
-      else
-        cp -r "$skill_dir" "$target"
-        print_ok "Installed skill: $skill_name"
-      fi
-    done
-  else
-    mkdir -p "$SKILLS_PATH"
-    cp -r "$REPO_DIR/skills"/. "$SKILLS_PATH/"
-    print_ok "All core skills installed to $SKILLS_PATH"
-  fi
+PROFILE="${CLI_PROFILE:-minimal}"
+if [[ ! "$PROFILE" =~ ^(minimal|standard|advanced)$ ]]; then
+  print_err "Invalid profile: $PROFILE (expected minimal|standard|advanced)"
+  exit 1
+fi
 
-  if ask_yn "Also install recommended skills?" "y"; then
+echo "Install profile: $PROFILE"
+
+install_skill_dir() {
+  local skill_name="$1"
+  local source_dir="$REPO_DIR/skills/$skill_name"
+  local target_dir="$SKILLS_PATH/$skill_name"
+
+  if [[ ! -d "$source_dir" ]]; then
+    print_warn "Skill source not found: $skill_name"
+    return
+  fi
+  mkdir -p "$SKILLS_PATH"
+  if [[ -d "$target_dir" ]]; then
+    print_warn "Skill '$skill_name' already exists — skipping"
+  else
+    cp -r "$source_dir" "$target_dir"
+    print_ok "Installed skill: $skill_name"
+  fi
+}
+
+if ask_yn "Install profile-selected skills to $SKILLS_PATH?" "${CLI_INSTALL_SKILLS:-y}"; then
+  case "$PROFILE" in
+    minimal)
+      PROFILE_SKILLS=(brain-os-installer article-notes-integration)
+      ;;
+    standard)
+      PROFILE_SKILLS=(brain-os-installer article-notes-integration personal-ops-driver conversation-knowledge-flywheel knowledge-flywheel-amplifier)
+      ;;
+    advanced)
+      PROFILE_SKILLS=(brain-os-installer article-notes-integration personal-ops-driver conversation-knowledge-flywheel knowledge-flywheel-amplifier observer notebooklm deep-research daily-timesheet brain-os-release)
+      ;;
+  esac
+
+  for skill_name in "${PROFILE_SKILLS[@]}"; do
+    install_skill_dir "$skill_name"
+  done
+
+  if [[ "$PROFILE" != "minimal" ]] && ask_yn "Also install recommended skills?" "${CLI_INSTALL_RECOMMENDED:-n}"; then
     for skill_dir in "$REPO_DIR/skills/recommended"/*/; do
-      skill_name="$(basename "$skill_dir")"
-      target="$SKILLS_PATH/$skill_name"
-      if [[ -d "$target" ]]; then
-        print_warn "Skill '$skill_name' already exists — skipping"
-      else
-        cp -r "$skill_dir" "$target"
-        print_ok "Installed: $skill_name"
-      fi
+      install_skill_dir "$(basename "$skill_dir")"
     done
   fi
 fi
-
-# =============================================================================
-# Step 9: Replace placeholders in cron examples
 
 # =============================================================================
 # Step 7: Observer .learnings/ directory (Optional)
@@ -279,7 +408,7 @@ echo "Observer is the AI team health monitor. It stores its operational memory i
 echo ".learnings/observer/ inside your vault."
 
 LEARNINGS_DIR=""
-if ask_yn "Initialize Observer .learnings/ directory?" "y"; then
+if ask_yn "Initialize Observer .learnings/ directory?" "${CLI_INIT_OBSERVER:-y}"; then
   LEARNINGS_DIR="$BRAIN_PATH/.learnings"
   mkdir -p "$LEARNINGS_DIR/observer/plans"
   mkdir -p "$LEARNINGS_DIR/observer/history"
@@ -328,12 +457,12 @@ for template in "$REPO_DIR/cron-examples"/*.json; do
   filename="$(basename "$template")"
   output="$CRON_OUT_DIR/$filename"
   sed \
-    -e "s|/tmp/brain-os-test/vault|$BRAIN_PATH|g" \
-    -e "s|/tmp/brain-os-test/workspace|$WORKSPACE_PATH|g" \
-    -e "s|/tmp/brain-os-test/skills|$SKILLS_PATH|g" \
+    -e "s|/tmp/brain-os-final-vault|$BRAIN_PATH|g" \
+    -e "s|/tmp/brain-os-final-workspace|$WORKSPACE_PATH|g" \
+    -e "s|/tmp/brain-os-final-skills|$SKILLS_PATH|g" \
     -e "s|{{TRANSCRIPT_DIR}}|${TRANSCRIPT_DIR:-$HOME/conversations}|g" \
-    -e "s|Alex|$USER_NAME|g" \
-    -e "s|CST|$TIMEZONE|g" \
+    -e "s|SmokeTest|$USER_NAME|g" \
+    -e "s|Asia/Shanghai|$TIMEZONE|g" \
     -e "s|{{DISCORD_WEBHOOK_URL}}||g" \
     "$template" > "$output"
   print_ok "Generated: cron-examples/generated/$filename"
@@ -357,11 +486,11 @@ echo ""
 
 # Define all replacements from config.env values
 REPLACEMENTS=(
-  "/tmp/brain-os-test/vault|$BRAIN_PATH"
-  "/tmp/brain-os-test/workspace|$WORKSPACE_PATH"
-  "/tmp/brain-os-test/skills|$SKILLS_PATH"
-  "Alex|$USER_NAME"
-  "CST|$TIMEZONE"
+  "/tmp/brain-os-final-vault|$BRAIN_PATH"
+  "/tmp/brain-os-final-workspace|$WORKSPACE_PATH"
+  "/tmp/brain-os-final-skills|$SKILLS_PATH"
+  "SmokeTest|$USER_NAME"
+  "Asia/Shanghai|$TIMEZONE"
 )
 
 # Agent identity placeholders (set later, after user provides model info)
@@ -384,7 +513,7 @@ for item in "${REPLACEMENTS[@]}"; do
     [[ "$file" == *"generated"* ]] && continue
     [[ "$file" == *"node_modules"* ]] && continue
     if grep -qF "$ph" "$file" 2>/dev/null; then
-      sed -i '' "s|$ph|$val|g" "$file"
+      replace_literal_in_file "$ph" "$val" "$file"
       REPLACE_COUNT=$((REPLACE_COUNT+1))
     fi
   done < <(find "$REPO_DIR" -type f \( -name '*.md' -o -name '*.json' -o -name '*.sh' \) -print0 2>/dev/null)
@@ -405,7 +534,7 @@ if $TEST_MODE; then
       [[ "$file" == *".git"* ]] && continue
       [[ "$file" == *"generated"* ]] && continue
       if grep -qF "$ph" "$file" 2>/dev/null; then
-        sed -i '' "s|$ph|$val|g" "$file"
+        replace_literal_in_file "$ph" "$val" "$file"
         REPLACE_COUNT=$((REPLACE_COUNT+1))
       fi
     done < <(find "$REPO_DIR" -type f \( -name '*.md' -o -name '*.json' \) -print0 2>/dev/null)
@@ -413,11 +542,11 @@ if $TEST_MODE; then
   print_ok "Bulk replacement done ($REPLACE_COUNT substitutions, test mode)"
 else
   # Ask for agent info
-  ask "Your main agent's display name (e.g., Brain OS Manager)" "Brain OS Manager"
+  ask "Your main agent's display name (e.g., Brain OS Manager)" "${CLI_MAIN_AGENT_NAME:-Brain OS Manager}"
   MAIN_AGENT_NAME="$REPLY"
-  ask "Your main model ID (e.g., gpt-4o, claude-sonnet-4)" ""
+  ask "Your main model ID (e.g., gpt-4o, claude-sonnet-4)" "${CLI_MAIN_MODEL:-}"
   MAIN_MODEL="$REPLY"
-  ask "Your lightweight model for routine tasks (e.g., haiku, glm-4.7-flash)" ""
+  ask "Your lightweight model for routine tasks (e.g., haiku, glm-4.7-flash)" "${CLI_LIGHT_MODEL:-}"
   LIGHT_MODEL="$REPLY"
   
   AGENT_VALS=(
@@ -435,7 +564,7 @@ else
       [[ "$file" == *".git"* ]] && continue
       [[ "$file" == *"generated"* ]] && continue
       if grep -qF "$ph" "$file" 2>/dev/null; then
-        sed -i '' "s|$ph|$val|g" "$file"
+        replace_literal_in_file "$ph" "$val" "$file"
         REPLACE_COUNT=$((REPLACE_COUNT+1))
       fi
     done < <(find "$REPO_DIR" -type f \( -name '*.md' -o -name '*.json' \) -print0 2>/dev/null)
@@ -480,10 +609,15 @@ else
 fi
 
 # Check skills
-if [[ -d "$SKILLS_PATH/personal-ops-driver" ]]; then
-  check "personal-ops-driver skill installed" "ok"
+if [[ -d "$SKILLS_PATH/brain-os-installer" ]]; then
+  check "brain-os-installer skill installed" "ok"
 else
-  print_warn "personal-ops-driver not found in $SKILLS_PATH (skip if you didn't install skills)"
+  print_warn "brain-os-installer not found in $SKILLS_PATH (skip if you didn't install skills)"
+fi
+if [[ -d "$SKILLS_PATH/article-notes-integration" ]]; then
+  check "article-notes-integration skill installed" "ok"
+else
+  print_warn "article-notes-integration not found in $SKILLS_PATH (skip if you didn't install skills)"
 fi
 
 # Run knowledge-lint
@@ -522,12 +656,14 @@ echo -e "${BOLD}Your Brain OS is ready.${NC}"
 echo ""
 echo "Next steps (see also docs/component-guide.md for full inventory):"
 echo "  1. Open Obsidian → File → Open Vault → $BRAIN_PATH"
-echo "  2. Read docs/guide/03-daily-workflow.md to understand daily usage"
-echo "  3. Read docs/component-guide.md for a complete feature overview
-  4. Enable Observer: edit prompts/cron/observer-daily-0001.md set enabled: true
-  5. Configure your AI Agent following docs/agents.md"
+echo "  2. Read docs/getting-started.md for the recommended day-one path"
+echo "  3. Read docs/component-guide.md for a complete feature overview"
+echo "  4. Configure your AI Agent following docs/agents.md"
+if [[ -d "$BRAIN_PATH/.learnings/observer" ]]; then
+  echo "  5. If you want Observer, read docs/agent-playbooks/observer-playbook.md"
+fi
 if [[ $INSTALL_CONVS == "y" ]]; then
-  echo "  4. Test conversation export: conversation-mining --no-open --days 1"
+  echo "  6. Test conversation export: conversation-mining --no-open --days 1"
 fi
 echo ""
 echo -e "${BLUE}Full documentation: https://github.com/FairladyZ625/Obsidian-Brain-OS${NC}"

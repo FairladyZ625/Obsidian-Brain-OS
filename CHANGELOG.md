@@ -4,6 +4,23 @@ All notable changes to Obsidian Brain OS are documented here.
 
 ---
 
+## [0.7.0] — 2026-04-20
+
+### Added
+- **`INSTALL_FOR_AGENTS.md`** — Added a dedicated agent-first installation guide with a single linear happy path and a default Minimal profile recommendation.
+- **`docs/install-profiles.md`** — Added explicit Minimal / Standard / Advanced install tiers so onboarding can scale from first-run to full-system adoption.
+- **`scripts/verify-install.sh`** — Added a post-install verifier that checks config, vault structure, installed skills, lint execution, and PII scan results.
+- **`.github/workflows/install-smoke.yml`** — Added CI smoke coverage for `setup.sh --non-interactive --profile minimal` followed by `verify-install.sh`.
+
+### Changed
+- **`setup.sh`** — Added non-interactive CLI flags, profile-aware skill installation, cross-platform placeholder replacement, and cleaner day-one next-step guidance.
+- **`README.md`**, **`README_EN.md`**, **`docs/getting-started.md`**, **`docs/zh/getting-started.md`**, **`docs/component-guide.md`** — Reworked install entry points around agent install, install profiles, verification, and the minimal-success path.
+- **`skills/brain-os-installer/SKILL.md`** — Re-aligned the installer skill to the current docs tree and removed guidance that implied unsupported install flows.
+
+### Fixed
+- Removed onboarding drift where the repo described install layering, but the setup flow still behaved like a broad all-in install.
+- Removed macOS-only in-place replacement behavior from `setup.sh`, improving Linux friendliness for agent-driven installs and CI.
+
 ## [0.6.1] — 2026-04-18
 
 ### Added

@@ -51,30 +51,32 @@ description: >
 
 根据回答推荐方案，并**引导用户阅读对应文档**：
 
-### 方案 A：知识系统
-安装内容：vault 知识层 + 文章处理 + 深度研究
+### 方案 A：知识系统（Minimal）
+安装内容：vault 知识层 + 最小核心 skills + 基础验证
 
 **引导阅读**：
-- 📖 先读 `docs/zh/guide/00-philosophy.md`（理解为什么这样设计）
-- 📖 再读 `docs/zh/guide/03-daily-workflow.md`（了解日常怎么用）
+- 📖 先读 `docs/install-profiles.md`（理解安装分层）
+- 📖 再读 `docs/getting-started.md`（了解最小安装路径）
+- 📖 装完后读 `docs/component-guide.md`（5 分钟看全貌）
 
-### 方案 B：个人事务管理
+### 方案 B：个人事务管理（Standard）
 安装内容：vault 事务层 + 每日驾驶舱 + 待办管理
 
 **引导阅读**：
-- 📖 先读 `docs/zh/guide/01-agent-setup.md`（Agent 配置是关键）
-- 📖 再读 `docs/zh/guide/02-channel-design.md`（频道设计防止上下文污染）
+- 📖 先读 `docs/install-profiles.md`
+- 📖 再读 `docs/personal-ops.md`
+- 📖 再看 `docs/agents.md`（Agent 配置与职责分工）
 
-### 方案 C：Nightly Pipeline
+### 方案 C：Nightly Pipeline（Standard / Advanced）
 安装内容：全套 vault + 脚本 + prompts + 核心 skills + cron 配置
 
 **引导阅读**：
-- 📖 先读 `docs/zh/guide/00-overview.md`（总览）
-- 📖 再读 `docs/zh/guide/01-agent-setup.md`（Agent 配置）
-- 📖 然后读 `docs/zh/nightly-pipeline.md`（Pipeline 详解）
+- 📖 先读 `docs/component-guide.md`（总览）
+- 📖 再读 `docs/agents.md`（Agent 配置）
+- 📖 然后读 `docs/nightly-pipeline-guide.md` 和 `docs/nightly-pipeline.md`
 
-### 方案 D：完整系统
-全部安装。引导阅读全部 guide 文档。
+### 方案 D：完整系统（Advanced）
+全部安装。优先按 `INSTALL_FOR_AGENTS.md` 走最小成功路径，再逐步启高级模块，不要一上来把所有能力全打开。
 
 ---
 
@@ -89,36 +91,26 @@ description: >
 git clone https://github.com/FairladyZ625/Obsidian-Brain-OS.git
 cd Obsidian-Brain-OS
 
-# 2. 运行交互式安装脚本
+# 2. 运行安装脚本
 bash setup.sh
 ```
+
+**setup.sh 当前主要提供交互式安装。**
 
 **setup.sh 会做什么：**
 1. 询问 vault 路径，复制模板
 2. 询问用户名、时区、语言
 3. 询问 OpenClaw workspace 路径和 skills 路径
 4. 询问是否安装 conversation-mining
-5. **初始化 Observer `.learnings/` 目录**（可选，v0.5 新增）
-6. **运行 PII 扫描验证**（确保仓库无私有数据泄露，v0.5 新增）
-7. 写入 `scripts/config.env`（替换所有 `{{PLACEHOLDER}}`）
-8. 安装 skills（有冲突检测，不会覆盖已有 skill）
-9. 生成已填好 placeholder 的 cron 配置到 `cron-examples/generated/`
-10. 运行验证 checklist（含 Observer 和 PII 检查项）
+5. 写入 `scripts/config.env`
+6. 安装 skills（有冲突检测，不会覆盖已有 skill）
+7. 运行基础检查
 
-**作为 AI Agent，你可以帮用户运行这个脚本：**
+**作为 AI Agent，你当前应该这样做：**
 - 先收集好用户的回答（Q1-Q4）
 - 推断出 BRAIN_PATH、USER_NAME、TIMEZONE、SKILLS_PATH
-- 用 exec 工具运行脚本并传入用户答案
-- 或者直接帮用户填写参数，用 `expect` 或 heredoc 方式非交互式运行：
-
-```bash
-# 非交互式运行示例（AI 代为执行）
-BRAIN_PATH="$HOME/my-brain" \
-USER_NAME="Alex" \
-TIMEZONE="Asia/Shanghai" \
-SKILLS_PATH="$HOME/.agents/skills" \
-bash setup.sh --non-interactive 2>&1
-```
+- 帮用户运行交互式安装，或一步步手动完成最小安装
+- **不要假设当前版本已经支持 `--non-interactive`**；若仓库后续补上该能力，再切到非交互模式
 
 ### 方式 B：手动分步安装（高级用户）
 
@@ -153,10 +145,11 @@ openclaw cron import Obsidian-Brain-OS/cron-examples/generated/personal-ops.json
 安装完成后：
 1. 确认用户能在 Obsidian 中打开 vault
 2. 确认至少一个脚本运行正常
-3. **引导用户阅读 `docs/component-guide.md`** ⭐ v0.5 — 完整组件一览，5 分钟上手
-4. **如启用了 Observer**：引导编辑 `prompts/cron/observer-daily-0001.md`，设 `enabled: true`
-5. **如推到 GitHub**：引导设置 branch protection（PII + Structure check 自动运行）
-6. 告诉用户：系统需要迭代，不是装完就完美的
+3. **引导用户阅读 `docs/component-guide.md`**，不要一次丢太多文档
+4. 如果用户做的是个人事务路径，再引导看 `docs/personal-ops.md`
+5. 如果用户做的是多 Agent / 协作路径，再引导看 `docs/agents.md`
+6. 如启用了 Observer，再引导看 `docs/agent-playbooks/observer-playbook.md`
+7. 告诉用户：系统需要迭代，不是装完就完美的
 
 ---
 
@@ -177,25 +170,24 @@ openclaw cron import Obsidian-Brain-OS/cron-examples/generated/personal-ops.json
 
 | 用户问题 | 引用文档 |
 |---------|---------|
-| **"Agent 怎么配？团队怎么搭？"** | **`docs/agents.md`** ⭐ 最重要 |
-| "频道怎么分？" | `docs/zh/guide/02-channel-design.md` |
-| "日常怎么用？" | `docs/zh/guide/03-daily-workflow.md` |
-| "怎么持续优化？" | `docs/zh/guide/04-iteration-guide.md` |
-| "Obsidian 插件推荐？" | `docs/zh/obsidian-setup.md` |
-| "Cron 怎么配？" | `docs/zh/openclaw-setup.md` |
-| "Skill 怎么用？每个 Skill 干嘛的？" | `docs/agents.md`（Skills 全览章节） |
-| "项目管理推荐？" | `docs/zh/project-management.md` |
-| "常见问题？" | `docs/zh/faq.md` |
-| "conversation-mining 怎么装？" | `tools/conversation-mining/AI_INSTALL.md` |
+| **"Agent 怎么配？团队怎么搭？"** | **`docs/agents.md`** |
+| "我该先装哪一档？" | `docs/install-profiles.md` |
+| "怎么快速开始？" | `docs/getting-started.md` |
+| "Obsidian 怎么配？" | `docs/obsidian-setup.md` |
+| "OpenClaw / cron 怎么配？" | `docs/openclaw-setup.md` |
+| "日常怎么用个人事务系统？" | `docs/personal-ops.md` |
+| "Skill 怎么用？每个 Skill 干嘛的？" | `docs/agents.md` |
+| "项目管理推荐？" | `docs/project-management.md` |
+| "常见问题？" | `docs/faq.md` |
 | "Chronicle 史官是什么？" | `docs/chronicle-agent.md` |
 | "QMD 语义搜索？" | `docs/qmd-setup.md` |
-| **"Observer 观察者怎么配置？"** | **`docs/agent-playbooks/observer-playbook.md`** ⭐ v0.5 |
-| **"怎么发版？PR 怎么写？"** | **`docs/agent-playbooks/release-playbook.md`** ⭐ v0.5 |
-| **"PII 脱敏怎么做？"** | **`docs/references/pii-deidentification-guide.md`** ⭐ v0.5 |
-| **"仓库里有什么？从哪开始？"** | **`docs/component-guide.md`** ⭐ v0.5 |
-| "Cron Prompt 怎么写才靠谱？" | `docs/writing-cron-prompts.md` (v0.5) |
-| "怎么自己写 Skill？」 | `docs/skill-authoring-guide.md` (v0.5) |
-| "主 Agent 为什么要多模态？" | `docs/agents.md`（主 Agent 章节） |
+| **"Observer 观察者怎么配置？"** | **`docs/agent-playbooks/observer-playbook.md`** |
+| **"怎么发版？PR 怎么写？"** | **`docs/agent-playbooks/release-playbook.md`** |
+| **"PII 脱敏怎么做？"** | **`docs/references/pii-deidentification-guide.md`** |
+| **"仓库里有什么？从哪开始？"** | **`docs/component-guide.md`** |
+| "Cron Prompt 怎么写才靠谱？" | `docs/writing-cron-prompts.md` |
+| "怎么自己写 Skill？" | `docs/skill-authoring-guide.md` |
+| "整体架构是什么？" | `docs/architecture.md` |
 
 ---
 

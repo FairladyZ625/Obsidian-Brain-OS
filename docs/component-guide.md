@@ -12,11 +12,11 @@
 | Category / 类别 | Components / 组件 | Count / 数量 |
 |---|---|:---:|
 | Vault Template / Vault 模板 | 8 directories | 1 |
-| Skills / 技能 | Agent instruction packages | 9+ |
-| Scripts / 脚本 | Automation tools | 6 |
+| Skills / 技能 | Agent instruction packages | 10+ |
+| Scripts / 脚本 | Automation + verification tools | 7+ |
 | Cron Prompts / 定时任务模板 | Nightly pipeline + auxiliary | 8 |
 | Documentation / 文档 | User guides + contributor guides | 20+ |
-| CI/CD Workflows | GitHub Actions | 3 |
+| CI/CD Workflows | GitHub Actions | 4 |
 
 ---
 
@@ -83,13 +83,20 @@ Skill 是可复用的指令包，告诉你的 AI agent 如何执行特定任务�
 | Script / 脚本 | Purpose / 用法 | Usage / 使用方式 |
 |---|---|---|
 | **`check-pii.sh`** 🆕 | Scan files for PII before committing | `bash scripts/check-pii.sh --strict` |
+| **`verify-install.sh`** 🆕 | Verify config, vault structure, installed skills, and core checks after setup | `bash scripts/verify-install.sh` |
 | **`scan-today-changes.sh`** | Detect today's changes across repos | Used by daily sync cron |
 | **`brain-to-reminders.sh`** | Push Brain todos → Apple Reminders | `BRAIN_ROOT=/path bash scripts/brain-to-reminders.sh` |
 | **`reminders-to-brain.sh`** | Pull Reminders completion → Brain | `BRAIN_ROOT=/path bash scripts/reminders-to-brain.sh` |
-| **`knowledge-graph-canvas.py`** | Generate daily knowledge graph visualization | `python3 scripts/knowledge-graph-canvas.py` |
 | **`init-nightly-digest.sh`** | Initialize nightly digest skeleton | `bash scripts/init-nightly-digest.sh <brain-root> <date>` |
 
 🆕 = New in v0.4–v0.5
+
+### Install & onboarding / 安装与上手
+
+For the cleanest first-run path:
+- humans: start with `docs/getting-started.md`
+- AI agents: start with `INSTALL_FOR_AGENTS.md`
+- unsure which scope to choose: read `docs/install-profiles.md`
 
 ### PII Safety / PII 安全
 

@@ -9,6 +9,19 @@
 
 ---
 
+## Quick entry points
+
+### I want to install it myself
+- Start with [docs/getting-started.md](docs/getting-started.md)
+
+### I want my AI agent to install it for me
+- Read [INSTALL_FOR_AGENTS.md](INSTALL_FOR_AGENTS.md)
+
+### I want to choose an install tier first
+- Read [docs/install-profiles.md](docs/install-profiles.md)
+
+---
+
 ## The Idea (from Andrej Karpathy)
 
 > *“Instead of just retrieving from raw documents at query time, the LLM incrementally builds and maintains a persistent wiki — a structured, interlinked collection of markdown files that sits between you and the raw sources… The wiki keeps getting richer with every source you add and every question you ask.”*
@@ -53,14 +66,17 @@ Karpathy’s gist describes the *idea*. Brain OS is the *running system*:
 ## Quick Start
 > Your vault name is user-defined. `{{BRAIN_ROOT}}` means your own vault root path, it does not need to be named `ZeYu-AI-Brain`.
 
+If this is your first time, start with the **Minimal** profile. See [docs/install-profiles.md](docs/install-profiles.md).
+
 ```bash
 # Clone & install
 git clone https://github.com/FairladyZ625/Obsidian-Brain-OS.git
 cd Obsidian-Brain-OS
 bash setup.sh
+bash scripts/verify-install.sh
 ```
 
-`setup.sh` walks you through everything interactively: vault path, user info, skills, cron, verification. Use `bash setup.sh --test` for a dry run.
+`setup.sh` walks you through the base install. `verify-install.sh` confirms the vault, config, skills, and core checks are working before you enable more modules.
 
 ### 🚀 One-Click Install (Copy-Paste to Your AI Agent)
 

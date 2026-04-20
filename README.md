@@ -9,6 +9,19 @@
 
 ---
 
+## 快速入口
+
+### 我想自己安装
+- 先看 [docs/getting-started.md](docs/getting-started.md)
+
+### 我想让 AI Agent 帮我安装
+- 直接看 [INSTALL_FOR_AGENTS.md](INSTALL_FOR_AGENTS.md)
+
+### 我想先选安装档位
+- 看 [docs/install-profiles.md](docs/install-profiles.md)
+
+---
+
 ## 这东西到底是什么？
 
 很多人第一次看会困惑：知识库？任务系统？Agent 框架？第二大脑？

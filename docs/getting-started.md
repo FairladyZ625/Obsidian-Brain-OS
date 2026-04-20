@@ -27,51 +27,84 @@ After setup:
 
 ---
 
-## Step 1: Clone and Set Up Your Vault
+## Day-one recommendation
+
+If this is your first time, do **not** start with the full system.
+
+Use:
+- **Minimal** if you mainly want knowledge capture and organization
+- **Standard** if you also want personal ops soon
+- **Advanced** only if you explicitly want the full multi-agent operating system
+
+See [install profiles](install-profiles.md).
+
+---
+
+## Step 1: Clone the repo
 
 ```bash
-# Clone the repo
 git clone https://github.com/FairladyZ625/Obsidian-Brain-OS.git
 cd Obsidian-Brain-OS
-
-# Copy the vault template to your preferred location
-cp -r vault-template ~/my-brain
-
-# Initialize your vault as a git repo
-cd ~/my-brain
-git init
-git add .
-git commit -m "init: Brain OS vault"
 ```
 
-Then open Obsidian → **File → Open Vault** → select `~/my-brain`.
+If you want an AI agent to do the install for you, stop here and use:
+- [INSTALL_FOR_AGENTS.md](../INSTALL_FOR_AGENTS.md)
 
 ---
 
-## Step 2: Configure Your Paths
+## Step 2: Run setup first
+
+The recommended path is:
 
 ```bash
-# Copy the config template
-cp scripts/config.env.example scripts/config.env
-
-# Edit with your actual values
-nano scripts/config.env
+bash setup.sh
 ```
 
-The key values to set:
+Or, if you want an agent-friendly unattended path:
 
 ```bash
-BRAIN_PATH="$HOME/my-brain"          # Your vault location (user-defined, any folder name is fine)
-USER_NAME="Your Name"                 # How AI refers to you
-TIMEZONE="America/New_York"           # Your timezone (for nightly scheduling)
-TRANSCRIPT_DIR="$HOME/transcripts"    # Where AI conversations are exported
+bash setup.sh --non-interactive --profile minimal
 ```
 
-`BRAIN_PATH` is your vault root. It does not need to be named `ZeYu-AI-Brain`.
+This will guide you through:
+- vault path
+- user info
+- workspace path
+- skills path
+- optional extras
+- basic verification
+
+If you prefer to inspect profiles before running setup, read [install profiles](install-profiles.md).
 
 ---
 
-## Step 3: Choose Your Installation Profile
+## Step 3: Open your vault
+
+After setup completes, open Obsidian → **File → Open Vault** → select your chosen vault path.
+
+---
+
+## Step 4: Verify the install
+
+Run:
+
+```bash
+bash scripts/verify-install.sh
+```
+
+This checks:
+- config exists
+- required values are set
+- vault structure exists
+- selected skills are present
+- core scripts run
+- PII scan passes
+
+If verification fails, fix the failing step before enabling more modules.
+
+---
+
+## Step 5: Choose Your Installation Profile
 
 ### 🧠 Profile A: Knowledge System Only
 Best for: building a personal knowledge base, organizing research
@@ -104,27 +137,22 @@ Install all skills + all cron jobs. See [Nightly Pipeline docs](nightly-pipeline
 
 ---
 
-## Step 4: Install Skills
+## Step 6: Install or expand skills
 
-Copy the skills you need to your OpenClaw skills directory:
+If you used `bash setup.sh`, your chosen skills may already be installed.
+
+If you want to add more manually, copy only the skills you actually need:
 
 ```bash
-# Copy core skills
 cp -r skills/article-notes-integration/ ~/.agents/skills/
 cp -r skills/personal-ops-driver/ ~/.agents/skills/
-
-# Or install all recommended skills
-cp -r skills/recommended/*/ ~/.agents/skills/
 ```
 
-Then update the placeholder values in each `SKILL.md`:
-- `/tmp/brain-os-test/vault` → your vault path
-- `Alex` → your name
-- `CST` → your timezone
+Avoid installing the entire tree unless you know you want the full system.
 
 ---
 
-## Step 5: Set Up Cron Jobs (OpenClaw)
+## Step 7: Set Up Cron Jobs (OpenClaw)
 
 ```bash
 # Import nightly pipeline jobs
@@ -140,23 +168,19 @@ Or manually edit `~/.openclaw/cron/jobs.json` following the format in `cron-exam
 
 ---
 
-## Step 6: Verify
+## Step 8: Expand only after one success
 
-```bash
-# Test knowledge lint
-bash scripts/knowledge-lint.sh ~/my-brain
+Good first successes:
+- open the vault in Obsidian
+- run `bash scripts/verify-install.sh`
+- add one article note
+- enable one relevant cron profile
 
-# Test nightly digest initialization
-bash scripts/init-nightly-digest.sh ~/my-brain
-
-# Test PII scanner (v0.5+)
-bash scripts/check-pii.sh --strict
-# Expected: ✅ PII scan passed — 0 hits
-```
+Only after that should you decide whether to enable Observer, CI/CD, QMD, or the full nightly system.
 
 ---
 
-## Step 7: Enable Observer (Optional, v0.5+)
+## Step 9: Enable Observer (Optional, v0.5+)
 
 Observer is your AI team's daily health monitor. It runs automatically and produces improvement suggestions.
 
@@ -174,7 +198,7 @@ Read [Observer Playbook](agent-playbooks/observer-playbook.md) for full configur
 
 ---
 
-## Step 8: Set Up CI/CD (Optional, v0.5+)
+## Step 10: Set Up CI/CD (Optional, v0.5+)
 
 If you host your vault on GitHub, enable automatic quality checks:
 
@@ -214,4 +238,6 @@ See [FAQ](faq.md) for common issues.
 - Knowledge lint finds nothing → confirm `BRAIN_PATH` points to vault root
 - PII scan fails → read [PII Deidentification Guide](references/pii-deidentification-guide.md)
 - Want to see everything included? → read [Component Guide (⭐)](component-guide.md)
+- Want to understand installation layers first? → read [install profiles](install-profiles.md)
+- Want an AI agent to do the install? → read [INSTALL_FOR_AGENTS.md](../INSTALL_FOR_AGENTS.md)
 - Want to contribute? → read [Release Playbook](agent-playbooks/release-playbook.md)

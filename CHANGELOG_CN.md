@@ -4,6 +4,23 @@
 
 ---
 
+## [0.7.0] — 2026-04-20
+
+### 新增 / Added
+- **`INSTALL_FOR_AGENTS.md`** — 新增专门面向 AI Agent 的安装指南，提供单一线性 happy path，并默认推荐 Minimal 安装档。
+- **`docs/install-profiles.md`** — 新增 Minimal / Standard / Advanced 三档安装分层，让首次上手与完整系统落地可以分阶段推进。
+- **`scripts/verify-install.sh`** — 新增安装后验证脚本，统一检查 config、vault 结构、skills 安装、lint 执行与 PII 扫描结果。
+- **`.github/workflows/install-smoke.yml`** — 新增 CI 安装冒烟测试，覆盖 `setup.sh --non-interactive --profile minimal` 与后续 `verify-install.sh`。
+
+### 变更 / Changed
+- **`setup.sh`** — 新增非交互 CLI 参数、按 profile 控制技能安装、跨平台占位符替换，以及更聚焦 day-one 的下一步指引。
+- **`README.md`**、**`README_EN.md`**、**`docs/getting-started.md`**、**`docs/zh/getting-started.md`**、**`docs/component-guide.md`** — 重构安装入口，围绕 agent 安装、安装分层、安装验证与最小成功路径展开。
+- **`skills/brain-os-installer/SKILL.md`** — 重新对齐当前文档树，移除暗示仓库尚未支持的安装路径说明。
+
+### 修复 / Fixed
+- 修复了“文档在讲安装分层，但 setup 实际仍像一把全装”的 onboarding 漂移问题。
+- 移除了 `setup.sh` 中仅适配 macOS 的原地替换行为，提升 Linux 环境和 CI 中的 agent 安装兼容性。
+
 ## [0.6.0] — 2026-04-17
 
 ### 新增 / Added

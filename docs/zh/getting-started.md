@@ -29,49 +29,84 @@ Brain OS 将 Obsidian 打造为一个**活的个人上下文系统**——不仅
 
 ---
 
-## 第一步：克隆并设置 Vault
+## 第零步建议：先走最小成功路径
+
+如果你是第一次安装，不要一上来就启完整系统。
+
+建议：
+- **Minimal**：先跑通知识系统最小版
+- **Standard**：如果你还想尽快接上个人事务管理
+- **Advanced**：只有在你明确要完整多 Agent / nightly / 治理系统时再选
+
+先看：[安装档位说明](../install-profiles.md)
+
+---
+
+## 第一步：克隆仓库
 
 ```bash
-# 克隆仓库
 git clone https://github.com/FairladyZ625/Obsidian-Brain-OS.git
 cd Obsidian-Brain-OS
-
-# 将 vault 模板复制到你的目标位置
-cp -r vault-template ~/my-brain
-
-# 初始化 vault 为 git 仓库
-cd ~/my-brain
-git init
-git add .
-git commit -m "init: Brain OS vault"
 ```
 
-然后打开 Obsidian → **File → Open Vault** → 选择 `~/my-brain`。
+如果你希望让 AI Agent 帮你安装，到这里就可以切到：
+- [INSTALL_FOR_AGENTS.md](../../INSTALL_FOR_AGENTS.md)
 
 ---
 
-## 第二步：配置路径
+## 第二步：优先运行 setup
+
+推荐路径：
 
 ```bash
-# 复制配置模板
-cp scripts/config.env.example scripts/config.env
-
-# 用实际值编辑
-nano scripts/config.env
+bash setup.sh
 ```
 
-需要设置的关键值：
+如果你要走更适合 Agent 编排的无人值守路径，也可以用：
 
 ```bash
-BRAIN_PATH="$HOME/my-brain"          # 你的 vault 位置
-USER_NAME="Your Name"                 # AI 对你的称呼
-TIMEZONE="America/New_York"           # 你的时区（用于夜间调度）
-TRANSCRIPT_DIR="$HOME/transcripts"    # AI 对话导出位置
+bash setup.sh --non-interactive --profile minimal
 ```
+
+它会引导你完成：
+- vault 路径
+- 用户信息
+- workspace 路径
+- skills 路径
+- 可选扩展
+- 基础验证
+
+如果你想先理解安装分层，再运行 setup，请看：[安装档位说明](../install-profiles.md)
 
 ---
 
-## 第三步：选择你的安装配置
+## 第三步：打开你的 Vault
+
+安装完成后，打开 Obsidian → **File → Open Vault** → 选择你刚创建的 vault 路径。
+
+---
+
+## 第四步：验证安装
+
+运行：
+
+```bash
+bash scripts/verify-install.sh
+```
+
+它会检查：
+- config 是否存在
+- 关键值是否已写入
+- vault 结构是否完整
+- 选中的 skills 是否已安装
+- 核心脚本是否能跑
+- PII 扫描是否通过
+
+如果验证失败，先修复失败项，再继续启高级模块。
+
+---
+
+## 第五步：选择你的安装配置
 
 ### 🧠 配置 A：仅知识系统
 适用场景：构建个人上下文库、整理研究资料
@@ -104,27 +139,22 @@ TRANSCRIPT_DIR="$HOME/transcripts"    # AI 对话导出位置
 
 ---
 
-## 第四步：安装 Skills
+## 第六步：安装或扩展 Skills
 
-将你需要的 skills 复制到 OpenClaw skills 目录：
+如果你已经运行了 `bash setup.sh`，所选 skills 可能已经安装好了。
+
+如果你要手动补装，只复制你真正需要的 skills：
 
 ```bash
-# 复制核心 skills
 cp -r skills/article-notes-integration/ ~/.agents/skills/
 cp -r skills/personal-ops-driver/ ~/.agents/skills/
-
-# 或安装所有推荐的 skills
-cp -r skills/recommended/*/ ~/.agents/skills/
 ```
 
-然后更新每个 `SKILL.md` 中的占位符值：
-- `/tmp/brain-os-test/vault` → 你的 vault 路径
-- `Alex` → 你的名字
-- `CST` → 你的时区
+不要默认一上来安装整棵 skills 树，除非你明确要完整系统。
 
 ---
 
-## 第五步：设置 Cron Jobs（OpenClaw）
+## 第七步：设置 Cron Jobs（OpenClaw）
 
 ```bash
 # 导入夜间 pipeline 任务
@@ -140,15 +170,15 @@ openclaw cron import cron-examples/personal-ops.json
 
 ---
 
-## 第六步：验证
+## 第八步：先拿到一个小成功
 
-```bash
-# 测试知识 lint
-bash scripts/knowledge-lint.sh ~/my-brain
+推荐的第一个成功点：
+- 在 Obsidian 里打开 vault
+- 跑通 `bash scripts/verify-install.sh`
+- 加一条文章 note
+- 只启一个相关 cron profile
 
-# 测试夜间摘要初始化
-bash scripts/init-nightly-digest.sh ~/my-brain
-```
+拿到第一个成功之后，再决定是否启用 Observer、CI/CD、QMD 或完整 nightly system。
 
 ---
 
@@ -172,3 +202,5 @@ bash scripts/init-nightly-digest.sh ~/my-brain
 - 脚本运行失败 → 先执行 `source scripts/config.env`
 - Cron job 不运行 → 验证 OpenClaw 正在运行（`openclaw gateway status`）
 - 知识 lint 无发现 → 确认 `BRAIN_PATH` 指向 vault 根目录
+- 想先看安装分层 → 读 [install-profiles.md](../install-profiles.md)
+- 想让 AI Agent 帮你装 → 读 [INSTALL_FOR_AGENTS.md](../../INSTALL_FOR_AGENTS.md)
