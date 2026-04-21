@@ -12,7 +12,7 @@ Brain OS 将 Obsidian 打造为一个**活的个人上下文系统**——不仅
 
 完成设置后：
 - 你只需捕获一次（文章、想法、待办）
-- AI 在你睡觉时处理（夜间 pipeline，凌晨 02:00-04:00）
+- AI 不只是帮你生产知识，也可以持续帮你保鲜、整理和治理知识系统
 - 你醒来时看到的是精筛摘要、有序知识库和每日简报
 
 ---
@@ -170,7 +170,23 @@ openclaw cron import cron-examples/personal-ops.json
 
 ---
 
-## 第八步：先拿到一个小成功
+## 第八步：先拿到一个小成功后，再加治理层
+
+当最小安装跑通后，你可以把 Brain OS 从“知识生产”继续扩展到更完整的知识系统：
+
+- `prompts/cron/qmd-index-refresh-daily.md` 负责检索保鲜
+- `prompts/cron/knowledge-librarian-3day.md` 负责周期整理
+- `prompts/cron/knowledge-governance-10day.md` 负责周期治理复核
+
+推荐顺序：
+- 先跑创建
+- 再加保鲜
+- 再加整理
+- 最后加治理
+
+这样更容易让新用户先拿到一个确定成功，再逐层上治理能力。
+
+## 第九步：先拿到一个小成功
 
 推荐的第一个成功点：
 - 在 Obsidian 里打开 vault

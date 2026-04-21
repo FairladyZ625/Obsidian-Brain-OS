@@ -32,6 +32,7 @@ Do **not** enable advanced modules by default:
 - conversation-mining
 - full nightly pipeline
 - QMD setup
+- governance cron stack
 
 These come later.
 
@@ -173,6 +174,15 @@ Avoid “install everything” unless explicitly requested.
 
 ## Step 7: Configure only one small workflow first
 
+Important: do not jump straight from install to the full governance stack.
+
+The governance cron stack is:
+- `prompts/cron/qmd-index-refresh-daily.md`
+- `prompts/cron/knowledge-librarian-3day.md`
+- `prompts/cron/knowledge-governance-10day.md`
+
+Only introduce these after the user already has a working minimal knowledge workflow.
+
 The user should feel one success quickly.
 
 ### Good first wins
@@ -212,6 +222,8 @@ If a dedicated install verifier exists, run that too.
 ---
 
 ## Step 9: Hand off the next 2 docs only
+
+If the user asks how Brain OS grows beyond ingestion, point them to docs that explain staged expansion, not just installation.
 
 Do not dump the whole docs tree on the user.
 

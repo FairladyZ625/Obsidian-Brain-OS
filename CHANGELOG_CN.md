@@ -13,6 +13,7 @@
 
 ### 变更 / Changed
 - 开源版知识工作流不再只覆盖知识生产，也开始把保鲜、整理与治理作为可复用的运行模式纳入主线。
+- **`docs/getting-started.md`**、**`docs/zh/getting-started.md`** 与 **`INSTALL_FOR_AGENTS.md`** — 补充安装与 onboarding 说明，明确新的治理栈是“最小成功之后的分阶段扩展”，不是默认首装即全开。
 
 ## [0.7.0] — 2026-04-20
 

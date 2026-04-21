@@ -10,7 +10,7 @@ Brain OS turns Obsidian into a **living personal context system** — not just a
 
 After setup:
 - You capture things once (articles, thoughts, todos)
-- AI processes them while you sleep (nightly pipeline at 02:00-04:00)
+- AI can help keep the knowledge system fresh, organized, and governed over time
 - You wake up to a curated digest, organized knowledge, and a daily briefing
 
 ---
@@ -168,7 +168,23 @@ Or manually edit `~/.openclaw/cron/jobs.json` following the format in `cron-exam
 
 ---
 
-## Step 8: Expand only after one success
+## Step 8: Add governance only after one success
+
+Once the minimal setup works, you can extend Brain OS beyond knowledge creation into a fuller knowledge-system loop:
+
+- `prompts/cron/qmd-index-refresh-daily.md` keeps search indexes fresh
+- `prompts/cron/knowledge-librarian-3day.md` handles periodic maintenance
+- `prompts/cron/knowledge-governance-10day.md` adds periodic governance review
+
+Recommendation:
+- start with creation first
+- then add freshness
+- then maintenance
+- then governance
+
+This staged rollout is important. Brain OS is easier to adopt when people can first see one successful workflow, then layer governance on top.
+
+## Step 9: Expand only after one success
 
 Good first successes:
 - open the vault in Obsidian
@@ -180,7 +196,7 @@ Only after that should you decide whether to enable Observer, CI/CD, QMD, or the
 
 ---
 
-## Step 9: Enable Observer (Optional, v0.5+)
+## Step 10: Enable Observer (Optional, v0.5+)
 
 Observer is your AI team's daily health monitor. It runs automatically and produces improvement suggestions.
 
@@ -198,7 +214,7 @@ Read [Observer Playbook](agent-playbooks/observer-playbook.md) for full configur
 
 ---
 
-## Step 10: Set Up CI/CD (Optional, v0.5+)
+## Step 11: Set Up CI/CD (Optional, v0.5+)
 
 If you host your vault on GitHub, enable automatic quality checks:
 

@@ -30,6 +30,7 @@ All notable changes to Obsidian Brain OS are documented here.
 
 ### Changed
 - The OSS knowledge workflow now covers not only knowledge creation, but also freshness, maintenance, and governance as a reusable operating pattern.
+- **`docs/getting-started.md`**, **`docs/zh/getting-started.md`**, and **`INSTALL_FOR_AGENTS.md`** — Updated install and onboarding guidance so agents and users understand that the new governance stack is a staged expansion after a working minimal setup, not a default first-run requirement.
 
 ## [0.6.1] — 2026-04-18
 
