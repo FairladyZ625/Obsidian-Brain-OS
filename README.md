@@ -207,6 +207,7 @@ bash setup.sh --test
 
 - [Nightly Pipeline 全景指南](docs/nightly-pipeline-guide.md)
 - [发版操作手册](docs/agent-playbooks/release-playbook.md)
+- [Friction-to-Governance Loop](docs/friction-to-governance-loop.md)
 - [PII 脱敏指南](docs/references/pii-deidentification-guide.md)
 - [Cron Prompt 编写指南](docs/writing-cron-prompts.md)
 - [Skill 编写指南](docs/skill-authoring-guide.md)

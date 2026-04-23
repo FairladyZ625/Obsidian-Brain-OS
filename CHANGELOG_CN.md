@@ -4,6 +4,14 @@
 
 ---
 
+## [1.0.1] — 2026-04-23
+
+### 新增 / Added
+- **`docs/friction-to-governance-loop.md`** — 新增治理模式文档，说明如何把重复摩擦信号转化为 prompt、reference、AGENTS、工作流与 onboarding 的持续改进。
+
+### 变更 / Changed
+- **`README.md`** — 新增 friction-to-governance loop 的直接入口，让维护者和贡献者能从主文档面更快找到这套治理模式。
+
 ## [1.0.0] — 2026-04-21
 
 ### 新增 / Added
