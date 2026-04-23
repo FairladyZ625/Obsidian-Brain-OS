@@ -32,7 +32,8 @@ Do **not** enable advanced modules by default:
 - conversation-mining
 - full nightly pipeline
 - QMD setup
-- governance cron stack
+- knowledge governance cron stack
+- friction-to-governance loop
 
 These come later.
 
@@ -77,7 +78,7 @@ Use `docs/install-profiles.md`.
 ### If the user clearly wants daily planning and reminders too
 - choose **Standard**
 
-### If the user explicitly asks for the full multi-agent / nightly / governance setup
+### If the user explicitly asks for the full multi-agent / nightly / governance / self-improvement setup
 - choose **Advanced**
 
 Do not silently upgrade them to a larger profile.
@@ -176,12 +177,27 @@ Avoid “install everything” unless explicitly requested.
 
 Important: do not jump straight from install to the full governance stack.
 
-The governance cron stack is:
+The knowledge governance cron stack is:
 - `prompts/cron/qmd-index-refresh-daily.md`
 - `prompts/cron/knowledge-librarian-3day.md`
 - `prompts/cron/knowledge-governance-10day.md`
 
-Only introduce these after the user already has a working minimal knowledge workflow.
+The friction-to-governance system includes:
+- `docs/friction-to-governance-loop.md` — methodology (EN + ZH)
+- `docs/zh/friction-to-governance-loop.md` — 中文版
+- `prompts/friction-to-governance-loop.prompt.md` — reusable prompt template
+- `docs/references/system-governance-guide.md` — write-back layer guide
+- `docs/references/friction-bucket-guide.md` — standard bucket taxonomy
+- `docs/references/friction-writeback-matrix.md` — decision matrix
+- `docs/friction-report-template.md` — report template (EN + ZH)
+- `schemas/friction-event.schema.json` — event data schema
+- `schemas/friction-report.schema.json` — report data schema
+- `examples/friction-log.sample.jsonl` — sample data
+
+Only introduce these after the user already has:
+1. A working minimal knowledge workflow
+2. At least one cycle of daily sync or nightly pipeline
+3. Some recurring friction patterns visible in operation
 
 The user should feel one success quickly.
 
@@ -261,6 +277,12 @@ Read next:
 Read next:
 - `docs/nightly-pipeline-guide.md`
 - `docs/nightly-pipeline.md`
+
+### If the user wants self-improving governance
+Read next:
+- `docs/friction-to-governance-loop.md`
+- `docs/references/system-governance-guide.md`
+- `docs/references/friction-writeback-matrix.md`
 
 ---
 

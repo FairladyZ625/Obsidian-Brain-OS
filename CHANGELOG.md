@@ -21,6 +21,21 @@ All notable changes to Obsidian Brain OS are documented here.
 - Removed onboarding drift where the repo described install layering, but the setup flow still behaved like a broad all-in install.
 - Removed macOS-only in-place replacement behavior from `setup.sh`, improving Linux friendliness for agent-driven installs and CI.
 
+## [1.2.0] — 2026-04-23
+
+### Added
+- **`docs/friction-report-template.md`** / **`docs/zh/friction-report-template.md`** — Structured friction report template (bilingual)
+- **`docs/references/friction-bucket-guide.md`** / **`docs/zh/friction-bucket-guide.md`** — Standard friction bucket taxonomy (bilingual)
+- **`docs/references/friction-writeback-matrix.md`** / **`docs/zh/friction-writeback-matrix.md`** — Decision matrix for write-back layer selection (bilingual)
+- **`schemas/friction-event.schema.json`** — JSON schema for a single friction signal
+- **`schemas/friction-report.schema.json`** — JSON schema for aggregated friction reports
+- **`examples/friction-log.sample.jsonl`** — 5 example friction signals in JSONL format
+
+### Changed
+- **`INSTALL_FOR_AGENTS.md`** — Added friction-to-governance loop to Advanced profile and install routing
+- **`docs/install-profiles.md`** — Advanced profile now includes governance stack + friction loop
+- **`docs/component-guide.md`** — Updated from v0.5 to v1.1.0; added governance stack + friction loop sections
+
 ## [1.1.0] — 2026-04-23
 
 ### Added

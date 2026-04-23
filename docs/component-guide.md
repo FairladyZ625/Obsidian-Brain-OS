@@ -1,9 +1,8 @@
-# What's Inside Brain OS v0.5 — Complete Component Guide
-# Brain OS v0.5 内容全览 — 完整组件指南
+# Brain OS v1.1.0 内容全览 — 完整组件指南
 
-> **English:** Everything included in Brain OS v0.5, what each component does, and how to start using it.
+> **English:** Everything included in Brain OS **v1.1.0**, what each component does, and how to start using it.
 >
-> **中文：** Brain OS v0.5 包含的所有内容、每个组件的作用、以及如何开始使用。
+> **中文：** Brain OS **v1.1.0** 包含的所有内容、每个组件的作用、以及如何开始使用。
 
 ---
 
@@ -14,8 +13,10 @@
 | Vault Template / Vault 模板 | 8 directories | 1 |
 | Skills / 技能 | Agent instruction packages | 10+ |
 | Scripts / 脚本 | Automation + verification tools | 7+ |
-| Cron Prompts / 定时任务模板 | Nightly pipeline + auxiliary | 8 |
-| Documentation / 文档 | User guides + contributor guides | 20+ |
+| Cron Prompts / 定时任务模板 | Nightly pipeline + governance cron | 11+ |
+| Documentation / 文档 | User guides + contributor guides + bilingual docs | 30+ |
+| Schemas / 数据结构 | JSON schemas for structured data | 2 |
+| Examples / 示例 | Sample data files | 1 |
 | CI/CD Workflows | GitHub Actions | 4 |
 
 ---
@@ -66,8 +67,58 @@ Skill 是可复用的指令包，告诉你的 AI agent 如何执行特定任务�
 | **`knowledge-lint`** | Knowledge base health audit (broken links, orphans) | `skills/knowledge-lint/SKILL.md` |
 
 🆕 = New in v0.4–v0.5
+🆕 = Updated in v1.0.0–v1.1.0
 
-### How to use a skill / 如何使用 Skill
+---
+
+## 🛡️ Knowledge Governance Stack / 知识库治理栈（v1.0.0）
+
+A three-layer system for keeping the knowledge base healthy over time.
+让知识库长期保持健康的三层治理系统。
+
+```
+Daily (保鲜)  → qmd-index-refresh-daily.md
+3-Day (整理) → knowledge-librarian-3day.md
+10-Day (治理) → knowledge-governance-10day.md
+```
+
+**How to enable / 如何启用：**
+1. Copy `prompts/cron/knowledge-*.md` to your OpenClaw cron jobs directory
+2. Set `enabled: true` in each file's frontmatter
+3. Configure paths (replace `{{BRAIN_ROOT}}`, `{{QMD_BIN}}` etc.)
+4. Follow staged rollout: Daily → 3-Day → 10-Day (one layer at a time)
+
+**Related docs / 相关文档：**
+- [Getting Started](docs/getting-started.md) — Install guide
+- [Friction-to-Governance Loop](docs/friction-to-governance-loop.md) — Self-improvement methodology
+
+---
+
+## 🔄 Friction-to-Governance Loop / 摩擦治理循环（v1.0.0–v1.2.0）
+
+A pattern for turning recurring operational friction into system-level improvements.
+把重复出现的运营摩擦转化为系统级改进的模式。
+
+### Core components / 核心组件
+
+| Component / 组件 | What it does / 作用 | Start here / 从这里开始 |
+|---|---|---|
+| **Methodology doc** | Explains the 4-stage loop (Capture → Diagnose → Govern → Write-back) | [EN](docs/friction-to-governance-loop.md) / [中文](docs/zh/friction-to-governance-loop.md) |
+| **Prompt template** | Reusable prompt for agents to diagnose and fix recurring friction | `prompts/friction-to-governance-loop.prompt.md` |
+| **System governance guide** | Which system layer to write fixes into | [Guide](docs/references/system-governance-guide.md) |
+| **Bucket guide** | Standard taxonomy for classifying friction types | [EN](docs/references/friction-bucket-guide.md) / [中文](docs/zh/friction-bucket-guide.md) |
+| **Write-back matrix** | Decision matrix: which problem → which layer | [EN](docs/references/friction-writeback-matrix.md) / [中文](docs/zh/friction-writeback-matrix.md) |
+| **Report template** | Structured report format for friction reviews | [EN](docs/friction-report-template.md) / [中文](docs/zh/friction-report-template.md) |
+| **Event schema** | JSON schema for a single friction signal | `schemas/friction-event.schema.json` |
+| **Report schema** | JSON schema for aggregated reports | `schemas/friction-report.schema.json` |
+| **Sample data** | 5 example friction signals in JSONL format | `examples/friction-log.sample.jsonl` |
+
+**How to use / 如何使用：**
+1. Read the methodology doc first
+2. When you see a recurring problem, classify it using the bucket guide
+3. Use the write-back matrix to decide where to fix it
+4. Use the report template for periodic reviews
+5. Use the prompt template to automate diagnosis with an AI agent
 
 1. Read the SKILL.md file for instructions
 2. Point your AI agent to the skill path when assigning tasks
@@ -161,6 +212,7 @@ Uses your machine's local timezone by default — works anywhere in the world.
 5. **[Nightly Pipeline](docs/nightly-pipeline.md)** — Automated knowledge processing
 6. **[Personal Ops](docs/personal-ops.md)** — Daily operations dashboard
 7. **[QMD Semantic Search](docs/qmd-setup.md)** — Vector search setup
+8. **[Friction-to-Governance Loop](docs/friction-to-governance-loop.md)** 🆕 — Self-improvement methodology
 
 ### For Contributors / 贡献者文档
 
@@ -237,6 +289,9 @@ cat skills/daily-timesheet/SKILL.md # Timesheet generation
 
 | Version / 版本 | Date / 日期 | Highlights / 亮点 |
 |---|---|---|
+| **v1.1.0** | 2026-04-23 | Friction loop practice templates, bilingual docs, prompt + governance guide |
+| **v1.0.0** | 2026-04-21 | Knowledge governance stack (3-layer cron), staged rollout guide |
+| **v0.6.1** | 2026-04-18 | Soft-link sync, project-aware lint, governance updates |
 | **v0.5.0** | 2026-04-13 | Bilingual governance, 6 contributor docs, CHANGELOG_CN, branch protection |
 | **v0.4.1** | 2026-04-13 | System-local timezone for all cron prompts |
 | **v0.4.0** | 2026-04-12 | Release SOP, Observer skill, PII scanner, 3 CI workflows |
