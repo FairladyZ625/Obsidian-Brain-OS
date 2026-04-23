@@ -94,6 +94,8 @@ Best for:
 - everything in Standard
 - nightly pipeline
 - Observer
+- knowledge governance cron stack
+- friction-to-governance loop (docs + prompts + schemas)
 - optional CI/CD and governance workflow
 - additional integrations and deeper operating docs
 
@@ -103,6 +105,8 @@ Best for:
 - `docs/nightly-pipeline-guide.md`
 - `docs/agent-playbooks/observer-playbook.md`
 - `docs/agent-playbooks/release-playbook.md`
+- `docs/friction-to-governance-loop.md`
+- `docs/references/system-governance-guide.md`
 
 ### Success definition
 - standard setup works

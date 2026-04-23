@@ -4,6 +4,21 @@
 
 ---
 
+## [1.2.0] — 2026-04-23
+
+### 新增 / Added
+- **`docs/friction-report-template.md`** / **`docs/zh/friction-report-template.md`** — 结构化摩擦报告模板（中英双语）
+- **`docs/references/friction-bucket-guide.md`** / **`docs/zh/friction-bucket-guide.md`** — 标准摩擦归桶分类法（中英双语）
+- **`docs/references/friction-writeback-matrix.md`** / **`docs/zh/friction-writeback-matrix.md`** — 回写层级决策矩阵（中英双语）
+- **`schemas/friction-event.schema.json`** — 单条摩擦信号的 JSON schema
+- **`schemas/friction-report.schema.json`** — 聚合摩擦报告的 JSON schema
+- **`examples/friction-log.sample.jsonl`** — 5 条示例摩擦信号（JSONL 格式）
+
+### 变更 / Changed
+- **`INSTALL_FOR_AGENTS.md`** — Advanced 档位和安装路由已加入 friction-to-governance loop
+- **`docs/install-profiles.md`** — Advanced 档位现已包含治理栈 + 摩擦循环
+- **`docs/component-guide.md`** — 从 v0.5 更新至 v1.1.0；新增治理栈 + 摩擦循环完整章节
+
 ## [1.1.0] — 2026-04-23
 
 ### 新增 / Added
