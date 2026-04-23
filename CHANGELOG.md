@@ -21,6 +21,16 @@ All notable changes to Obsidian Brain OS are documented here.
 - Removed onboarding drift where the repo described install layering, but the setup flow still behaved like a broad all-in install.
 - Removed macOS-only in-place replacement behavior from `setup.sh`, improving Linux friendliness for agent-driven installs and CI.
 
+## [1.1.0] — 2026-04-23
+
+### Added
+- **`docs/zh/friction-to-governance-loop.md`** — Added a Chinese companion document for the friction-to-governance loop so the governance pattern is documented bilingually.
+- **`prompts/friction-to-governance-loop.prompt.md`** — Added a reusable prompt template for diagnosing repeated friction and converting it into governance write-backs.
+- **`docs/references/system-governance-guide.md`** — Added a reference guide for deciding where recurring problems should be written back into the system.
+
+### Changed
+- **`README.md`** — Updated the friction-to-governance entry to point to both English and Chinese documents.
+
 ## [1.0.1] — 2026-04-23
 
 ### Added

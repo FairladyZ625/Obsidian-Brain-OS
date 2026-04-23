@@ -4,6 +4,16 @@
 
 ---
 
+## [1.1.0] — 2026-04-23
+
+### 新增 / Added
+- **`docs/zh/friction-to-governance-loop.md`** — 新增 friction-to-governance loop 的中文版文档，让这套治理模式具备中英双语入口。
+- **`prompts/friction-to-governance-loop.prompt.md`** — 新增可复用 prompt 模板，用于诊断重复摩擦并把它转化为治理回写。
+- **`docs/references/system-governance-guide.md`** — 新增 system governance guide，说明重复问题应回写到系统的哪一层。
+
+### 变更 / Changed
+- **`README.md`** — friction-to-governance 入口更新为同时指向中英文文档。
+
 ## [1.0.1] — 2026-04-23
 
 ### 新增 / Added
