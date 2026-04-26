@@ -4,6 +4,12 @@ All notable changes to Obsidian Brain OS are documented here.
 
 ---
 
+## [Unreleased]
+
+### Added
+- **`skills/brain-vault-governance/`** — Added a reusable vault governance skill for agents writing, moving, classifying, and auditing durable Brain OS vault files.
+- **`docs/governance-sync-boundary.md`** / **`docs/zh/governance-sync-boundary.md`** — Added bilingual guidance for deciding what should be synced from a private Brain OS deployment into the public repository.
+
 ## [0.7.0] — 2026-04-20
 
 ### Added

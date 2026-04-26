@@ -4,6 +4,12 @@
 
 ---
 
+## [未发布 / Unreleased]
+
+### 新增 / Added
+- **`skills/brain-vault-governance/`** — 新增可复用 vault 治理 skill，供 agent 在写入、移动、分类、巡检 Brain OS vault 持久文件前使用。
+- **`docs/governance-sync-boundary.md`** / **`docs/zh/governance-sync-boundary.md`** — 新增中英双语同步边界文档，用于判断私有 Brain OS 部署中的哪些资产适合进入公开仓库。
+
 ## [1.2.0] — 2026-04-23
 
 ### 新增 / Added
