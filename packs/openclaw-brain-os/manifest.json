@@ -1,7 +1,7 @@
 {
   "packName": "openclaw-brain-os",
-  "packVersion": "1.0.0-alpha.4",
-  "status": "profiled-safe-apply-preview",
+  "packVersion": "1.0.0-alpha.5",
+  "status": "profiled-safe-apply-with-install-report",
   "minOpenClawVersion": "0.0.0",
   "maxOpenClawVersion": null,
   "generatedFrom": "brain-os-real-env-redacted",

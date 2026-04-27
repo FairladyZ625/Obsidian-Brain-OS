@@ -48,6 +48,7 @@ bash install.sh --check
 bash install.sh --dry-run
 bash install.sh --answers answers.json --out /tmp/brain-os-preview
 bash verify.sh /tmp/brain-os-preview
+cat /tmp/brain-os-preview/INSTALL_REPORT.md
 bash install.sh --answers answers.json --apply --yes
 OPENCLAW_ROOT=~/.openclaw bash rollback.sh
 ```
@@ -57,6 +58,10 @@ Run the smoke test:
 ```bash
 bash tests/smoke.sh
 ```
+
+## Before choosing a profile
+
+Read `PROFILE_GUIDE.md` for the recommended rollout path. After apply, read the generated `INSTALL_REPORT.md` and `POST_INSTALL_CHECKLIST.md` before enabling cron jobs.
 
 ## Profiles and bundled assets
 

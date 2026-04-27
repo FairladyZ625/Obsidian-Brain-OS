@@ -104,6 +104,13 @@ if (!fs.existsSync(brainRoot) || fs.readdirSync(brainRoot).length === 0) {
 }
 
 const installState = { installId, pack: manifest.packName, packVersion: manifest.packVersion, appliedAt: new Date().toISOString(), paths: { openclawRoot, skillsRoot, brainRoot }, backupDir, changes };
-writeJson(path.join(installStateDir, 'install-state.json'), installState);
+const installStatePath = path.join(installStateDir, 'install-state.json');
+writeJson(installStatePath, installState);
 writeJson(path.join(openclawRoot, '.brain-os-pack-last-install.json'), { installId, installStateDir });
-console.log(JSON.stringify({ ok: true, installId, installStateDir, changes }, null, 2));
+const reportScript = path.join(scriptDir, 'generate-install-report.mjs');
+const reportPath = path.join(installStateDir, 'INSTALL_REPORT.md');
+if (fs.existsSync(reportScript)) {
+  spawnSync(process.execPath, [reportScript, '--summary', path.join(previewDir, 'summary.json'), '--state', installStatePath, '--out', reportPath], { encoding: 'utf8' });
+  changes.push({ action: 'write-report', path: reportPath });
+}
+console.log(JSON.stringify({ ok: true, installId, installStateDir, installReport: reportPath, changes }, null, 2));

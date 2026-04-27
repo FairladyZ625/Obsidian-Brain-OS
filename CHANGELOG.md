@@ -4,6 +4,16 @@ All notable changes to Obsidian Brain OS are documented here.
 
 ---
 
+## [1.5.7] — 2026-04-27
+
+### Added
+- **Install report** — Pack dry-run and apply now generate `INSTALL_REPORT.md` summarizing selected profile, paths, selected assets, backups, changes, next steps, and rollback guidance.
+- **Profile guide** — Added `packs/openclaw-brain-os/PROFILE_GUIDE.md` to help users choose `minimal`, `knowledge`, `personal-ops`, `team`, or `full`.
+- **Post-install checklist** — Added `packs/openclaw-brain-os/POST_INSTALL_CHECKLIST.md` for safe validation before enabling cron jobs.
+
+### Changed
+- **`packs/openclaw-brain-os/manifest.json`** — Bumped pack preview version to `1.0.0-alpha.5` for install-report milestone.
+
 ## [1.5.6] — 2026-04-27
 
 ### Added

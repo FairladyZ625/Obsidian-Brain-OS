@@ -58,8 +58,10 @@ rm -rf "$TMP_PREVIEW"
 bash "$PACK/install.sh" --check --answers "$PACK/tests/fixtures/answers.minimal.json" >/dev/null
 bash "$PACK/install.sh" --dry-run --answers "$PACK/tests/fixtures/answers.minimal.json" --out "$TMP_PREVIEW/minimal" >/dev/null
 bash "$PACK/verify.sh" "$TMP_PREVIEW/minimal" >/dev/null
+grep -q "OpenClaw Brain OS Pack Install Report" "$TMP_PREVIEW/minimal/INSTALL_REPORT.md"
 bash "$PACK/install.sh" --dry-run --answers "$PACK/tests/fixtures/answers.full.json" --out "$TMP_PREVIEW/full" >/dev/null
 bash "$PACK/verify.sh" "$TMP_PREVIEW/full" >/dev/null
+grep -q "Profile" "$TMP_PREVIEW/full/INSTALL_REPORT.md"
 python3 - <<PY
 import json
 j=json.load(open("$TMP_PREVIEW/full/cron.jobs-patch.json"))
@@ -99,6 +101,14 @@ test -f "$APPLY_ROOT/.openclaw/agents/main/agent/AGENTS.md"
 test -d "$APPLY_ROOT/.agents/skills/brain-vault-governance"
 test ! -d "$APPLY_ROOT/.agents/skills/observer"
 test -d "$APPLY_ROOT/BrainOS-Vault/00-INBOX"
+REPORT_PATH="$(python3 - <<PY
+import json, pathlib
+last=json.load(open("$APPLY_ROOT/.openclaw/.brain-os-pack-last-install.json"))
+print(pathlib.Path(last["installStateDir"])/"INSTALL_REPORT.md")
+PY
+)"
+test -f "$REPORT_PATH"
+grep -q "Rollback" "$REPORT_PATH"
 OPENCLAW_ROOT="$APPLY_ROOT/.openclaw" bash "$PACK/rollback.sh" >/dev/null
 rm -rf "$APPLY_ROOT"
 rm -rf "$TMP_PREVIEW"

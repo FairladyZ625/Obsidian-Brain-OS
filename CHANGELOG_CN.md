@@ -4,6 +4,16 @@
 
 ---
 
+## [1.5.7] — 2026-04-27
+
+### 新增 / Added
+- **Install report** — pack dry-run 与 apply 现在会生成 `INSTALL_REPORT.md`，汇总所选 profile、路径、安装资产、备份、变更、下一步和 rollback 指引。
+- **Profile guide** — 新增 `packs/openclaw-brain-os/PROFILE_GUIDE.md`，帮助用户选择 `minimal`、`knowledge`、`personal-ops`、`team` 或 `full`。
+- **Post-install checklist** — 新增 `packs/openclaw-brain-os/POST_INSTALL_CHECKLIST.md`，用于启用 cron 前的安全检查。
+
+### 变更 / Changed
+- **`packs/openclaw-brain-os/manifest.json`** — pack preview 版本升到 `1.0.0-alpha.5`，对应 install-report 阶段。
+
 ## [1.5.6] — 2026-04-27
 
 ### 新增 / Added

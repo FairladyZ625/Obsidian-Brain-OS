@@ -112,4 +112,10 @@ const summary = {
 fs.writeFileSync(path.join(outDir, 'summary.json'), JSON.stringify(summary, null, 2) + '\n');
 fs.writeFileSync(path.join(outDir, 'diff-summary.md'), `# OpenClaw Brain OS Pack Dry-run Preview\n\n- Pack: ${manifest.packName} ${manifest.packVersion}\n- Profile: ${profileId}\n- OpenClaw root: \`${openclawRoot}\`\n- Skills root: \`${skillsRoot}\`\n- Brain root: \`${brainRoot}\`\n- Canonical vault template: \`${canonicalVault}\`\n\n## Would generate\n\n- \`openclaw.config-patch.json\`\n- \`cron.jobs-patch.json\`\n- \`workspaces/${selectedAgents.join('`, `workspaces/')}\`\n- \`available-workspaces/writer|review|chronicle|observer\`\n\nNo user files were modified.\n`);
 
+
+const reportScript = path.join(packDir, 'scripts/generate-install-report.mjs');
+if (fs.existsSync(reportScript)) {
+  const { spawnSync } = await import('node:child_process');
+  spawnSync(process.execPath, [reportScript, '--summary', path.join(outDir, 'summary.json'), '--out', path.join(outDir, 'INSTALL_REPORT.md')], { stdio: 'inherit' });
+}
 console.log(outDir);

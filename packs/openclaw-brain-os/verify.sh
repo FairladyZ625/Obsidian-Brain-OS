@@ -15,6 +15,7 @@ ALLOW_PLACEHOLDERS="DISCORD_GUILD_ID,DISCORD_OWNER_USER_ID,MAIN_CHANNEL_ID,PERSO
 node "$(dirname "${BASH_SOURCE[0]}")/scripts/scan-secrets.mjs" "$TARGET"
 
 test -f "$TARGET/diff-summary.md"
+test -f "$TARGET/INSTALL_REPORT.md"
 test -d "$TARGET/workspaces/main"
 test -f "$TARGET/workspaces/main/AGENTS.md"
 
