@@ -1,0 +1,106 @@
+{
+  "_meta": {
+    "name": "Brain OS multi-channel OpenClaw config example",
+    "note": "This demonstrates the routing shape for a private Discord workspace. Copy only the sections you need into ~/.openclaw/openclaw.json.",
+    "secret_rule": "Keep DISCORD_BOT_TOKEN in your environment or secret provider, never in git.",
+    "qmd_boundary": "QMD is a separately installed retrieval engine. This config routes agents/channels; QMD itself must be installed and exposed separately, for example as qmd on PATH or via QMD_BIN in cron/script environments."
+  },
+  "agents": {
+    "defaults": {
+      "workspace": "{{USER_HOME}}/.openclaw/workspace",
+      "userTimezone": "{{TIMEZONE}}",
+      "model": {
+        "primary": "your-main-model",
+        "fallbacks": ["your-light-model"]
+      },
+      "thinkingDefault": "medium",
+      "timeoutSeconds": 900,
+      "maxConcurrent": 4
+    },
+    "list": [
+      {
+        "id": "main",
+        "default": true,
+        "name": "Brain OS Main",
+        "workspace": "{{USER_HOME}}/.openclaw/workspace-main",
+        "subagents": { "allowAgents": ["*"] }
+      },
+      {
+        "id": "knowledge",
+        "name": "Knowledge Librarian",
+        "workspace": "{{USER_HOME}}/.openclaw/workspace-knowledge",
+        "model": "your-main-model"
+      },
+      {
+        "id": "personalops",
+        "name": "Personal Ops",
+        "workspace": "{{USER_HOME}}/.openclaw/workspace-personal-ops",
+        "model": "your-main-model"
+      },
+      {
+        "id": "chronicle",
+        "name": "Chronicle",
+        "workspace": "{{USER_HOME}}/.openclaw/workspace-chronicle",
+        "model": "your-light-model",
+        "thinkingDefault": "low"
+      }
+    ]
+  },
+  "channels": {
+    "discord": {
+      "enabled": true,
+      "token": {
+        "source": "env",
+        "provider": "default",
+        "id": "DISCORD_BOT_TOKEN"
+      },
+      "groupPolicy": "allowlist",
+      "guilds": {
+        "{{DISCORD_GUILD_ID}}": {
+          "requireMention": true,
+          "users": ["{{DISCORD_OWNER_USER_ID}}"]
+        }
+      },
+      "commands": {
+        "native": "auto",
+        "nativeSkills": "auto"
+      },
+      "threadBindings": {
+        "enabled": true
+      }
+    }
+  },
+  "bindings": [
+    {
+      "agentId": "knowledge",
+      "match": {
+        "channel": "discord",
+        "guildId": "{{DISCORD_GUILD_ID}}",
+        "peer": { "kind": "channel", "id": "{{KNOWLEDGE_CHANNEL_ID}}" }
+      }
+    },
+    {
+      "agentId": "personalops",
+      "match": {
+        "channel": "discord",
+        "guildId": "{{DISCORD_GUILD_ID}}",
+        "peer": { "kind": "channel", "id": "{{PERSONAL_OPS_CHANNEL_ID}}" }
+      }
+    },
+    {
+      "agentId": "chronicle",
+      "match": {
+        "channel": "discord",
+        "guildId": "{{DISCORD_GUILD_ID}}",
+        "peer": { "kind": "channel", "id": "{{CHRONICLE_CHANNEL_ID}}" }
+      }
+    },
+    {
+      "agentId": "main",
+      "match": {
+        "channel": "discord",
+        "guildId": "{{DISCORD_GUILD_ID}}"
+      }
+    }
+  ]
+}

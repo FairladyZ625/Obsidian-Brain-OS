@@ -24,14 +24,15 @@
 13. [个人文档与工作上下文（06/07）](personal-context-guide.md)
 14. [Obsidian 配置](obsidian-setup.md)
 15. [OpenClaw 配置](openclaw-setup.md)
-16. [QMD 语义搜索配置](qmd-setup.md)
-17. [Chronicle 史官系统](chronicle-agent.md)
-18. [Skills 使用指南](skills-guide.md)
-19. [项目管理](project-management.md)
-20. [治理同步边界](governance-sync-boundary.md)
-21. [发版与版本号指南](release-versioning.md)
-22. [治理巡检 Cron 指南](governance-cron-guide.md)
-23. [常见问题](faq.md)
+16. [OpenClaw 配置指南](openclaw-config-guide.md) — 多频道、cron 投递、QMD 边界
+17. [QMD 语义搜索配置](qmd-setup.md)
+18. [Chronicle 史官系统](chronicle-agent.md)
+19. [Skills 使用指南](skills-guide.md)
+20. [项目管理](project-management.md)
+21. [治理同步边界](governance-sync-boundary.md)
+22. [发版与版本号指南](release-versioning.md)
+23. [治理巡检 Cron 指南](governance-cron-guide.md)
+24. [常见问题](faq.md)
 
 ---
 

@@ -10,7 +10,8 @@ With OpenClaw:
 - **Cron jobs** run AI tasks on schedule (02:00-04:00 pipeline, 07:00 morning brief)
 - **Isolated sessions** prevent pipeline runs from polluting your main conversation
 - **Skills** give AI agents specialized instructions for each task
-- **Memory search** provides semantic retrieval across your knowledge base
+- **Channel routing** maps Discord/Slack/etc. channels to the right agent
+- **Retrieval integration** lets agents use external search backends such as QMD when installed
 
 ---
 
@@ -64,6 +65,21 @@ sed -i '' 's|/tmp/brain-os-test/vault|/path/to/your/vault|g' SKILL.md
 sed -i '' 's|Alex|Your Name|g' SKILL.md
 sed -i '' 's|CST|America/New_York|g' SKILL.md
 ```
+
+---
+
+## OpenClaw Config Examples
+
+Before importing cron jobs, configure your agents and channels in `~/.openclaw/openclaw.json`.
+
+Brain OS provides starter examples:
+
+```text
+examples/openclaw/openclaw.example.json
+examples/openclaw/openclaw.multi-channel.example.json
+```
+
+Read [OpenClaw Config Guide](openclaw-config-guide.md) for multi-channel Discord routing, agent bindings, delivery targets, and QMD boundary notes.
 
 ---
 
@@ -172,19 +188,13 @@ Cron jobs can deliver results to various channels:
 
 ---
 
-## Memory Search Configuration
+## Retrieval / QMD Configuration
 
-Brain OS uses semantic memory search for knowledge retrieval. Configure in OpenClaw:
+QMD is not bundled with OpenClaw. Install QMD separately if you want semantic / hybrid retrieval for large vaults or conversation mining.
 
-```json
-{
-  "memory": {
-    "provider": "openai",
-    "model": "text-embedding-3-small",
-    "mode": "hybrid"
-  }
-}
-```
+Brain OS agents can use QMD as the recommended retrieval backend when it is available. If QMD is missing, prompts should report degraded mode and fall back to keyword search.
+
+See [QMD Semantic Search Setup](qmd-setup.md) and [OpenClaw Config Guide](openclaw-config-guide.md).
 
 ---
 

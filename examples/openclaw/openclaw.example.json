@@ -1,0 +1,62 @@
+{
+  "_meta": {
+    "name": "Brain OS minimal OpenClaw config example",
+    "note": "Copy the useful parts into ~/.openclaw/openclaw.json. Replace every {{PLACEHOLDER}} before use. Do not commit real tokens, user IDs, channel IDs, or private paths.",
+    "qmd_boundary": "QMD is not bundled with OpenClaw. Install QMD separately, then make its CLI available on PATH or set QMD_BIN for Brain OS scripts/prompts that call it."
+  },
+  "agents": {
+    "defaults": {
+      "workspace": "{{USER_HOME}}/.openclaw/workspace",
+      "userTimezone": "{{TIMEZONE}}",
+      "model": {
+        "primary": "your-main-model",
+        "fallbacks": ["{{FALLBACK_MODEL}}"]
+      },
+      "thinkingDefault": "medium",
+      "timeoutSeconds": 900,
+      "maxConcurrent": 3
+    },
+    "list": [
+      {
+        "id": "main",
+        "default": true,
+        "name": "Brain OS Main",
+        "workspace": "{{USER_HOME}}/.openclaw/workspace",
+        "subagents": { "allowAgents": ["*"] },
+        "tools": {
+          "allow": ["read", "write", "edit", "exec", "process", "message", "sessions_spawn", "sessions_send", "memory_search", "memory_get", "web_search", "web_fetch"]
+        }
+      }
+    ]
+  },
+  "channels": {
+    "discord": {
+      "enabled": true,
+      "token": {
+        "source": "env",
+        "provider": "default",
+        "id": "DISCORD_BOT_TOKEN"
+      },
+      "groupPolicy": "allowlist",
+      "guilds": {
+        "{{DISCORD_GUILD_ID}}": {
+          "requireMention": true,
+          "users": ["{{DISCORD_OWNER_USER_ID}}"]
+        }
+      },
+      "commands": {
+        "native": "auto",
+        "nativeSkills": "auto"
+      }
+    }
+  },
+  "bindings": [
+    {
+      "agentId": "main",
+      "match": {
+        "channel": "discord",
+        "guildId": "{{DISCORD_GUILD_ID}}"
+      }
+    }
+  ]
+}

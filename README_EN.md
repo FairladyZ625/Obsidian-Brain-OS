@@ -40,7 +40,7 @@
 | The wiki (LLM-maintained) | `03-KNOWLEDGE/` (3-layer: Reading/Working/System) |
 | The schema (AGENTS.md) | `skills/` + `AGENTS.md` + `SOUL.md` |
 | Ingest workflow | `article-notes-integration` skill + Nightly Pipeline |
-| Query workflow | QMD semantic search + daily digest |
+| Query workflow | Optional QMD semantic search + daily digest |
 | Lint workflow | `knowledge-lint.sh` + weekly audit cron |
 | LLM writes, you browse | Agent writes to vault; you browse in Obsidian |
 | Compounding knowledge | Cross-source synthesis via `knowledge-flywheel-amplifier` |
@@ -58,7 +58,7 @@ Karpathy’s gist describes the *idea*. Brain OS is the *running system*:
 - 📋 **Daily timesheet**: scan git commits + project briefings, align to OKRs, generate draft for confirmation — supports file / Feishu / DingTalk backends
 - 🔬 **Deep research**: NotebookLM + deep-research skill for Stage 0 research seeds
 - 🎯 **22+ agent skills**: pre-built instruction sets for every workflow
-- 🔒 **Governance**: single write entry point, auditable commits, QMD semantic search
+- 🔒 **Governance**: single write entry point, auditable commits, optional QMD semantic search
 - 🧭 **Vault governance skill**: `brain-vault-governance` helps agents decide where plans, prompts, knowledge notes, tasks, and raw assets belong
 - 🚀 **One-command install**: `bash setup.sh` — interactive, bulk placeholder replacement included
 
@@ -94,7 +94,7 @@ Hi! I want to install Obsidian Brain OS — an AI-driven personal context system
 Start now — let's get Brain OS running!
 ```
 
-→ Full guide: [docs/getting-started.md](docs/getting-started.md) | [中文首页](README.md)
+→ Full guide: [docs/getting-started.md](docs/getting-started.md) | [OpenClaw config examples](docs/openclaw-config-guide.md) | [中文首页](README.md)
 
 ---
 

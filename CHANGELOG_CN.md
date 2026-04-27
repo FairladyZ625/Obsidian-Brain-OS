@@ -4,6 +4,20 @@
 
 ---
 
+## [1.5.1] — 2026-04-27
+
+### 新增 / Added
+- **`examples/openclaw/openclaw.example.json`** 与 **`examples/openclaw/openclaw.multi-channel.example.json`** — 新增脱敏后的 OpenClaw 配置示例，覆盖单 agent 和 Discord 多频道设置。
+- **`docs/openclaw-config-guide.md`** / **`docs/zh/openclaw-config-guide.md`** — 新增中英双语 `openclaw.json` 配置指南，说明频道路由、cron 投递、占位符、密钥和 QMD 边界。
+
+### 变更 / Changed
+- **`docs/qmd-setup.md`** / **`docs/zh/qmd-setup.md`** — 明确 QMD 是需要单独安装的检索引擎，不是 OpenClaw 默认内置组件。
+- **`docs/openclaw-setup.md`**、**`docs/zh/openclaw-setup.md`**、**`docs/getting-started.md`**、**`docs/zh/getting-started.md`**、**`README.md`** 与 **`README_EN.md`** — 补充 OpenClaw 频道配置与 QMD 独立安装的入口说明。
+- **`scripts/config.env.example`** — 补充可选 `QMD_BIN` / `QMD_BIN_REAL` 环境变量，适配 QMD 不在 `PATH` 的部署。
+
+### 修复 / Fixed
+- 移除可能让用户或 agent 误以为“QMD 随 OpenClaw 默认安装”的表述。
+
 ## [1.5.0] — 2026-04-27
 
 ### 变更 / Changed

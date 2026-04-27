@@ -202,7 +202,8 @@ bash setup.sh --test
 1. **[组件全览指南](docs/component-guide.md)** ⭐ 先看全貌
 2. **[快速开始](docs/getting-started.md)** ⭐ 安装与首次运行
 3. **[Agent 团队配置](docs/agents.md)** ⭐ 真正把系统跑起来的关键
-4. **[Observer 使用手册](docs/agent-playbooks/observer-playbook.md)** ⭐ 理解系统如何自我进化
+4. **[OpenClaw 配置指南](docs/openclaw-config-guide.md)** ⭐ 多频道、cron 投递、QMD 边界
+5. **[Observer 使用手册](docs/agent-playbooks/observer-playbook.md)** ⭐ 理解系统如何自我进化
 
 ### 如果你想理解“怎么长期养出来”
 
@@ -229,6 +230,7 @@ bash setup.sh --test
 | `scripts/` | 自动化脚本 |
 | `docs/` | 文档与 playbooks |
 | `cron-examples/` | OpenClaw cron 配置示例 |
+| `examples/openclaw/` | OpenClaw `openclaw.json` 配置示例 |
 | `CHANGELOG.md` / `CHANGELOG_CN.md` | 英文 / 中文变更日志 |
 
 ---

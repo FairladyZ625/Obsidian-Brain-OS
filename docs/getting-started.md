@@ -158,7 +158,22 @@ Avoid installing the entire tree unless you know you want the full system.
 
 ---
 
-## Step 7: Set Up Cron Jobs (OpenClaw)
+## Step 7: Configure OpenClaw Agents and Channels
+
+Before importing cron jobs, configure `~/.openclaw/openclaw.json` for your agents and channels.
+
+Starter examples:
+
+```text
+examples/openclaw/openclaw.example.json
+examples/openclaw/openclaw.multi-channel.example.json
+```
+
+See [OpenClaw Config Guide](openclaw-config-guide.md) for Discord multi-channel routing, cron delivery targets, and QMD boundary notes.
+
+---
+
+## Step 8: Set Up Cron Jobs (OpenClaw)
 
 ```bash
 # Import nightly pipeline jobs
@@ -174,7 +189,7 @@ Or manually edit `~/.openclaw/cron/jobs.json` following the format in `cron-exam
 
 ---
 
-## Step 8: Add governance only after one success
+## Step 9: Add governance only after one success
 
 Once the minimal setup works, you can extend Brain OS beyond knowledge creation into a fuller knowledge-system loop:
 
@@ -190,7 +205,7 @@ Recommendation:
 
 This staged rollout is important. Brain OS is easier to adopt when people can first see one successful workflow, then layer governance on top.
 
-## Step 9: Expand only after one success
+## Step 10: Expand only after one success
 
 Good first successes:
 - open the vault in Obsidian
@@ -200,9 +215,11 @@ Good first successes:
 
 Only after that should you decide whether to enable Observer, CI/CD, QMD, or the full nightly system.
 
+QMD is optional and separately installed; it is recommended for large vaults and conversation mining, but it is not bundled with OpenClaw.
+
 ---
 
-## Step 10: Enable Observer (Optional, v0.5+)
+## Step 11: Enable Observer (Optional, v0.5+)
 
 Observer is your AI team's daily health monitor. It runs automatically and produces improvement suggestions.
 
@@ -220,7 +237,7 @@ Read [Observer Playbook](agent-playbooks/observer-playbook.md) for full configur
 
 ---
 
-## Step 11: Set Up CI/CD (Optional, v0.5+)
+## Step 12: Set Up CI/CD (Optional, v0.5+)
 
 If you host your vault on GitHub, enable automatic quality checks:
 

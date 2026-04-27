@@ -4,6 +4,20 @@ All notable changes to Obsidian Brain OS are documented here.
 
 ---
 
+## [1.5.1] — 2026-04-27
+
+### Added
+- **`examples/openclaw/openclaw.example.json`** and **`examples/openclaw/openclaw.multi-channel.example.json`** — Added sanitized OpenClaw config examples for single-agent and multi-channel Discord setups.
+- **`docs/openclaw-config-guide.md`** / **`docs/zh/openclaw-config-guide.md`** — Added bilingual guidance for `openclaw.json`, channel routing, cron delivery, placeholders, secrets, and QMD boundaries.
+
+### Changed
+- **`docs/qmd-setup.md`** / **`docs/zh/qmd-setup.md`** — Clarified that QMD is a separately installed retrieval engine, not a bundled OpenClaw component.
+- **`docs/openclaw-setup.md`**, **`docs/zh/openclaw-setup.md`**, **`docs/getting-started.md`**, **`docs/zh/getting-started.md`**, **`README.md`**, and **`README_EN.md`** — Added links and wording so users configure OpenClaw channels and QMD separately.
+- **`scripts/config.env.example`** — Documented optional `QMD_BIN` / `QMD_BIN_REAL` environment variables for deployments where QMD is not on `PATH`.
+
+### Fixed
+- Removed wording that could lead users or agents to claim that QMD comes with OpenClaw by default.
+
 ## [1.5.0] — 2026-04-27
 
 ### Changed

@@ -12,7 +12,8 @@
 - **Cron jobs** 按计划运行 AI 任务（02:00-04:00 pipeline、07:00 晨间简报）
 - **隔离 session** 防止 pipeline 运行污染你的主对话
 - **Skills** 给 AI agent 每个任务的专门指令
-- **Memory search** 提供跨知识库的语义检索
+- **频道路由** 把 Discord / Slack 等频道映射到对应 agent
+- **检索集成** 让 agent 在外部检索后端（如 QMD）已安装时使用它们
 
 ---
 
@@ -64,6 +65,21 @@ sed -i '' 's|/tmp/brain-os-test/vault|/path/to/your/vault|g' SKILL.md
 sed -i '' 's|Alex|Your Name|g' SKILL.md
 sed -i '' 's|CST|America/New_York|g' SKILL.md
 ```
+
+---
+
+## OpenClaw 配置示例
+
+导入 cron jobs 之前，先在 `~/.openclaw/openclaw.json` 中配置 agents 和 channels。
+
+Brain OS 提供起步示例：
+
+```text
+examples/openclaw/openclaw.example.json
+examples/openclaw/openclaw.multi-channel.example.json
+```
+
+多频道 Discord 路由、agent bindings、投递目标和 QMD 边界说明见 [OpenClaw 配置指南](openclaw-config-guide.md)。
 
 ---
 
@@ -172,19 +188,13 @@ Cron jobs 可以将结果投递到各种渠道：
 
 ---
 
-## Memory Search 配置
+## 检索 / QMD 配置
 
-Brain OS 使用语义 memory search 进行知识检索。在 OpenClaw 中配置：
+QMD 不是 OpenClaw 默认内置组件。如果你需要大型 vault 或 conversation mining 的语义 / 混合检索，请单独安装 QMD。
 
-```json
-{
-  "memory": {
-    "provider": "openai",
-    "model": "text-embedding-3-small",
-    "mode": "hybrid"
-  }
-}
-```
+当 QMD 可用时，Brain OS agent 可以优先使用它作为检索后端。如果 QMD 缺失，prompt 应明确进入 degraded mode，并回退到关键词检索。
+
+见 [QMD 向量检索配置指南](qmd-setup.md) 和 [OpenClaw 配置指南](openclaw-config-guide.md)。
 
 ---
 

@@ -1,170 +1,132 @@
 # QMD 向量检索配置指南
 
-> QMD（Query-Memory-Docs）是 OpenClaw 内置的本地向量/混合检索层，用于在大型知识库中做语义搜索。
+> QMD（Query-Memory-Docs）用于为 Brain OS vault 配置向量 / 混合检索。
 
 ---
 
 ## 什么是 QMD？
 
-QMD 是 OpenClaw 提供的本地向量检索引擎，它能：
+QMD（Query-Memory-Docs）是一个需要单独安装的本地检索引擎，用于向量检索 / 混合检索。它能让你用自然语言在知识库中做语义搜索。
+
+**重要边界：QMD 不是 OpenClaw 默认内置组件。** Brain OS 推荐在 QMD 已安装且可用时，把它作为 OpenClaw Agent 的优先语义检索后端；但用户仍然需要单独安装和配置 QMD。
+
+QMD 可以提供：
 
 - **语义搜索**：用自然语言找内容，不依赖关键词精确匹配
-- **混合检索**（hybrid）：向量检索 + BM25 全文检索结合，召回率更高
+- **混合检索**：向量检索 + BM25 全文检索结合，召回率更高
 - **rerank**：对候选结果二次排序，提升精度
-- **本地运行**：所有数据留在本地，无需外部 API
+- **本地优先索引**：vault 和 transcript 索引留在本机
 
-在 Brain OS 的 Nightly Pipeline 中，QMD 是对话挖掘（conversation-knowledge-flywheel）的**主要召回层**。
+在 Brain OS 的 Nightly Pipeline 中，QMD 是 conversation mining 在可用时的优先召回层。
 
 ---
 
 ## 什么时候需要 QMD？
 
 | 场景 | 是否需要 QMD |
-|------|------------|
-| vault < 200 条笔记 | ❌ 不需要，手动搜索够用 |
+|---|---|
+| vault < 200 条笔记 | ❌ 通常手动搜索够用 |
 | vault 200-500 条笔记 | 🟡 可选，有 QMD 效果更好 |
-| vault > 500 条笔记 | ✅ 推荐，语义检索优势明显 |
-| 运行对话挖掘 Pipeline | ✅ 推荐，QMD 是主召回层 |
-| 只做知识整理，不跑 Pipeline | ❌ 不需要 |
+| vault > 500 条笔记 | ✅ 推荐 |
+| 运行 conversation mining / nightly pipeline | ✅ 推荐作为主召回层 |
+| 只做知识整理 + 个人事务 | ❌ 可选，可以跳过 |
 
-**结论：如果你只用 Brain OS 的知识层 + 个人事务，不跑 Nightly Pipeline，可以跳过 QMD。**
+如果 QMD 不可用，Brain OS prompt 应该进入 degraded mode，并回退到 `grep` / `ripgrep`。召回率会下降，但 pipeline 仍然可以运行。
 
 ---
 
-## 安装 QMD
+## 单独安装 QMD
 
-QMD 是 OpenClaw 的内置功能，随 OpenClaw 安装一起提供。
+请根据你使用的 QMD 包或仓库说明安装。安装后，先确认 QMD CLI 可用：
 
 ```bash
-# 确认 OpenClaw 已安装
-openclaw --version
-
-# 查看 QMD 配置选项
-openclaw qmd --help
+qmd status
+# 或者如果安装在自定义路径：
+/path/to/qmd status
 ```
+
+然后用以下任一方式让 Brain OS 脚本能找到它：
+
+```bash
+# 方式 A：把 qmd 放进 PATH
+export PATH="/path/to/qmd/bin:$PATH"
+
+# 方式 B：为 Brain OS 脚本指定 binary
+export QMD_BIN="/path/to/qmd"
+export QMD_BIN_REAL="/path/to/qmd"
+```
+
+不要假设每个 OpenClaw 安装都有 `openclaw qmd ...` 命令。除非你的 OpenClaw 发行版明确提供了 QMD wrapper，否则请直接使用已安装的 QMD binary。
 
 ---
 
-## 配置 QMD for Brain OS
+## Brain OS 推荐索引范围
 
-在 OpenClaw 配置文件（`~/.openclaw/openclaw.json` 或 `openclaw.yaml`）中添加 QMD 配置：
+安装 QMD 后，建议索引这些目录：
 
-```json
-{
-  "qmd": {
-    "provider": "openai",
-    "model": "text-embedding-3-small",
-    "mode": "hybrid",
-    "sources": [
-      {
-        "path": "/tmp/brain-os-test/vault/03-KNOWLEDGE",
-        "watch": true,
-        "embedInterval": "6h"
-      },
-      {
-        "path": "{{TRANSCRIPT_DIR}}",
-        "watch": false,
-        "embedInterval": "1d"
-      }
-    ]
-  }
-}
+| 来源 | 作用 |
+|---|---|
+| `{{BRAIN_ROOT}}/03-KNOWLEDGE` | 正式知识笔记 |
+| `{{BRAIN_ROOT}}/05-PROJECTS` | 项目 brief 和计划 |
+| `{{TRANSCRIPT_DIR}}` | 导出的对话 transcript |
+| `{{WORKSPACE_ROOT}}` | 可选 workspace 文档 / prompts |
+
+不同 QMD 发行版的命令可能不同，但常见模式是：
+
+```bash
+qmd update
+qmd embed
+qmd query "agent architecture decisions"
 ```
 
-**配置说明：**
-
-| 字段 | 说明 | 推荐值 |
-|------|------|--------|
-| `provider` | embedding 提供商 | `openai` / `local`（本地模型） |
-| `model` | embedding 模型 | `text-embedding-3-small`（OpenAI）或 `qwen3-embedding-4b`（本地） |
-| `mode` | 检索模式 | `hybrid`（推荐）/ `vector` / `bm25` |
-| `sources[].path` | 要索引的目录 | Brain vault 的 03-KNOWLEDGE 目录 |
-| `sources[].watch` | 是否实时监听文件变化 | 知识库用 `true`，对话目录用 `false` |
-| `embedInterval` | 重新 embed 间隔 | `6h`（知识库），`1d`（对话） |
-
----
-
-## 本地模型（无 OpenAI API）
-
-如果你想完全本地化运行，可以使用本地 embedding 模型：
-
-```json
-{
-  "qmd": {
-    "provider": "local",
-    "model": "qwen3-embedding-4b",
-    "mode": "hybrid"
-  }
-}
-```
-
-**本地模型要求：** 需要 Ollama 或兼容的本地推理服务。参考 [OpenClaw 本地模型文档](../openclaw-setup.md)。
+Brain OS 脚本中优先使用 `QMD_BIN`，这样用户可以自己决定 QMD binary 路径。
 
 ---
 
 ## 在 Brain OS 中使用 QMD
 
-QMD 在 Brain OS 中主要用于两个场景：
+QMD 主要用于两个场景：
 
-### 场景 1：对话挖掘（Nightly Pipeline）
+1. **Nightly Pipeline**：`conversation-knowledge-flywheel` 可以使用 QMD 做高召回候选检索。
+2. **日常知识检索**：agent 在回答前可以用 QMD 搜大型 vault / workspace。
 
-`conversation-knowledge-flywheel` skill 会自动使用 QMD 做对话内容的语义召回：
+写 agent 指令时应使用条件式口径：
 
-```bash
-# 手动触发 QMD 更新（Nightly Pipeline 会自动做这步）
-openclaw qmd update --path "/tmp/brain-os-test/vault/03-KNOWLEDGE"
-openclaw qmd embed --path "{{TRANSCRIPT_DIR}}"
-```
-
-### 场景 2：知识检索（日常使用）
-
-配置好 QMD 后，你可以用自然语言搜索 vault：
-
-```bash
-# 语义搜索示例
-openclaw qmd query "关于 AI Agent 架构设计的笔记"
-
-# 混合检索（推荐）
-openclaw qmd query --mode hybrid "如何做对话挖掘"
-```
+- ✅ “QMD 可用时优先使用。”
+- ✅ “如果 QMD 缺失或不健康，明确报告 degraded mode，并回退到关键词检索。”
+- ❌ “OpenClaw 默认自带 QMD。”
 
 ---
 
-## 健康检查与故障排查
+## OpenClaw 配置边界
 
-```bash
-# 检查 QMD 状态
-openclaw qmd status
+OpenClaw 负责 agent、频道、模型和 cron 投递路由。QMD 是独立检索引擎。
 
-# 强制重建索引
-openclaw qmd rebuild --path "/tmp/brain-os-test/vault/03-KNOWLEDGE"
-```
+OpenClaw 配置示例见：
 
-**常见问题：**
+- [OpenClaw 配置指南](openclaw-config-guide.md)
+- `examples/openclaw/openclaw.example.json`
+- `examples/openclaw/openclaw.multi-channel.example.json`
 
-| 问题 | 原因 | 解决方案 |
-|------|------|---------|
-| `QMD unhealthy` | 索引损坏或模型 ABI 不匹配 | `openclaw qmd rebuild` |
-| 搜索结果不相关 | embedding 模型与内容语言不匹配 | 换用 `qwen3-embedding-4b`（中文更好）|
-| `native module mismatch` | Node.js 版本升级后 QMD 未重新编译 | 重装 OpenClaw 或 `openclaw repair` |
-| 索引速度慢 | vault 文件太多 | 调大 `embedInterval` 或缩小 `sources.path` |
+如果 Brain OS 脚本需要非默认 QMD 路径，请在运行 OpenClaw 的环境中设置 `QMD_BIN` / `QMD_BIN_REAL`。
 
 ---
 
-## 降级模式
+## 常见问题
 
-如果 QMD 不可用，`conversation-knowledge-flywheel` skill 会自动进入降级模式：
-
-- 用 `grep` / `ripgrep` 做关键词搜索替代语义搜索
-- 召回率下降，但 Pipeline 仍然可以运行
-- 会在产出报告中明确标注 "degraded mode (QMD unavailable)"
-
-**QMD 是可选增强，不是必须项。**
+| 问题 | 解决方案 |
+|---|---|
+| `qmd: command not found` | 先单独安装 QMD，再加入 `PATH` 或设置 `QMD_BIN` |
+| `QMD unhealthy` | 用你的 QMD CLI 重建或修复索引 |
+| 搜索结果不相关 | 如果中文内容多，换用更适合中文 / 多语言的 embedding 模型 |
+| native module mismatch | 为当前 Node/runtime 版本重装或重建 QMD |
+| Pipeline 报 degraded mode | 检查 transcript 路径、QMD binary 路径和 QMD 索引健康 |
 
 ---
 
 ## 相关文档
 
-- [OpenClaw 配置指南](openclaw-setup.md)
+- [OpenClaw 配置指南](openclaw-config-guide.md)
+- [OpenClaw 配置](openclaw-setup.md)
 - [Nightly Pipeline 详解](nightly-pipeline.md)
 - [知识库架构](knowledge-architecture.md)
