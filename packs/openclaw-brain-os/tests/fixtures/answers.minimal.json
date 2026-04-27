@@ -1,0 +1,26 @@
+{
+  "userHome": "/home/brainos-user",
+  "openclawRoot": "/home/brainos-user/.openclaw",
+  "skillsRoot": "/home/brainos-user/.agents/skills",
+  "brainRoot": "/home/brainos-user/Documents/BrainOS-Vault",
+  "ownerName": "Brain OS User",
+  "timezone": "UTC",
+  "profile": "minimal",
+  "models": {
+    "main": "openrouter/auto",
+    "light": "openrouter/auto"
+  },
+  "discord": {
+    "enabled": true,
+    "guildId": "{{DISCORD_GUILD_ID}}",
+    "ownerUserId": "{{DISCORD_OWNER_USER_ID}}",
+    "channels": {
+      "main": "{{MAIN_CHANNEL_ID}}",
+      "personalOps": "{{PERSONAL_OPS_CHANNEL_ID}}",
+      "knowledgeIngest": "{{KNOWLEDGE_INGEST_CHANNEL_ID}}",
+      "knowledgeQuery": "{{KNOWLEDGE_QUERY_CHANNEL_ID}}",
+      "ossSync": "{{OSS_SYNC_CHANNEL_ID}}",
+      "cronNotifications": "{{CRON_NOTIFICATION_CHANNEL_ID}}"
+    }
+  }
+}

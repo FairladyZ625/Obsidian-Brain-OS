@@ -8,7 +8,7 @@ It is different from the rest of the repository:
 - `examples/` provides small copyable snippets.
 - `packs/openclaw-brain-os/` is a self-contained install pack that an agent can apply to an existing OpenClaw installation.
 
-Current status: **skeleton / reviewable static pack**. This PR establishes the directory shape, manifest, config patch template, main workspace template, vault-template strategy, and safety checks. Apply/rollback is intentionally deferred to a later PR.
+Current status: **dry-run installer preview**. The pack can now run `--check`, render a dry-run preview, and verify that preview. Apply/rollback is intentionally deferred to a later PR.
 
 ## What this pack installs
 
@@ -39,19 +39,25 @@ This pack does not maintain a second full vault template. The installer should c
 - Config writes must use patch + conflict detection, not blind deep merge.
 - Existing user config should be skipped by default when conflicts exist.
 
-## Planned commands
+## Commands
 
-Future PRs will add:
+Available now:
 
 ```bash
 bash install.sh --check
 bash install.sh --dry-run
+bash install.sh --answers answers.json --out /tmp/brain-os-preview
+bash verify.sh /tmp/brain-os-preview
+```
+
+Planned for a later PR:
+
+```bash
 bash install.sh --answers answers.json --apply
-bash verify.sh
 bash rollback.sh
 ```
 
-For now, run the static smoke test:
+Run the smoke test:
 
 ```bash
 bash tests/smoke.sh

@@ -31,7 +31,7 @@
 |---|---|---|---|---|---|
 | Vault 模板 | Core | 提供 Obsidian 基础目录结构 | `vault-template/` | `bash setup.sh` 或复制模板 | 检查 vault 中存在 `00-INBOX/`、`03-KNOWLEDGE/`、`05-PROJECTS/` |
 | 安装器 | Core | 交互式 / 非交互式初始化 vault、config、skills | `setup.sh`、`skills/brain-os-installer/SKILL.md`、`INSTALL_FOR_AGENTS.md` | 运行 `bash setup.sh`；agent 从 `INSTALL_FOR_AGENTS.md` 开始 | 带 `BRAIN_OS_CONFIG` 运行 `bash scripts/verify-install.sh` |
-| OpenClaw Brain OS install pack | Core | 提供可安装的 OpenClaw 分发包，包含 config patch 模板、workspace bootstrap、skill manifest 和 canonical vault-template 接入 | `packs/openclaw-brain-os/` | 从 `packs/openclaw-brain-os/README.md` 开始；PR1a 是静态骨架，后续 PR 增加 dry-run/apply | 运行 `bash packs/openclaw-brain-os/tests/smoke.sh`；验证 JSON 模板和无私有信息 |
+| OpenClaw Brain OS install pack | Core | 提供可安装的 OpenClaw 分发包，包含 config patch 模板、workspace bootstrap、skill manifest 和 canonical vault-template 接入 | `packs/openclaw-brain-os/` | 从 `packs/openclaw-brain-os/README.md` 开始；PR1b 支持 --check/--dry-run preview，后续 PR 增加 safe apply/rollback | 运行 `bash packs/openclaw-brain-os/tests/smoke.sh`；验证 JSON 模板和无私有信息 |
 | 配置环境 | Core | 保存用户路径和运行变量 | `scripts/config.env.example` | 复制为 `scripts/config.env` 或由 setup 生成 | 检查 `BRAIN_PATH`、`WORKSPACE_PATH`、`SKILLS_PATH`、`USER_NAME`、`TIMEZONE` |
 | 安装验证器 | Core | 验证 vault、config、skills、lint、PII 检查 | `scripts/verify-install.sh` | setup 后运行 | 命令 exit 0；故意跳过的 optional feature 有 warning 可接受 |
 | PII / 私有路径扫描 | Core | 防止私有数据进入提交 | `scripts/check-pii.sh`、`.github/workflows/pii-scan.yml`、`docs/references/pii-deidentification-guide.md` | commit / PR 前运行 | `bash scripts/check-pii.sh --strict` 返回 0 |

@@ -4,6 +4,15 @@ All notable changes to Obsidian Brain OS are documented here.
 
 ---
 
+## [1.5.4] — 2026-04-27
+
+### Added
+- **OpenClaw Brain OS pack dry-run installer** — Added `install.sh --check`, `install.sh --dry-run`, `verify.sh`, render/placeholder/secret-scan helper scripts, minimal/full dry-run fixtures, and smoke coverage for preview generation.
+- **Multi-workspace templates** — Added initial writer, review, chronicle, and observer workspace templates as available preview assets.
+
+### Changed
+- **`packs/openclaw-brain-os/manifest.json`** — Bumped pack skeleton to `1.0.0-alpha.2` for the dry-run preview milestone.
+
 ## [1.5.3] — 2026-04-27
 
 ### Added

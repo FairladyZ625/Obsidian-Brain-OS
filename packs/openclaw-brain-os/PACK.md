@@ -22,6 +22,6 @@ You are installing or reviewing the OpenClaw Brain OS distribution pack.
 
 ## First implementation milestone
 
-PR1a should only establish the static skeleton and safety checks.
+PR1b adds non-destructive dry-run rendering and preview verification.
 
-Do not implement destructive apply behavior until patch preview and conflict detection are present.
+Do not implement destructive apply behavior until patch preview, conflict detection, backup, and rollback are present.

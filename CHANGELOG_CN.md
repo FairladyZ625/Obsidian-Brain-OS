@@ -4,6 +4,15 @@
 
 ---
 
+## [1.5.4] — 2026-04-27
+
+### 新增 / Added
+- **OpenClaw Brain OS pack dry-run installer** — 新增 `install.sh --check`、`install.sh --dry-run`、`verify.sh`、render / placeholder / secret-scan 辅助脚本、minimal/full dry-run fixtures，并把 preview 生成纳入 smoke test。
+- **Multi-workspace templates** — 新增 writer、review、chronicle、observer workspace 模板，作为 dry-run preview 中的 available assets。
+
+### 变更 / Changed
+- **`packs/openclaw-brain-os/manifest.json`** — pack skeleton 版本升到 `1.0.0-alpha.2`，对应 dry-run preview 阶段。
+
 ## [1.5.3] — 2026-04-27
 
 ### 新增 / Added

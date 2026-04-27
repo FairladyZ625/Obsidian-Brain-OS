@@ -27,7 +27,7 @@ done
 PRIVATE_BRAIN_NAME='ZeYu-AI'
 PRIVATE_BRAIN_NAME+='-Brain'
 SECRET_PATTERN="(/Users/[A-Za-z0-9._-]+|${PRIVATE_BRAIN_NAME}|[0-9]{18,20}|discord[.]com/api/webhooks|sk-[A-Za-z0-9_-]{12,}|xoxb-|Bot [A-Za-z0-9._-]{20,})"
-if grep -R -nE --exclude='smoke.sh' "$SECRET_PATTERN" "$PACK"; then
+if grep -R -nE --exclude='smoke.sh' --exclude='scan-secrets.mjs' "$SECRET_PATTERN" "$PACK"; then
   echo "private or secret-looking material found in pack" >&2
   exit 1
 fi
@@ -51,5 +51,15 @@ for key in manifest['configPatchScope']['forbiddenTopLevelKeys']:
     if key in patch:
         raise SystemExit(f"forbidden top-level key in openclaw patch template: {key}")
 PY
+
+# Exercise PR1b dry-run installer and preview verification for minimal and full profiles.
+TMP_PREVIEW="${TMPDIR:-/tmp}/brain-os-pack-smoke-$$"
+rm -rf "$TMP_PREVIEW"
+bash "$PACK/install.sh" --check --answers "$PACK/tests/fixtures/answers.minimal.json" >/dev/null
+bash "$PACK/install.sh" --dry-run --answers "$PACK/tests/fixtures/answers.minimal.json" --out "$TMP_PREVIEW/minimal" >/dev/null
+bash "$PACK/verify.sh" "$TMP_PREVIEW/minimal" >/dev/null
+bash "$PACK/install.sh" --dry-run --answers "$PACK/tests/fixtures/answers.full.json" --out "$TMP_PREVIEW/full" >/dev/null
+bash "$PACK/verify.sh" "$TMP_PREVIEW/full" >/dev/null
+rm -rf "$TMP_PREVIEW"
 
 echo "pack smoke ok"
