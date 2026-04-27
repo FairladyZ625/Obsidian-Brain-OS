@@ -197,15 +197,16 @@ bash setup.sh --test
 
 ## 新用户最该先读什么？
 
-### 先读这 4 篇
+### 先读这些
 
 1. **[功能清单 SSOT](docs/feature-matrix.md)** ⭐ 所有能力、安装资产、检查方法总表
-2. **[组件全览指南](docs/component-guide.md)** ⭐ 先看全貌
-3. **[快速开始](docs/getting-started.md)** ⭐ 安装与首次运行
-4. **[Agent 团队配置](docs/agents.md)** ⭐ 真正把系统跑起来的关键
-5. **[Agent Bootstrap 指南](docs/agent-bootstrap-guide.md)** ⭐ AGENTS.md / references 模板写法
-6. **[OpenClaw 配置指南](docs/openclaw-config-guide.md)** ⭐ 多频道、cron 投递、QMD 边界
-7. **[Observer 使用手册](docs/agent-playbooks/observer-playbook.md)** ⭐ 理解系统如何自我进化
+2. **[OpenClaw Brain OS Pack](packs/openclaw-brain-os/README.md)** ⭐ 可安装分发包
+3. **[组件全览指南](docs/component-guide.md)** ⭐ 先看全貌
+4. **[快速开始](docs/getting-started.md)** ⭐ 安装与首次运行
+5. **[Agent 团队配置](docs/agents.md)** ⭐ 真正把系统跑起来的关键
+6. **[Agent Bootstrap 指南](docs/agent-bootstrap-guide.md)** ⭐ AGENTS.md / references 模板写法
+7. **[OpenClaw 配置指南](docs/openclaw-config-guide.md)** ⭐ 多频道、cron 投递、QMD 边界
+8. **[Observer 使用手册](docs/agent-playbooks/observer-playbook.md)** ⭐ 理解系统如何自我进化
 
 ### 如果你想理解“怎么长期养出来”
 
@@ -227,6 +228,7 @@ bash setup.sh --test
 |------|------|
 | `vault-template/` | Brain 的基础目录结构模板 |
 | `setup.sh` | 安装和初始化脚本 |
+| `packs/openclaw-brain-os/` | OpenClaw Brain OS 可安装分发包 |
 | `skills/` | Agent 的能力包 |
 | `prompts/` | Nightly / cron / pipeline 的模板 |
 | `scripts/` | 自动化脚本 |

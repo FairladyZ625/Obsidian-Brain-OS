@@ -17,24 +17,25 @@
 ### 📚 技术文档
 7. [快速开始](getting-started.md)
 8. [功能清单 SSOT](feature-matrix.md) — 所有能力、安装资产、检查方法总表
-9. [系统架构](architecture.md)
-10. **[Agent 团队配置指南](agents.md)** ⭐ — **4 个必备 Agent 定义 + Skills 全目录 + 配置 Checklist**
-11. [Agent Bootstrap 指南](agent-bootstrap-guide.md) — AGENTS.md / references 模板写法
-12. [Nightly Pipeline](nightly-pipeline.md)
-13. [个人事务系统](personal-ops.md)
-14. [知识库架构](knowledge-architecture.md)
-15. [个人文档与工作上下文（06/07）](personal-context-guide.md)
-16. [Obsidian 配置](obsidian-setup.md)
-17. [OpenClaw 配置](openclaw-setup.md)
-18. [OpenClaw 配置指南](openclaw-config-guide.md) — 多频道、cron 投递、QMD 边界
-19. [QMD 语义搜索配置](qmd-setup.md)
-20. [Chronicle 史官系统](chronicle-agent.md)
-21. [Skills 使用指南](skills-guide.md)
-22. [项目管理](project-management.md)
-23. [治理同步边界](governance-sync-boundary.md)
-24. [发版与版本号指南](release-versioning.md)
-25. [治理巡检 Cron 指南](governance-cron-guide.md)
-26. [常见问题](faq.md)
+9. [OpenClaw Brain OS Pack](../../packs/openclaw-brain-os/README.md) — 可安装分发包
+10. [系统架构](architecture.md)
+11. **[Agent 团队配置指南](agents.md)** ⭐ — **4 个必备 Agent 定义 + Skills 全目录 + 配置 Checklist**
+12. [Agent Bootstrap 指南](agent-bootstrap-guide.md) — AGENTS.md / references 模板写法
+13. [Nightly Pipeline](nightly-pipeline.md)
+14. [个人事务系统](personal-ops.md)
+15. [知识库架构](knowledge-architecture.md)
+16. [个人文档与工作上下文（06/07）](personal-context-guide.md)
+17. [Obsidian 配置](obsidian-setup.md)
+18. [OpenClaw 配置](openclaw-setup.md)
+19. [OpenClaw 配置指南](openclaw-config-guide.md) — 多频道、cron 投递、QMD 边界
+20. [QMD 语义搜索配置](qmd-setup.md)
+21. [Chronicle 史官系统](chronicle-agent.md)
+22. [Skills 使用指南](skills-guide.md)
+23. [项目管理](project-management.md)
+24. [治理同步边界](governance-sync-boundary.md)
+25. [发版与版本号指南](release-versioning.md)
+26. [治理巡检 Cron 指南](governance-cron-guide.md)
+27. [常见问题](faq.md)
 
 ---
 
@@ -43,10 +44,11 @@
 **刚装完？按这个顺序读：**
 1. → [快速开始](getting-started.md)
 2. → [功能清单 SSOT](feature-matrix.md)
-3. → [Agent Bootstrap 指南](agent-bootstrap-guide.md)
-4. → **[Agent 团队配置](agents.md)** ⭐ 最重要
-5. → [日常工作流](03-daily-workflow.md)
-6. → 按需查阅其他文档
+3. → [OpenClaw Brain OS Pack](../../packs/openclaw-brain-os/README.md)
+4. → [Agent Bootstrap 指南](agent-bootstrap-guide.md)
+5. → **[Agent 团队配置](agents.md)** ⭐ 最重要
+6. → [日常工作流](03-daily-workflow.md)
+7. → 按需查阅其他文档
 
 **想深入了解设计？**
 1. → [核心方法论](00-philosophy.md)

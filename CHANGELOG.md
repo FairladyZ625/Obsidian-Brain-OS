@@ -4,6 +4,15 @@ All notable changes to Obsidian Brain OS are documented here.
 
 ---
 
+## [1.5.3] — 2026-04-27
+
+### Added
+- **`packs/openclaw-brain-os/`** — Added the first static skeleton for an installable OpenClaw Brain OS distribution pack, including manifest, scope-limited OpenClaw config patch template, main workspace bootstrap, canonical vault-template strategy, skill manifest, disabled cron placeholder, and smoke test.
+- **`.github/workflows/pack-smoke.yml`** — Added CI coverage for pack JSON validity, canonical vault-template checks, disabled cron defaults, forbidden config scope, and private/secret material scanning.
+
+### Changed
+- **`docs/feature-matrix.md`** / **`docs/zh/feature-matrix.md`** and README entry points — Added discoverability for the OpenClaw Brain OS install pack.
+
 ## [1.5.2] — 2026-04-27
 
 ### Added

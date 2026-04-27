@@ -4,6 +4,15 @@
 
 ---
 
+## [1.5.3] — 2026-04-27
+
+### 新增 / Added
+- **`packs/openclaw-brain-os/`** — 新增可安装 OpenClaw Brain OS 分发包的第一版静态骨架，包含 manifest、限制 scope 的 OpenClaw config patch 模板、main workspace bootstrap、canonical vault-template 策略、skill manifest、默认 disabled 的 cron placeholder 和 smoke test。
+- **`.github/workflows/pack-smoke.yml`** — 新增 pack CI 检查，覆盖 JSON 合法性、canonical vault-template、cron 默认 disabled、禁止配置 scope 和私有/密钥内容扫描。
+
+### 变更 / Changed
+- **`docs/feature-matrix.md`** / **`docs/zh/feature-matrix.md`** 与 README 入口 — 补充分发 pack 的发现入口。
+
 ## [1.5.2] — 2026-04-27
 
 ### 新增 / Added

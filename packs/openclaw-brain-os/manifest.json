@@ -1,0 +1,59 @@
+{
+  "packName": "openclaw-brain-os",
+  "packVersion": "1.0.0-alpha.1",
+  "status": "skeleton",
+  "minOpenClawVersion": "0.0.0",
+  "maxOpenClawVersion": null,
+  "generatedFrom": "brain-os-real-env-redacted",
+  "generatedAt": "2026-04-27",
+  "canonicalVaultTemplate": "../../vault-template",
+  "profiles": [
+    {
+      "id": "minimal",
+      "description": "Vault template + main workspace + main Discord channel prompt patch.",
+      "agents": ["main"],
+      "skills": ["brain-vault-governance"],
+      "cronJobs": []
+    },
+    {
+      "id": "knowledge",
+      "description": "Minimal plus knowledge ingest/query channels and article ingestion skills.",
+      "agents": ["main"],
+      "skills": ["brain-vault-governance", "article-notes-integration"],
+      "cronJobs": []
+    },
+    {
+      "id": "personal-ops",
+      "description": "Minimal plus personal ops channel prompts and personal ops skills. Cron jobs remain disabled until explicitly enabled by the user.",
+      "agents": ["main"],
+      "skills": ["brain-vault-governance", "personal-ops-driver"],
+      "cronJobs": ["personal-ops-morning-brief"]
+    },
+    {
+      "id": "team",
+      "description": "Adds review/writer/chronicle workspace templates in later PRs.",
+      "agents": ["main"],
+      "skills": ["brain-vault-governance"],
+      "cronJobs": []
+    },
+    {
+      "id": "full",
+      "description": "Full Brain OS automation profile. Advanced cron jobs are installed disabled by default.",
+      "agents": ["main"],
+      "skills": ["brain-vault-governance", "article-notes-integration", "conversation-knowledge-flywheel", "knowledge-flywheel-amplifier", "personal-ops-driver"],
+      "cronJobs": ["nightly-pipeline", "personal-ops", "governance"]
+    }
+  ],
+  "configPatchScope": {
+    "allowedTopLevelKeys": ["agents", "bindings", "channels", "skills"],
+    "forbiddenTopLevelKeys": ["auth", "models", "memory", "talk", "meta", "wizard", "tools", "commands", "approvals", "session", "hooks", "gateway", "plugins", "credentials"]
+  },
+  "installDefaults": {
+    "openclawRoot": "{{USER_HOME}}/.openclaw",
+    "skillsRoot": "{{USER_HOME}}/.agents/skills",
+    "profile": "minimal",
+    "cronEnabledDefault": false,
+    "skillInstallMode": "missing-only",
+    "workspaceConflictDefault": "skip"
+  }
+}
