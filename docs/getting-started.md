@@ -82,6 +82,8 @@ This will guide you through:
 
 If you prefer to inspect profiles before running setup, read [install profiles](install-profiles.md).
 
+For a complete SSOT of features, install assets, and verification checks, use the [Feature Matrix](feature-matrix.md).
+
 ---
 
 ## Step 3: Open your vault

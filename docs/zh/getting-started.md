@@ -84,6 +84,8 @@ bash setup.sh --non-interactive --profile minimal
 
 如果你想先理解安装分层，再运行 setup，请看：[安装档位说明](../install-profiles.md)
 
+如果你要看完整功能、安装资产和验证方法的 SSOT，阅读 [功能清单](feature-matrix.md)。
+
 ---
 
 ## 第三步：打开你的 Vault

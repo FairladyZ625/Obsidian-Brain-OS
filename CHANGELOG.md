@@ -9,10 +9,11 @@ All notable changes to Obsidian Brain OS are documented here.
 ### Added
 - **`examples/openclaw/openclaw.example.json`** and **`examples/openclaw/openclaw.multi-channel.example.json`** — Added sanitized OpenClaw config examples for single-agent and multi-channel Discord setups.
 - **`docs/openclaw-config-guide.md`** / **`docs/zh/openclaw-config-guide.md`** — Added bilingual guidance for `openclaw.json`, channel routing, cron delivery, placeholders, secrets, and QMD boundaries.
+- **`docs/feature-matrix.md`** / **`docs/zh/feature-matrix.md`** — Added a feature matrix SSOT so users and agents can see every public Brain OS capability, its install assets, and its verification checks.
 
 ### Changed
 - **`docs/qmd-setup.md`** / **`docs/zh/qmd-setup.md`** — Clarified that QMD is a separately installed retrieval engine, not a bundled OpenClaw component.
-- **`docs/openclaw-setup.md`**, **`docs/zh/openclaw-setup.md`**, **`docs/getting-started.md`**, **`docs/zh/getting-started.md`**, **`README.md`**, and **`README_EN.md`** — Added links and wording so users configure OpenClaw channels and QMD separately.
+- **`docs/openclaw-setup.md`**, **`docs/zh/openclaw-setup.md`**, **`docs/getting-started.md`**, **`docs/zh/getting-started.md`**, **`docs/component-guide.md`**, **`README.md`**, and **`README_EN.md`** — Added links and wording so users configure OpenClaw channels and QMD separately and can find the feature matrix.
 - **`scripts/config.env.example`** — Documented optional `QMD_BIN` / `QMD_BIN_REAL` environment variables for deployments where QMD is not on `PATH`.
 
 ### Fixed

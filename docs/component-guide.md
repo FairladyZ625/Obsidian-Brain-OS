@@ -206,9 +206,10 @@ Uses your machine's local timezone by default — works anywhere in the world.
 ### For Users / 用户文档（入门顺序）
 
 1. **[README](README.md)** — Project overview & quick start
-2. **[Getting Started](docs/getting-started.md)** — Install & first run
-3. **[Agent Team Guide](docs/agents.md)** ⭐ — Configure your AI agents
-4. **[Architecture](docs/architecture.md)** — System design
+2. **[Feature Matrix SSOT](docs/feature-matrix.md)** ⭐ — All features, install assets, and verification checks
+3. **[Getting Started](docs/getting-started.md)** — Install & first run
+4. **[Agent Team Guide](docs/agents.md)** ⭐ — Configure your AI agents
+5. **[Architecture](docs/architecture.md)** — System design
 5. **[Nightly Pipeline](docs/nightly-pipeline.md)** — Automated knowledge processing
 6. **[Personal Ops](docs/personal-ops.md)** — Daily operations dashboard
 7. **[QMD Semantic Search](docs/qmd-setup.md)** — Vector search setup

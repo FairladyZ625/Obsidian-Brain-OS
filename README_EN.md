@@ -94,7 +94,7 @@ Hi! I want to install Obsidian Brain OS — an AI-driven personal context system
 Start now — let's get Brain OS running!
 ```
 
-→ Full guide: [docs/getting-started.md](docs/getting-started.md) | [OpenClaw config examples](docs/openclaw-config-guide.md) | [中文首页](README.md)
+→ Full guide: [docs/getting-started.md](docs/getting-started.md) | [Feature Matrix SSOT](docs/feature-matrix.md) | [OpenClaw config examples](docs/openclaw-config-guide.md) | [中文首页](README.md)
 
 ---
 
