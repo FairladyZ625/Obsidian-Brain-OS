@@ -22,6 +22,6 @@ You are installing or reviewing the OpenClaw Brain OS distribution pack.
 
 ## First implementation milestone
 
-PR1b adds non-destructive dry-run rendering and preview verification.
+PR2 adds conservative safe apply, conflict detection, backup, and rollback.
 
-Do not implement destructive apply behavior until patch preview, conflict detection, backup, and rollback are present.
+Never overwrite conflicting user config by default. Apply must require explicit `--yes`, cron jobs must remain disabled, and rollback must restore config backups without deleting user workspace, skills, or vault files.

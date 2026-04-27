@@ -4,6 +4,15 @@ All notable changes to Obsidian Brain OS are documented here.
 
 ---
 
+## [1.5.5] — 2026-04-27
+
+### Added
+- **OpenClaw Brain OS pack safe apply** — Added config conflict detection, conservative OpenClaw config merge, cron job merge, temp-safe apply flow, backup state, and rollback script for config files.
+- **Apply smoke fixture** — Pack smoke now applies into an isolated temp OpenClaw root and verifies rollback without touching real user config.
+
+### Changed
+- **`packs/openclaw-brain-os/manifest.json`** — Bumped pack preview version to `1.0.0-alpha.3` for the safe-apply milestone.
+
 ## [1.5.4] — 2026-04-27
 
 ### Added

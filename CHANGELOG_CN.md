@@ -4,6 +4,15 @@
 
 ---
 
+## [1.5.5] — 2026-04-27
+
+### 新增 / Added
+- **OpenClaw Brain OS pack safe apply** — 新增 config 冲突检测、保守 OpenClaw config merge、cron job merge、temp-safe apply flow、backup state 和 config rollback 脚本。
+- **Apply smoke fixture** — pack smoke 现在会安装到隔离的临时 OpenClaw root，并验证 rollback，不触碰真实用户配置。
+
+### 变更 / Changed
+- **`packs/openclaw-brain-os/manifest.json`** — pack preview 版本升到 `1.0.0-alpha.3`，对应 safe-apply 阶段。
+
 ## [1.5.4] — 2026-04-27
 
 ### 新增 / Added

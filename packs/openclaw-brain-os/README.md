@@ -8,7 +8,7 @@ It is different from the rest of the repository:
 - `examples/` provides small copyable snippets.
 - `packs/openclaw-brain-os/` is a self-contained install pack that an agent can apply to an existing OpenClaw installation.
 
-Current status: **dry-run installer preview**. The pack can now run `--check`, render a dry-run preview, and verify that preview. Apply/rollback is intentionally deferred to a later PR.
+Current status: **safe apply preview**. The pack can run `--check`, render and verify a dry-run preview, apply into a target OpenClaw root with backups, and roll back backed-up config files. Apply remains conservative: it refuses to run without `--yes`, skips existing workspace/vault files by default, and does not overwrite conflicting config unless future workflows explicitly opt into force mode.
 
 ## What this pack installs
 
@@ -48,13 +48,8 @@ bash install.sh --check
 bash install.sh --dry-run
 bash install.sh --answers answers.json --out /tmp/brain-os-preview
 bash verify.sh /tmp/brain-os-preview
-```
-
-Planned for a later PR:
-
-```bash
-bash install.sh --answers answers.json --apply
-bash rollback.sh
+bash install.sh --answers answers.json --apply --yes
+OPENCLAW_ROOT=~/.openclaw bash rollback.sh
 ```
 
 Run the smoke test:

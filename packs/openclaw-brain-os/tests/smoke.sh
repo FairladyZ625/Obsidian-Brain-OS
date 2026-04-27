@@ -60,6 +60,39 @@ bash "$PACK/install.sh" --dry-run --answers "$PACK/tests/fixtures/answers.minima
 bash "$PACK/verify.sh" "$TMP_PREVIEW/minimal" >/dev/null
 bash "$PACK/install.sh" --dry-run --answers "$PACK/tests/fixtures/answers.full.json" --out "$TMP_PREVIEW/full" >/dev/null
 bash "$PACK/verify.sh" "$TMP_PREVIEW/full" >/dev/null
+
+
+# Conflict detection should block an existing same-id agent with different config.
+CONFLICT_DIR="$TMP_PREVIEW/conflict"
+mkdir -p "$CONFLICT_DIR"
+printf '{"agents":{"list":[{"id":"main","workspace":"/already/there"}]}}
+' > "$CONFLICT_DIR/existing-openclaw.json"
+if node "$PACK/scripts/detect-openclaw-conflicts.mjs" --existing "$CONFLICT_DIR/existing-openclaw.json" --patch "$TMP_PREVIEW/minimal/openclaw.config-patch.json" --report "$CONFLICT_DIR/report.json" >/dev/null 2>&1; then
+  echo "expected conflict detection to fail" >&2
+  exit 1
+fi
+python3 - <<PY
+import json
+r=json.load(open('$CONFLICT_DIR/report.json'))
+assert r['ok'] is False
+assert any(b['type']=='agent' and b['id']=='main' for b in r['blockers'])
+PY
+
+# Exercise safe apply and rollback against an isolated temp OpenClaw root.
+APPLY_ROOT="/tmp/brain-os-pack-apply-smoke"
+rm -rf "$APPLY_ROOT"
+mkdir -p "$APPLY_ROOT/.openclaw/cron"
+printf '{"agents":{"list":[]},"bindings":[]}
+' > "$APPLY_ROOT/.openclaw/openclaw.json"
+printf '{"jobs":[]}
+' > "$APPLY_ROOT/.openclaw/cron/jobs.json"
+bash "$PACK/install.sh" --apply --yes --answers "$PACK/tests/fixtures/answers.apply.json" --out "$TMP_PREVIEW/apply" >/dev/null
+test -f "$APPLY_ROOT/.openclaw/openclaw.json"
+test -f "$APPLY_ROOT/.openclaw/cron/jobs.json"
+test -f "$APPLY_ROOT/.openclaw/agents/main/agent/AGENTS.md"
+test -d "$APPLY_ROOT/BrainOS-Vault/00-INBOX"
+OPENCLAW_ROOT="$APPLY_ROOT/.openclaw" bash "$PACK/rollback.sh" >/dev/null
+rm -rf "$APPLY_ROOT"
 rm -rf "$TMP_PREVIEW"
 
 echo "pack smoke ok"

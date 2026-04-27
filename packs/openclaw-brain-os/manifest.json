@@ -1,6 +1,6 @@
 {
   "packName": "openclaw-brain-os",
-  "packVersion": "1.0.0-alpha.2",
+  "packVersion": "1.0.0-alpha.3",
   "status": "skeleton",
   "minOpenClawVersion": "0.0.0",
   "maxOpenClawVersion": null,
