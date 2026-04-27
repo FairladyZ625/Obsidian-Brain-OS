@@ -34,6 +34,7 @@ delivery_mode: webhook
    - 七、今天明确不做
    - 八、今日提醒
    - 九、🧠 昨日知识信号（见规则 11）
+   - 十、🔮 Insight Analysis / 洞察落地（见规则 12）
 6. 优先级判断规则：
    - 先处理今天到期 / 明天到期 / 本周硬截止的事项
    - 再处理高杠杆但未启动事项
@@ -63,6 +64,23 @@ delivery_mode: webhook
    - 末尾固定一行 wikilink 跳回原文：`[[03-KNOWLEDGE/01-READING/04-DIGESTS/nightly-digest-YYYY-MM-DD|查看完整 nightly digest →]]`
    - 若文件不存在或无有效内容：写一行 `> 昨日 nightly digest 尚未生成或无有效信号`，不要报错或跳过这个模块
    - 风格要求：精炼，3-5 条，不复制全文，让{{USER_NAME}}一眼看到 AI 系统昨天挖了什么
+12. **Insight Analysis / 洞察落地模块（必须包含，不可省略）**：
+   - 在 daily-briefing.md 的结构末尾追加模块：`## 十、🔮 Insight Analysis / 洞察落地`
+   - 目标：把外部知识信号、当前项目状态、待办压力和最近对话灵感交叉起来，判断今天有没有值得落地的新方案。
+   - 使用 **HV-lite 横纵洞察法**：
+     - **Vertical / 纵轴**：读取 todo、当前承诺、progress board、decision queue、project briefs、nightly digest，识别当前真实压力、deadline、blocker、反复出现的行动主题和项目演进轨迹。
+     - **Horizontal / 横轴**：读取昨天 nightly digest 中的 article integration / conversation mining 信号，并结合最近 7 天 article notes、domain notes、同类产品/方法/架构模式，寻找可迁移参照。
+     - **Intersection / 交汇判断**：只在“纵轴压力”与“横轴方法”交叉时生成洞察；外部知识如果不能改变今天/本周执行质量，就不要硬升级为方案。
+   - 输出分三类：
+     - **今日可落地方案**：high-confidence，可直接降低 blocker、提升本周项目质量或解释近期反复问题；给出目标项目、来源、2-3 句话提案摘要和建议下一步。
+     - **候选观察**：medium-confidence，有价值但今天不宜展开；必须说明为什么暂不升级。
+     - **研究种子**：偏战略或需要外部补强的方向；标注适合后续 deep research / NotebookLM / human review。
+   - 即使没有 high-confidence 新方案，也必须保留简短小节，不要省略：
+     - 写明“已扫描但未生成新方案”
+     - 列出最强 1-3 个候选观察及排除原因
+     - 明确说明这不代表昨日知识没有价值，只代表今天没有自动升级为可直接执行的新落地点
+   - 去重规则：如果已有类似 `plans/insights/`、project plan、或最近 briefing 已提过，标为重复候选，不要再次生成新方案。
+   - 风格要求：简短、具体、可执行；不要写成研究报告，不要为了显得智能而制造低置信度方案.
 
 补充口径：
 - `todo-backlog.md` 是待办真相源。

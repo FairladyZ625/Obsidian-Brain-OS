@@ -133,6 +133,7 @@ If you have a brain dump, just list everything in the backlog. AI will triage du
 - Generate structured briefings
 - Track follow-ups and reminders
 - Identify decision bottlenecks
+- Run a lightweight insight analysis loop that connects external knowledge signals with current projects, blockers, deadlines, and recent conversation-derived ideas
 
 ### ❌ AI Cannot
 - Delete your items (only you can close/archive)

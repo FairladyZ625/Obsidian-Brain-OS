@@ -4,6 +4,15 @@
 
 ---
 
+## [1.5.0] — 2026-04-27
+
+### 变更 / Changed
+- **`prompts/cron/personal-ops-morning-brief.md`** 与 **`prompts/personal-ops-morning-brief.prompt.md`** — 新增 Insight Analysis / 洞察落地模块，在每日简报中使用 HV-lite 横纵分析法，把外部知识信号与 active projects、TODO、阻塞、截止日期和近期对话灵感连接起来。
+- **`docs/personal-ops.md`** / **`docs/zh/personal-ops.md`** — 补充 Personal Ops 可运行轻量洞察分析，而不只是任务排序和提醒。
+
+### 修复 / Fixed
+- 当当天没有 high-confidence 洞察时，要求简报仍展示候选观察与排除原因，避免静默省略洞察板块导致用户误以为链路未运行。
+
 ## [1.4.0] — 2026-04-27
 
 ### 变更 / Changed
