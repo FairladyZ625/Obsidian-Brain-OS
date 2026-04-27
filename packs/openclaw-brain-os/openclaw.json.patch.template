@@ -1,0 +1,77 @@
+{
+  "agents": {
+    "list": [
+      {
+        "id": "main",
+        "default": true,
+        "name": "Brain OS Main",
+        "workspace": "{{OPENCLAW_ROOT}}/agents/main/agent",
+        "model": {
+          "primary": "{{MAIN_MODEL}}",
+          "fallbacks": ["{{LIGHT_MODEL}}"]
+        },
+        "subagents": {
+          "allowAgents": ["*"]
+        }
+      }
+    ]
+  },
+  "bindings": [
+    {
+      "agentId": "main",
+      "match": {
+        "channel": "discord",
+        "accountId": "main",
+        "guildId": "{{DISCORD_GUILD_ID}}"
+      }
+    }
+  ],
+  "channels": {
+    "discord": {
+      "enabled": true,
+      "token": {
+        "source": "env",
+        "provider": "default",
+        "id": "DISCORD_BOT_TOKEN"
+      },
+      "groupPolicy": "allowlist",
+      "guilds": {
+        "{{DISCORD_GUILD_ID}}": {
+          "requireMention": true,
+          "users": ["{{DISCORD_OWNER_USER_ID}}"]
+        }
+      },
+      "accounts": {
+        "main": {
+          "guilds": {
+            "{{DISCORD_GUILD_ID}}": {
+              "channels": {
+                "{{MAIN_CHANNEL_ID}}": {
+                  "systemPrompt": "You are the Brain OS main coordinator in the main collaboration channel. Coordinate work, route requests, and keep replies concise. Ask before destructive, public, or permission-changing actions."
+                },
+                "{{PERSONAL_OPS_CHANNEL_ID}}": {
+                  "systemPrompt": "You are the Brain OS Personal Ops agent in the personal operations channel. Focus on daily planning, todo triage, commitments, reminders, and personal dashboards."
+                },
+                "{{KNOWLEDGE_INGEST_CHANNEL_ID}}": {
+                  "systemPrompt": "You are the Brain OS knowledge ingestion agent. When receiving links, articles, PDFs, or notes, classify the source, preserve raw context when needed, and write structured knowledge notes using vault governance rules."
+                },
+                "{{KNOWLEDGE_QUERY_CHANNEL_ID}}": {
+                  "systemPrompt": "You are the Brain OS knowledge query agent. Search the vault before answering, cite paths when useful, and do not create durable notes unless explicitly asked."
+                },
+                "{{OSS_SYNC_CHANNEL_ID}}": {
+                  "systemPrompt": "You are the Brain OS open-source sync agent. Help evolve the public repository as a reusable framework. De-identify private context, prefer templates over live config, update changelog and docs, and verify PRs before reporting done."
+                },
+                "{{CRON_NOTIFICATION_CHANNEL_ID}}": {
+                  "systemPrompt": "This is a scheduled job notification channel. Only respond when directly mentioned or when a cron result requires action. Keep routine OK notifications quiet."
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "skills": {
+    "paths": ["{{SKILLS_ROOT}}"]
+  }
+}

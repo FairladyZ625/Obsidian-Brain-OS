@@ -1,0 +1,26 @@
+{
+  "jobs": [
+    {
+      "id": "brain-os-pack-placeholder-disabled-job",
+      "name": "Brain OS Pack Placeholder Disabled Job",
+      "enabled": false,
+      "description": "Placeholder proving that pack cron jobs default to disabled. Later PRs replace this with profile-specific cron templates.",
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 7 * * *",
+        "tz": "{{TIMEZONE}}"
+      },
+      "agentId": "main",
+      "sessionTarget": "isolated",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Brain OS pack placeholder job. Replace this in later profile templates."
+      },
+      "delivery": {
+        "mode": "announce",
+        "channel": "discord",
+        "to": "{{CRON_NOTIFICATION_CHANNEL_ID}}"
+      }
+    }
+  ]
+}

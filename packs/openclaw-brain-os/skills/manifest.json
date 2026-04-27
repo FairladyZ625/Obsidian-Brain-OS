@@ -1,0 +1,21 @@
+{
+  "installMode": "missing-only",
+  "defaultTarget": "{{SKILLS_ROOT}}",
+  "requiredForMinimal": [
+    "brain-vault-governance"
+  ],
+  "recommended": [
+    "article-notes-integration",
+    "conversation-knowledge-flywheel",
+    "knowledge-flywheel-amplifier",
+    "personal-ops-driver",
+    "channel-chronicle",
+    "observer",
+    "brain-os-release"
+  ],
+  "notes": [
+    "PR1a records the skill install manifest only.",
+    "Later PRs may bundle sanitized skill copies under skills/bundled/.",
+    "If a skill already exists at the target, skip by default and report it."
+  ]
+}
