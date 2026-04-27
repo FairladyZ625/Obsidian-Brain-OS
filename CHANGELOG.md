@@ -4,6 +4,15 @@ All notable changes to Obsidian Brain OS are documented here.
 
 ---
 
+## [1.5.0] — 2026-04-27
+
+### Changed
+- **`prompts/cron/personal-ops-morning-brief.md`** and **`prompts/personal-ops-morning-brief.prompt.md`** — Added the Insight Analysis / 洞察落地 module for daily briefings, using an HV-lite horizontal/vertical method to connect external knowledge signals with active projects, todos, blockers, deadlines, and recent conversation-derived ideas.
+- **`docs/personal-ops.md`** / **`docs/zh/personal-ops.md`** — Documented that Personal Ops can run lightweight insight analysis, not only task prioritization and reminders.
+
+### Fixed
+- Made “no high-confidence insight today” visible in the briefing output by requiring candidate observations and rejection reasons instead of silently omitting the insight section.
+
 ## [1.4.0] — 2026-04-27
 
 ### Changed
