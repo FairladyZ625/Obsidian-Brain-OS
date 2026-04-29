@@ -4,6 +4,11 @@
 
 ---
 
+## [1.5.9] — 2026-04-29
+
+### 新增 / Added
+- **`skills/knowledge-ingest/`** — 新增 Brain OS 核心知识入库 skill，包含三层分离模型（原始素材 → 文章笔记 → 领域知识）、平台抓取路由、frontmatter schema、入库决策流与 nightly pipeline 契约。
+
 ## [1.5.8] — 2026-04-29
 
 ### 新增 / Added

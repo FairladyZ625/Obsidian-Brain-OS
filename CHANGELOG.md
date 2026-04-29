@@ -4,6 +4,11 @@ All notable changes to Obsidian Brain OS are documented here.
 
 ---
 
+## [1.5.9] — 2026-04-29
+
+### Added
+- **`skills/knowledge-ingest/`** — Added a core Brain OS knowledge ingestion skill with three-layer storage model (raw assets → article notes → domain knowledge), platform capture routing, frontmatter schema, ingestion decision flow, and nightly pipeline integration contract.
+
 ## [1.5.8] — 2026-04-29
 
 ### Added
