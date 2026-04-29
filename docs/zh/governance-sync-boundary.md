@@ -12,6 +12,28 @@
 
 如果是可复用能力，可以考虑同步。如果只是私有胶水，不同步。
 
+## 两条公开同步轨道
+
+先判断候选项属于哪条公开同步轨道，再决定是否同步。
+
+### 轨道 1：完整安装包
+
+用于帮助用户安装、验证、运行或回滚完整 OpenClaw Brain OS 包的资产：
+
+- install pack、manifest、setup 脚本、profile guide、smoke test、rollback 工具
+- 已脱敏、可复用的 installer / release skill
+- 说明安装路径、验证检查、运行预期的文档
+
+### 轨道 2：方法论资产
+
+用于沉淀可复用 Brain OS 运行方法的资产：
+
+- 编码可重复知识系统工作流的 skills
+- nightly pipeline prompts、cron examples、治理指南、模板与 schema
+- 对 knowledge flywheel、vault governance、agent collaboration、review loop 的公开解释
+
+强同步候选通常至少属于其中一条轨道。如果两条都不属于，它很可能只是私有胶水或项目管理上下文。
+
 ## 默认分类
 
 ### A 类：主线框架资产 —— 可作为同步候选

@@ -4,6 +4,15 @@ All notable changes to Obsidian Brain OS are documented here.
 
 ---
 
+## [1.5.8] — 2026-04-29
+
+### Added
+- **`skills/brain-os-open-source-sync/`** — Added a dedicated skill for public Brain OS synchronization, including the two-track distribution-pack/methodology model, A/B/C classification, system-upgrade detection, nightly planning workflow, and PR checklist.
+
+### Changed
+- **`prompts/cron/brain-os-daily-sync.md`** — Updated daily sync to read the open-source sync skill first and classify candidates by distribution-pack and methodology tracks before A/B/C scoring.
+- **`docs/governance-sync-boundary.md`** / **`docs/zh/governance-sync-boundary.md`** — Documented the two public sync tracks so maintainers can separate installable package assets from reusable methodology assets.
+
 ## [1.5.7] — 2026-04-27
 
 ### Added

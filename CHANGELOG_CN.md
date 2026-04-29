@@ -4,6 +4,15 @@
 
 ---
 
+## [1.5.8] — 2026-04-29
+
+### 新增 / Added
+- **`skills/brain-os-open-source-sync/`** — 新增 Brain OS 开源同步专用 skill，固化完整安装包 / 方法论双轨模型、A/B/C 分类、系统升级识别、nightly 计划流程与 PR checklist。
+
+### 变更 / Changed
+- **`prompts/cron/brain-os-daily-sync.md`** — daily sync 现在先读取开源同步 skill，再按完整安装包与方法论两条轨道归类候选项，最后做 A/B/C 判断。
+- **`docs/governance-sync-boundary.md`** / **`docs/zh/governance-sync-boundary.md`** — 补充两条公开同步轨道，帮助维护者区分可安装包资产与可复用方法论资产。
+
 ## [1.5.7] — 2026-04-27
 
 ### 新增 / Added

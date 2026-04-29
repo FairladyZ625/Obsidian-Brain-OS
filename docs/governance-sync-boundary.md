@@ -12,6 +12,28 @@ Before syncing anything, ask:
 
 If it is reusable, consider syncing it. If it is private glue, do not sync it.
 
+## Two public sync tracks
+
+Classify candidates into a public track before deciding whether to sync them.
+
+### Track 1: Distribution pack
+
+Use this track for assets that help users install, verify, operate, or roll back a complete OpenClaw Brain OS package:
+
+- install packs, manifests, setup scripts, profile guides, smoke tests, and rollback helpers
+- installer or release skills that are sanitized and reusable
+- docs that explain installation paths, validation checks, and operational expectations
+
+### Track 2: Methodology assets
+
+Use this track for reusable Brain OS operating methods:
+
+- skills that encode repeatable knowledge-system workflows
+- nightly pipeline prompts, cron examples, governance guides, templates, and schemas
+- public explanations of knowledge flywheels, vault governance, agent collaboration, and review loops
+
+A strong sync candidate usually belongs to one of these tracks. If it belongs to neither, it is probably private glue or project management context.
+
 ## Default categories
 
 ### A. Mainline framework assets — sync candidates
